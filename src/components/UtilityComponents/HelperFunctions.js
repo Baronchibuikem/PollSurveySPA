@@ -2,8 +2,13 @@
 export const defaultColor = {
 	background_color: {
 		backgroundColor: "#413a76",
-		color: "white"
-	}
+		color: "white",
+	},
+	profile_header: {
+		backgroundColor: "#413a76",
+		color: "white",
+		height: "400px",
+	},
 };
 
 // This is our console.log() function

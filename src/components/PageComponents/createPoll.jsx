@@ -16,9 +16,10 @@ class createPoll extends Component {
 		defaultColor: PropTypes.object,
 		Logger: PropTypes.func,
 	};
-	focusActivated = () => {
+	focusActivated = (e) => {
 		this.setState({
 			showForm: true,
+			question: e.target.value,
 		});
 	};
 
@@ -47,20 +48,28 @@ class createPoll extends Component {
 			<div className="d-flex ">
 				<input
 					type="text"
+					placeholder="Pleae enter the choices"
 					className="form-control"
-					style={{ borderRadius: "10px" }}
+					style={{ borderRadius: "5px" }}
 					value={this.state.option}
+					readOnly={!this.state.question}
 					onChange={(e) => {
 						this.setState({
 							option: e.target.value,
 						});
 					}}
 				/>
+
 				<button
 					type="button"
 					onClick={this.AddOption}
+					disabled={!this.state.option}
 					className="form-control w-25 b"
-					style={defaultColor.background_color}>
+					style={
+						this.state.option
+							? defaultColor.background_color
+							: { backgroundColor: "grey" }
+					}>
 					Add
 				</button>
 			</div>
@@ -70,7 +79,7 @@ class createPoll extends Component {
 				<form action="">
 					<div>
 						<textarea
-							style={{ borderRadius: "10px" }}
+							style={{ borderRadius: "5px" }}
 							className="form-control is-rounded"
 							onChange={this.focusActivated}
 							placeholder="What is your question"></textarea>
@@ -94,7 +103,35 @@ class createPoll extends Component {
 							);
 						})}
 					</div>
-					<div className="mt-2">{this.state.showForm ? choiceform : ""}</div>
+					<div className="mt-3">{this.state.showForm ? choiceform : ""}</div>
+					<div className="mt-3">
+						{this.state.showForm ? (
+							<input
+								type="date"
+								className="form-control is-rounded"
+								style={{ borderRadius: "5px" }}
+								disabled={this.state.options.length < 1}
+							/>
+						) : (
+							""
+						)}
+					</div>
+					<div>
+						{this.state.showForm ? (
+							<button
+								disabled={this.state.question}
+								className="form-control mt-3"
+								style={
+									this.state.question
+										? defaultColor.background_color
+										: { backgroundColor: "grey" }
+								}>
+								Submit
+							</button>
+						) : (
+							""
+						)}
+					</div>
 				</form>
 			</div>
 		);

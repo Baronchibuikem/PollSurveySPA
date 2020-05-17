@@ -12,14 +12,15 @@ import {
 	MDBDropdownMenu,
 	MDBDropdownItem,
 	MDBIcon,
-	MDBFormInline
+	MDBFormInline,
 } from "mdbreact";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Divider } from "antd";
+import { defaultColor, Logger } from "../UtilityComponents/HelperFunctions";
 
 class NavbarPage extends Component {
 	state = {
-		isOpen: false
+		isOpen: false,
 	};
 
 	toggleCollapse = () => {
@@ -27,13 +28,8 @@ class NavbarPage extends Component {
 	};
 
 	render() {
-		const styles = {
-			navbarStyle: {
-				backgroundColor: "#413A76"
-			}
-		};
 		return (
-			<MDBNavbar style={styles.navbarStyle} dark expand="md">
+			<MDBNavbar style={defaultColor.background_color} dark expand="md">
 				<div className="container">
 					<MDBNavbarBrand>
 						<strong className="text-light">LOGO</strong>
