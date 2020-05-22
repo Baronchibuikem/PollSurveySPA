@@ -31,7 +31,7 @@ class profileHeader extends Component {
 					<div className="text-center my-3">
 						<span className="text-light">
 							<i
-								className="fa fa-eye text-dark"
+								className="fa fa-eye text-light"
 								data-toggle="tooltip"
 								title="view profile"></i>
 							Username

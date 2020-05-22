@@ -9,7 +9,7 @@ class getTrends extends Component {
 	render() {
 		return (
 			<div className="d-none d-sm-block">
-				<h1>This page will be used to render trends</h1>
+				<h3>Top Trending Polls</h3>
 			</div>
 		);
 	}

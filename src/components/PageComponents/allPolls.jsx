@@ -3,12 +3,12 @@ import PropTypes from "prop-types";
 
 class allPolls extends Component {
 	static propTypes = {
-		prop: PropTypes
+		prop: PropTypes,
 	};
 
 	render() {
 		return (
-			<div>
+			<div className="">
 				<h1>Used to render all polls</h1>
 			</div>
 		);
