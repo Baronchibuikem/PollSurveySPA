@@ -5,7 +5,6 @@ import {
 	MDBNavbarBrand,
 	MDBNavbarNav,
 	MDBNavItem,
-
 	MDBNavbarToggler,
 	MDBCollapse,
 	MDBDropdown,
@@ -15,7 +14,6 @@ import {
 	MDBIcon,
 	MDBFormInline,
 } from "mdbreact";
-// import { BrowserRouter as Router } from "react-router-dom";
 import { Divider } from "antd";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { Link } from "react-router-dom";
