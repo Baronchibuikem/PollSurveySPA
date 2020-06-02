@@ -5,7 +5,8 @@ import {
 	LOGOUT_SUCCESS,
 	LOGOUT_FAIL,
 	REGISTER_FAIL,
-	REGISTER_SUCCESS
+	REGISTER_SUCCESS,
+	USER_LOADING,
 } from "./actionTypes";
 import route from "../../ApiClient";
 // import axios from "axios";
@@ -35,21 +36,22 @@ export const loadUser = () => {
 };
 
 // LOGIN USER
-export const login = ({ email, password }) => async dispatch => {
+export const login = ({ email, password }) => async (dispatch) => {
+	dispatch({ type: USER_LOADING });
 	const config = {
 		headers: {
-			"Content-Type": "application/json"
-		}
+			"Content-Type": "application/json",
+		},
 	};
 	const body = JSON.stringify({ email, password });
 	route
-		.post("/api/v1/account/auth/login", body, config)
-		.then(res => {
-			dispatch({ type: LOGIN_SUCCESS, payload: res.data });
+		.post("api/v1/account/login/", body, config)
+		.then((response) => {
+			dispatch({ type: LOGIN_SUCCESS, payload: response.data });
 		})
-		.catch(err => {
-			dispatch({ type: LOGIN_FAIL });
-			console.log(err);
+		.catch((error) => {
+			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data });
+			console.log(error.response.data.data);
 		});
 };
 
@@ -60,8 +62,8 @@ export const register = ({
 	organization,
 	purpose_of_data,
 	password,
-	email
-}) => async dispatch => {
+	email,
+}) => async (dispatch) => {
 	const config = { headers: { "Content-Type": "application/json" } };
 	const body = JSON.stringify({
 		fullname,
@@ -69,15 +71,15 @@ export const register = ({
 		organization,
 		purpose_of_data,
 		password,
-		email
+		email,
 	});
 
 	route
 		.post("/api/v1/account/auth/register", body, config)
-		.then(res => {
+		.then((res) => {
 			dispatch({ type: REGISTER_SUCCESS, payload: res.data });
 		})
-		.catch(err => {
+		.catch((err) => {
 			dispatch({ type: REGISTER_FAIL });
 			console.log(err);
 		});
@@ -87,14 +89,14 @@ export const register = ({
 export const logout = () => (dispatch, getState) => {
 	route
 		.post("/api/v1/account/auth/logout", null, tokenConfig(getState))
-		.then(res => {
+		.then((res) => {
 			dispatch({
-				type: LOGOUT_SUCCESS
+				type: LOGOUT_SUCCESS,
 			});
 		})
-		.catch(err => {
+		.catch((err) => {
 			dispatch({
-				type: LOGOUT_FAIL
+				type: LOGOUT_FAIL,
 			});
 			console.log(err);
 		});
@@ -102,15 +104,15 @@ export const logout = () => (dispatch, getState) => {
 
 // Setup config with token - helper function
 
-export const tokenConfig = getState => {
+export const tokenConfig = (getState) => {
 	// Get token
 	const token = getState().userAuth.token;
 
 	// Headers
 	const config = {
 		headers: {
-			"Content-Type": "application/json"
-		}
+			"Content-Type": "application/json",
+		},
 	};
 
 	if (token) {

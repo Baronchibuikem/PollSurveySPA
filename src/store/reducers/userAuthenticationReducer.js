@@ -6,14 +6,15 @@ import {
 	LOGIN_SUCCESS,
 	LOGOUT_SUCCESS,
 	REGISTER_SUCCESS,
-	REGISTER_FAIL
+	REGISTER_FAIL,
 } from "../actions/actionTypes";
 
 const initialState = {
 	token: localStorage.getItem("token"),
 	isAuthenticated: false,
-	isLoading: false,
-	user: null
+	isLoading: "Login",
+	user: null,
+	auth_error: "",
 };
 
 const reducer = (state = initialState, action) => {
@@ -21,14 +22,14 @@ const reducer = (state = initialState, action) => {
 		case USER_LOADING:
 			return {
 				...state,
-				isLoading: true
+				isLoading: "Loading",
 			};
 		case USER_LOADED:
 			return {
 				...state,
 				isAuthenticated: true,
 				isLoading: false,
-				user: action.payload
+				user: action.payload,
 			};
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
@@ -37,7 +38,7 @@ const reducer = (state = initialState, action) => {
 				...state,
 				...action.payload,
 				isAuthenticated: true,
-				isLoading: false
+				isLoading: "Success",
 			};
 		case AUTH_ERROR:
 		case LOGIN_FAIL:
@@ -49,7 +50,8 @@ const reducer = (state = initialState, action) => {
 				token: null,
 				user: null,
 				isAuthenticated: false,
-				isLoading: false
+				isLoading: "Try Again",
+				auth_error: action.payload,
 			};
 		default:
 			return state;

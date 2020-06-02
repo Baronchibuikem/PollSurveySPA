@@ -10,6 +10,15 @@ export const defaultColor = {
 		height: "400px",
 	},
 };
+export const defaultImage = {
+	login_background_image: {
+		background: "url'(../../../../assets/images/login-bg.svg)'",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundAttachment: "fixed",
+		backgroundPosition: "center center",
+	},
+};
 
 // This is our console.log() function
 export const Logger = ({ ...param }) => {

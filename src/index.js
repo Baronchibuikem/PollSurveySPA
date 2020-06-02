@@ -6,6 +6,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
 import "antd/dist/antd.css";
 import "mdbreact";
-import "./components/App.css";
+import { Provider } from "react-redux";
+import store from "./store";
 
-ReactDom.render(<App />, document.querySelector("#root"));
+ReactDom.render(
+	<Provider store={store}>
+		<App />
+	</Provider>,
+	document.querySelector("#root")
+);

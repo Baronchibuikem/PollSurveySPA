@@ -29,7 +29,11 @@ class NavbarPage extends Component {
 
 	render() {
 		return (
-			<MDBNavbar style={defaultColor.background_color} dark expand="md">
+			<MDBNavbar
+				style={defaultColor.background_color}
+				dark
+				expand="md"
+				fixed="top">
 				<div className="container">
 					<MDBNavbarBrand>
 						<strong className="text-light">LOGO</strong>
