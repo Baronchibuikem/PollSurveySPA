@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux"
 import {
 	MDBNavbar,
 	MDBNavbarBrand,
 	MDBNavbarNav,
 	MDBNavItem,
-	MDBNavLink,
+
 	MDBNavbarToggler,
 	MDBCollapse,
 	MDBDropdown,
@@ -14,68 +15,74 @@ import {
 	MDBIcon,
 	MDBFormInline,
 } from "mdbreact";
-import { BrowserRouter as Router } from "react-router-dom";
+// import { BrowserRouter as Router } from "react-router-dom";
 import { Divider } from "antd";
-import { defaultColor, Logger } from "../UtilityComponents/HelperFunctions";
+import { defaultColor } from "../UtilityComponents/HelperFunctions";
+import { Link } from "react-router-dom";
+import { logout } from "../../store/actions/userAuthentication"
 
-class NavbarPage extends Component {
-	state = {
-		isOpen: false,
+const NavbarPage = () => {
+
+	const [isOpen, setIsOpen] = useState(false)
+
+	const toggleCollapse = () => {
+		setIsOpen(!isOpen)
 	};
 
-	toggleCollapse = () => {
-		this.setState({ isOpen: !this.state.isOpen });
-	};
+	const params = useSelector((state) => ({
+		authenticated: state.userAuth.isAuthenticated
+	}));
 
-	render() {
-		return (
-			<MDBNavbar
-				style={defaultColor.background_color}
-				dark
-				expand="md"
-				fixed="top">
-				<div className="container">
-					<MDBNavbarBrand>
-						<strong className="text-light">LOGO</strong>
-					</MDBNavbarBrand>
-					<MDBNavbarToggler onClick={this.toggleCollapse} />
-					<MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
-						<MDBNavbarNav left></MDBNavbarNav>
-						<MDBNavbarNav right>
-							<MDBNavItem>
-								<MDBFormInline waves>
-									<div className="md-form my-0">
-										<input
-											className="form-control mr-sm-2"
-											type="text"
-											placeholder="Search"
-											aria-label="Search"
-										/>
-									</div>
-								</MDBFormInline>
-							</MDBNavItem>
+	const dropdown = (
+		<MDBNavItem>
+			<MDBDropdown>
+				<MDBDropdownToggle nav caret className="text-light">
+					<MDBIcon icon="user" className="text-light" />
+					<div className="d-none d-md-inline mx-2 font-weight-bold">Username</div>
+				</MDBDropdownToggle>
+				<MDBDropdownMenu className="dropdown-default text-light">
+					<MDBDropdownItem to="/">View Profile</MDBDropdownItem>
+					<MDBDropdownItem href="#!">My polls</MDBDropdownItem>
+					<MDBDropdownItem href="#!">My inbox</MDBDropdownItem>
 
-							<MDBNavItem>
-								<MDBDropdown>
-									<MDBDropdownToggle nav caret className="text-light">
-										<MDBIcon icon="user" className="text-light" />
-										<div className="d-none d-md-inline mx-2">Username</div>
-									</MDBDropdownToggle>
-									<MDBDropdownMenu className="dropdown-default text-light">
-										<MDBDropdownItem to="/">View Profile</MDBDropdownItem>
-										<MDBDropdownItem href="#!">My polls</MDBDropdownItem>
-										<MDBDropdownItem href="#!">My inbox</MDBDropdownItem>
-										<Divider></Divider>
-										<MDBDropdownItem href="#!">Logout</MDBDropdownItem>
-									</MDBDropdownMenu>
-								</MDBDropdown>
-							</MDBNavItem>
-						</MDBNavbarNav>
-					</MDBCollapse>
-				</div>
-			</MDBNavbar>
-		);
-	}
+					<MDBDropdownItem>
+						<Link onClick={logout}>
+							LOGOUT
+					</Link>
+					</MDBDropdownItem>
+				</MDBDropdownMenu>
+			</MDBDropdown>
+		</MDBNavItem>
+	)
+	const not_signed_in = (
+		<MDBNavItem>
+			<Link to="/login" className="text-light font-weight-bold">
+				LOGIN
+	</Link>
+		</MDBNavItem>
+	)
+
+	return (
+		<MDBNavbar
+			style={defaultColor.background_color}
+			dark
+			expand="md"
+			fixed="top">
+			<div className="container">
+				<MDBNavbarBrand>
+					<strong className="text-light">LOGO</strong>
+				</MDBNavbarBrand>
+				<MDBNavbarToggler onClick={toggleCollapse} />
+				<MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>
+
+					<MDBNavbarNav right>
+						{params.authenticated ? dropdown : not_signed_in}
+
+					</MDBNavbarNav>
+				</MDBCollapse>
+			</div>
+		</MDBNavbar>
+	);
 }
 
 export default NavbarPage;

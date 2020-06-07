@@ -1,13 +1,8 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { login } from "../../store/actions/userAuthentication";
-import {
-	defaultColor,
-	Logger,
-	defaultImage,
-} from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/Homepage.css";
 
 const LoginForm = () => {
@@ -25,10 +20,6 @@ const LoginForm = () => {
 		error: state.userAuth.auth_error,
 	}));
 
-	// static propTypes = {
-	// 	login: PropTypes.func.isRequired,
-	// 	isAuthenticated: PropTypes.bool,
-	// };
 
 	// this is used to dispatch a redux action with the neeeded login data
 	const onSubmit = (e) => {

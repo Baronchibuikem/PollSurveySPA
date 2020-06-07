@@ -1,5 +1,10 @@
-import React, { Component, Fragment } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React, {
+	Component,
+	Fragment
+} from "react";
+import {
+	BrowserRouter as Router
+} from "react-router-dom";
 // import { loadUser } from "../store/actions/userAuthentication";
 import BaseRouter from "../routes";
 import Navbar from "./CommonComponents/Navbar";
@@ -11,15 +16,17 @@ export default class App extends Component {
 	// }
 	render() {
 		return (
-			<Fragment>
-				<Router>
+			<Fragment >
+				<Router >
 					<Navbar />
-					<div className="container mt-2">
+					<div className="container" style={{ paddingTop: "70px" }} >
 						<BaseRouter />
 					</div>
-					{/* <Footer /> */}
+					{
+						/* <Footer /> */
+					}
 				</Router>
-			</Fragment>
+			</Fragment >
 		);
 	}
 }

@@ -1,107 +1,122 @@
 import React, { useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux"
 import "../StyleComponents/Homepage.css";
+import { register_action } from "../../store/actions/userAuthentication"
+
 
 const RegistrationForm = () => {
-	const { username, setUsername } = useState("");
-	const { email, setEmail } = useState("");
-	const { firstname, setFirstname } = useState("");
-	const { lastname, srtLastname } = useState("");
-	const { password, setPassword } = useState("");
-	const { password2, setPassword2 } = useState("");
-	const { register, handleSubmit, errors } = useForm();
+	const { register, handleSubmit, errors, watch } = useForm();
 
-	const onSubmit = (data) => {
-		console.log(data);
+	// Here we are instantiating our dispatch action
+	const dispatch_register = useDispatch()
+
+	// Here we fetching data from our global state store in redux
+	// email_exist_error and username_exist_error are errors coming from the server side if the email and username entered already exist
+	const params = useSelector((state) => ({
+		loading: state.userAuth.isLoading,
+		email_exist_error : state.userAuth.email_exist_error,
+		username_exist_error: state.userAuth.username_exist_error
+	}));
+
+	// This is used to dispatch a redux action with the needed registration data
+	const regSubmit = (data) => {
+		dispatch_register(register_action({
+			data
+		}))
 	};
 
 	return (
-		<div className="my-5 py-5">
+		<div className="my-2">
 			<form
-				className="text-center border border-light p-5 col-md-6 col-sm-12 mx-auto shadow login_background_image"
+				className="text-center border border-light p-4 col-md-6 col-sm-12 mx-auto shadow login_background_image"
 				style={{ backgroundColor: "#eee" }}
-				onSubmit={handleSubmit(onSubmit)}>
+				onSubmit={handleSubmit(regSubmit)}>
 				<p className="h4 mb-4">Sign up</p>
 
+				<h6 className="text-left font-italic text-light">{params.email_exist_error ? params.email_exist_error : ""}</h6>
+				<h6 className="text-left font-italic text-light">{params.username_exist_error ? params.username_exist_error : ""}</h6>
 				<div className="mb-4">
+					<h6 className="text-left font-italic text-light">{errors.firstname && errors.firstname.type === "required" && (
+						<p>Firstname field is required</p>
+					)}</h6>
 					<input
 						type="text"
 						name="firstname"
 						className="form-control"
-						placeholder="firstname"
-						//   onChange={this.onChange}
-						value={firstname}
-						ref={register}
+						placeholder="Firstname"
+						ref={register({ required: true })}
 					/>
 				</div>
 
 				<div className="mb-4">
+					<h6 className="text-left font-italic text-light">{errors.lastname && errors.lastname.type === "required" && (
+						<p>Lastname field is required</p>
+					)}</h6>
 					<input
 						type="text"
 						name="lastname"
 						className="form-control"
 						placeholder="lastname"
-						//   onChange={this.onChange}
-						value={lastname}
-						ref={register}
+						ref={register({ required: true })}
 					/>
 				</div>
 
 				<div className="mb-4">
+					<h6 className="text-left font-italic text-light">{errors.username && errors.username.type === "required" && (
+						<p>Username field is required</p>
+					)}</h6>
 					<input
 						type="text"
 						name="username"
 						className="form-control"
 						placeholder="Username"
-						//   onChange={this.onChange}
-						value={username}
-						ref={register}
+						// value={username}
+						ref={register({ required: true })}
 					/>
 				</div>
-
-				<input
-					type="email"
-					name="email"
-					className="form-control mb-4"
-					placeholder="E-mail"
-					// onChange={this.onChange}
-					value={email}
-					ref={register}
-				/>
-
-				<input
-					type="password"
-					name="password"
-					className="form-control"
-					placeholder="Password"
-					// onChange={this.onChange}
-					value={password}
-					ref={register}
-				/>
-				<small
-					id="defaultRegisterFormPasswordHelpBlock"
-					className="form-text text-white mb-4">
-					At least 8 characters and 1 digit
-				</small>
-
+				<div className="mb-4">
+					<h6 className="text-left font-italic text-light">{errors.email && errors.email.type === "required" && (
+						<p>Email field is required</p>
+					)}</h6>
+					<input
+						type="email"
+						name="email"
+						className="form-control mb-4"
+						placeholder="Email"
+						ref={register({ required: true })}
+					/>
+				</div>
+				<div className="mb-4">
+					<h6 className="text-left font-italic text-light">{errors.password && errors.password.type === "required" && (
+						<p>Password field is required</p>
+					)}</h6>
+					<input
+						type="password"
+						name="password"
+						className="form-control"
+						placeholder="Password"
+						ref={register({ required: true })}
+					/>
+				</div>
+				<h6 className="text-left font-italic text-light">{errors.password2 && errors.password2.type === "required" && (
+					<p>Confirm Password field is required</p>
+				)}</h6>
+				<h6 className="text-left font-italic text-light">{errors.password2 && errors.password2.type === "validate" && (
+					<p>Passwords don't match</p>
+				)}</h6>
 				<input
 					type="password"
 					name="password2"
 					className="form-control"
-					placeholder="Password2"
-					// onChange={this.onChange}
-					value={password2}
-					ref={register}
+					placeholder="Confirm Password"
+					ref={register({ required: true, validate: (value) => {
+						return value === watch("password")
+					} })}
 				/>
-				<small
-					id="defaultRegisterFormPasswordHelpBlock"
-					className="form-text text-white mb-4">
-					At least 8 characters and 1 digit
-				</small>
-
 				<button className="btn btn-info my-4 btn-block" type="submit">
-					Register
+					{params.loading}
 				</button>
 				<p className="text-light">
 					<Link to="login" className="lg mx-1 font-weight-bold">

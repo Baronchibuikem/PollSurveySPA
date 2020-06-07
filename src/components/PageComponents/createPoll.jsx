@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { defaultColor, Logger } from "../UtilityComponents/HelperFunctions";
+import { defaultColor } from "../UtilityComponents/HelperFunctions";
 
 class createPoll extends Component {
 	state = {
@@ -45,7 +45,7 @@ class createPoll extends Component {
 
 	render() {
 		const choiceform = (
-			<div className="d-flex ">
+			<div className="d-flex">
 				<input
 					type="text"
 					placeholder="Pleae enter the choices"
@@ -113,13 +113,13 @@ class createPoll extends Component {
 								disabled={this.state.options.length < 1}
 							/>
 						) : (
-							""
-						)}
+								""
+							)}
 					</div>
 					<div>
 						{this.state.showForm ? (
 							<button
-								disabled={this.state.question}
+								disabled={!this.state.question && !this.state.options && !this.state.date}
 								className="form-control mt-3"
 								style={
 									this.state.question
@@ -129,8 +129,8 @@ class createPoll extends Component {
 								Submit
 							</button>
 						) : (
-							""
-						)}
+								""
+							)}
 					</div>
 				</form>
 			</div>

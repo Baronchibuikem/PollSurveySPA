@@ -1,22 +1,22 @@
 import React, { Component } from "react";
 import profileImage from "../../assets/images/author.jpg";
 import { MDBIcon } from "mdbreact";
-import { defaultColor, Logger } from "../UtilityComponents/HelperFunctions";
+import { defaultColor } from "../UtilityComponents/HelperFunctions";
 
 class profileHeader extends Component {
 	render() {
-		const style = {
-			imageStyle: {
-				display: "block",
-				margin: "auto auto",
-				maxHeight: "100%",
-				borderRadius: "50%",
-			},
-			divContainer: {
-				height: "250px",
-				backgroundColor: "#eeee",
-			},
-		};
+		// const style = {
+		// 	imageStyle: {
+		// 		display: "block",
+		// 		margin: "auto auto",
+		// 		maxHeight: "100%",
+		// 		borderRadius: "50%",
+		// 	},
+		// 	divContainer: {
+		// 		height: "250px",
+		// 		backgroundColor: "#eeee",
+		// 	},
+		// };
 		return (
 			<div className="d-none d-sm-block" style={defaultColor.profile_header}>
 				<div>
