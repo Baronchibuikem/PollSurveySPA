@@ -1,5 +1,5 @@
 import {
-
+	USER_LOADED,
 	LOGIN_FAIL,
 	LOGIN_SUCCESS,
 	LOGOUT_SUCCESS,
@@ -10,33 +10,44 @@ import {
 } from "./actionTypes";
 import route from "../../ApiClient";
 
+// Setup config with token - helper function
 
-const config = { headers: { "Content-Type": "application/json" } };
-
-
-// export const loadUser = () => {
-// 	return async (dispatch, getState) => {
-// 		const response = await route.get(
-// 			"api/v1/account/auth/user",
-// 			tokenConfig(getState)
-// 		);
-// 		dispatch({ type: USER_LOADED, payload: response.data });
-// 	};
-// };
-
-// LOGIN USER
-export const login = ({ email, password }) => (dispatch) => {
-	dispatch({ type: REQUEST_LOADING })
+export const tokenConfig = (getState) => {
+	// Get token
+	const token = getState().userAuth.token;
 	const config = {
 		headers: {
 			"Content-Type": "application/json",
 		},
 	};
-	const body = JSON.stringify({ email, password });
+	if (token) {
+		config.headers["Authorization"] = `Token ${token}`;
+	}
+
+	return config;
+};
+
+let config = { headers: { "Content-Type": "application/json" } };
+
+
+export const loadUser = (id) => {
+	return async (dispatch, getState) => {
+		const response = await route.get(
+			`api/v1/account/user/${id}`,
+			tokenConfig(getState)
+		);
+		dispatch({ type: USER_LOADED, payload: response.data.user });
+	};
+};
+
+// LOGIN USER
+export const login = ({ email, password }) => (dispatch) => {
 	route
-		.post("api/v1/account/login/", body, config)
+		.post("api/v1/account/login/", { email, password }, config)
 		.then((response) => {
-			dispatch({ type: LOGIN_SUCCESS, payload: response.data });
+			console.log(response.data.user.id)
+			dispatch({ type: USER_LOADED, payload: response.data });
+			// dispatch(loadUser(response.data.user.id));
 		})
 		.catch((error) => {
 			dispatch({ type: LOGIN_FAIL, payload: error.response.data });
@@ -46,9 +57,6 @@ export const login = ({ email, password }) => (dispatch) => {
 // Register user
 export const register_action = ({ data }) => (dispatch) => {
 	dispatch({ type: REQUEST_LOADING })
-	const body = JSON.stringify({
-		data
-	});
 	route
 		.post("/api/v1/account/register/", {
 			first_name: data.firstname,
@@ -63,14 +71,13 @@ export const register_action = ({ data }) => (dispatch) => {
 		.catch((err) => {
 
 			dispatch({ type: REGISTER_FAIL, payload: err.response.data });
-			console.log(err.response.data.email.error, "ERROR DQATA");
 		});
 };
 
 // LOGOUT USER
 export const logout = () => (dispatch, getState) => {
 	route
-		.post("/api/v1/account/auth/logout", null, tokenConfig(getState))
+		.post("/api/v1/account/logout/", null, tokenConfig(getState))
 		.then((res) => {
 			dispatch({
 				type: LOGOUT_SUCCESS,
@@ -84,22 +91,4 @@ export const logout = () => (dispatch, getState) => {
 		});
 };
 
-// Setup config with token - helper function
 
-export const tokenConfig = (getState) => {
-	// Get token
-	const token = getState().userAuth.token;
-
-	// Headers
-	const config = {
-		headers: {
-			"Content-Type": "application/json",
-		},
-	};
-
-	if (token) {
-		config.headers["Authorization"] = `Token ${token}`;
-	}
-
-	return config;
-};

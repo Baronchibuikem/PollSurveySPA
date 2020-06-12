@@ -12,7 +12,7 @@ import {
 const initialState = {
 	token: localStorage.getItem("token"),
 	isAuthenticated: false,
-	isLoading: "Login",
+	isLoading: "Send",
 	user: {
 		id: "",
 		first_name: "",
@@ -34,26 +34,17 @@ const reducer = (state = initialState, action) => {
 				...state,
 				isLoading: "Loading",
 			};
-		case USER_LOADED:
-			return {
-				...state,
-				isAuthenticated: true,
-				isLoading: false,
-				user: action.payload,
-			};
 		// This is used to mutate/update the state on successful login/registration
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
+		case USER_LOADED:
 			localStorage.setItem("token", action.payload.token);
 			return {
 				...state,
 				user: action.payload.user,
 				isAuthenticated: true,
-				isLoading: "Success",
 			};
 		case AUTH_ERROR:
-		case LOGIN_FAIL:
-		case LOGOUT_SUCCESS:
 		case REGISTER_FAIL:
 			localStorage.removeItem("token");
 			return {
@@ -65,6 +56,14 @@ const reducer = (state = initialState, action) => {
 				email_exist_error: action.payload.email.error,
 				username_exist_error: action.payload.username.error
 			};
+		case LOGOUT_SUCCESS:
+			localStorage.removeItem("token");
+			return {
+				...state,
+				token: null,
+				user: null,
+				isAuthenticated: false
+			}
 		default:
 			return state;
 	}

@@ -38,7 +38,7 @@ const LoginForm = () => {
 	};
 
 	// Here we are checking if our authenticated value from the state is true, it yes we redirect to the homepage
-	if (params.authenticated) {
+	if (params.authenticated === true) {
 		return <Redirect to="/" />;
 	}
 

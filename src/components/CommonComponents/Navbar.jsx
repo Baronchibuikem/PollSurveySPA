@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import {
 	MDBNavbar,
 	MDBNavbarBrand,
@@ -28,15 +28,22 @@ const NavbarPage = () => {
 	};
 
 	const params = useSelector((state) => ({
-		authenticated: state.userAuth.isAuthenticated
+		authenticated: state.userAuth.isAuthenticated,
+		current_user: state.userAuth.user
 	}));
+
+	const dispatch_logout = useDispatch();
+
+	const onSubmit = (e) => {
+		dispatch_logout(logout);
+	};
 
 	const dropdown = (
 		<MDBNavItem>
 			<MDBDropdown>
 				<MDBDropdownToggle nav caret className="text-light">
 					<MDBIcon icon="user" className="text-light" />
-					<div className="d-none d-md-inline mx-2 font-weight-bold">Username</div>
+					<div className="d-none d-md-inline mx-2 font-weight-bold">{params.current_user ? params.current_user.username : ""}</div>
 				</MDBDropdownToggle>
 				<MDBDropdownMenu className="dropdown-default text-light">
 					<MDBDropdownItem to="/">View Profile</MDBDropdownItem>
@@ -44,8 +51,8 @@ const NavbarPage = () => {
 					<MDBDropdownItem href="#!">My inbox</MDBDropdownItem>
 
 					<MDBDropdownItem>
-						<Link onClick={logout}>
-							LOGOUT
+						<Link onClick={onSubmit}>
+							Logout
 					</Link>
 					</MDBDropdownItem>
 				</MDBDropdownMenu>
@@ -56,7 +63,7 @@ const NavbarPage = () => {
 		<MDBNavItem>
 			<Link to="/login" className="text-light font-weight-bold">
 				LOGIN
-	</Link>
+			</Link>
 		</MDBNavItem>
 	)
 
@@ -74,7 +81,7 @@ const NavbarPage = () => {
 				<MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>
 
 					<MDBNavbarNav right>
-						{params.authenticated ? dropdown : not_signed_in}
+						{params.authenticated === true ? dropdown : not_signed_in}
 
 					</MDBNavbarNav>
 				</MDBCollapse>
