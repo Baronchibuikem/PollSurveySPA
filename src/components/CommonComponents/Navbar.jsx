@@ -12,9 +12,11 @@ import {
 	MDBDropdownMenu,
 	MDBDropdownItem,
 	MDBIcon,
-	MDBFormInline,
 } from "mdbreact";
+<<<<<<< HEAD
 import { Divider } from "antd";
+=======
+>>>>>>> Added config header and authorization to poll_action
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { Link } from "react-router-dom";
 import { logout } from "../../store/actions/userAuthentication"
@@ -47,14 +49,14 @@ const NavbarPage = () => {
 					<div className="d-none d-md-inline mx-2 font-weight-bold">{params.current_user ? params.current_user.username : ""}</div>
 				</MDBDropdownToggle>
 				<MDBDropdownMenu className="dropdown-default text-light">
-					<MDBDropdownItem to="/">View Profile</MDBDropdownItem>
+					<MDBDropdownItem href="/">View Profile</MDBDropdownItem>
 					<MDBDropdownItem href="#!">My polls</MDBDropdownItem>
 					<MDBDropdownItem href="#!">My inbox</MDBDropdownItem>
 
-					<MDBDropdownItem>
-						<Link onClick={onSubmit}>
+					<MDBDropdownItem onClick={onSubmit}>
+						
 							Logout
-						</Link>
+						
 					</MDBDropdownItem>
 				</MDBDropdownMenu>
 			</MDBDropdown>

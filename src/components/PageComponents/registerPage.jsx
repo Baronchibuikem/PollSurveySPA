@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux"
 import "../StyleComponents/Homepage.css";

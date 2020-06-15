@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { func, object } from "prop-types";
+import { useDispatch, useSelector } from "react-redux"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
+import { create_poll } from "../../store/actions/poll_action";
+
 
 const CreatePoll = () => {
 	const [question, setQuestion] = useState("");
@@ -10,14 +13,19 @@ const CreatePoll = () => {
 	const [showForm, setShowForm] = useState(false)
 	const [date, setDate] = useState("")
 
+	const dispatch_createpoll = useDispatch()
+
+	const params = useSelector((state) => ({
+		token: state.userAuth.token
+	}));
+
 
 	const focusActivated = (e) => {
 		setShowForm(true)
 		setQuestion(e.target.value)
 	};
 
-	const AddOption = (e) => {
-		e.preventDefault();
+	const AddOption = () => {
 		setOptions(options => {
 			return [...options, option]
 		})
@@ -32,7 +40,9 @@ const CreatePoll = () => {
 
 	const submit = (e) => {
 		e.preventDefault()
-		console.log(e)
+		const token = params.token
+		console.log(question, options, date, "FROM Poll SUBMIT", token)
+		dispatch_createpoll(create_poll({ question, options, date, token }));
 	}
 
 	const choiceform = (
@@ -101,9 +111,10 @@ const CreatePoll = () => {
 						<div className="mt-3">
 							<input
 								type="date"
+								value={date}
 								className="form-control is-rounded"
 								style={{ borderRadius: "5px" }}
-								disabled={Boolean(options.length)}
+								disabled={Boolean(!options.length)}
 							/>
 						</div>
 					)
@@ -113,6 +124,7 @@ const CreatePoll = () => {
 					showForm && (
 						<div className="d-flex">
 							<button
+								onSubmit={submit}
 								disabled={!question && !options && !date}
 								className="form-control mt-3"
 								style={

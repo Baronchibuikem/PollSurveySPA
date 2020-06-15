@@ -33,9 +33,10 @@ let config = { headers: { "Content-Type": "application/json" } };
 export const loadUser = (id) => {
 	return async (dispatch, getState) => {
 		const response = await route.get(
-			`api/v1/account/user/${id}`,
+			`account/user/${id}`,
 			tokenConfig(getState)
 		);
+
 		dispatch({ type: USER_LOADED, payload: response.data.user });
 	};
 };
@@ -43,9 +44,9 @@ export const loadUser = (id) => {
 // LOGIN USER
 export const login = ({ email, password }) => (dispatch) => {
 	route
-		.post("api/v1/account/login/", { email, password }, config)
+		.post("/account/login/", { email, password }, config)
 		.then((response) => {
-			console.log(response.data.user.id)
+			console.log(response.data)
 			dispatch({ type: USER_LOADED, payload: response.data });
 			// dispatch(loadUser(response.data.user.id));
 		})

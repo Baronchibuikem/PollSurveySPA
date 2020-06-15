@@ -43,6 +43,7 @@ const reducer = (state = initialState, action) => {
 				...state,
 				user: action.payload.user,
 				isAuthenticated: true,
+				token: action.payload.token
 			};
 		case AUTH_ERROR:
 		case REGISTER_FAIL:
