@@ -1,52 +1,39 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
+import { func, object } from "prop-types";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 
 const CreatePoll = () => {
-	const { question, setQuestion } = useState("")
-	const { option, setOption } = useState("")
-	const { options, useOptions } = useState([])
-	const { initialValue, setInitialValue } = useState({ choice_text: [{}] })
-	const { showForm, setShowForm } = useState(false)
-	const { date, setDate } = useState("")
+	const [question, setQuestion] = useState("");
+	const [option, setOption] = useState('')
+	const [options, setOptions] = useState([])
+	const [initialValue, setIntialValue] = useState({ choice_text: [{}] })
+	const [showForm, setShowForm] = useState(false)
+	const [date, setDate] = useState("")
 
-	useEffect(() => {
-		const focusActivated = (e) => {
-			setShowForm(true)
-			setQuestion(e.target.value)
-			// this.setState({
-			// 	showForm: true,
-			// 	question: e.target.value,
-			// });
-		};
-	}
-	
+
+	const focusActivated = (e) => {
+		setShowForm(true)
+		setQuestion(e.target.value)
+	};
 
 	const AddOption = (e) => {
 		e.preventDefault();
-		let option = this.state.option;
-		this.setState((prevState) => {
-			return { options: [...prevState.options, option], option: "" };
-		});
+		setOptions(options => {
+			return [...options, option]
+		})
 	};
 
 	// For removing an a choice from a poll question when it is being created
-	const RemoveOption = (e) => {
-		e.preventDefault();
-		let array = this.state.options;
-		let index = array.indexOf(e);
-
-		array.splice(index, 1);
-		this.setState({
-			options: array,
-		});
+	const RemoveOption = o => {
+		const newArr = options.filter(opt => opt !== o);
+		setOptions(newArr);
+		setOption("")
 	};
 
-	const submitPoll = (e) => {
+	const submit = (e) => {
 		e.preventDefault()
-
+		console.log(e)
 	}
-
 
 	const choiceform = (
 		<div className="d-flex">
@@ -55,22 +42,18 @@ const CreatePoll = () => {
 				placeholder="Pleae enter the choices"
 				className="form-control"
 				style={{ borderRadius: "5px" }}
-				value={this.state.option}
-				readOnly={!this.state.question}
-				onChange={(e) => {
-					this.setState({
-						option: e.target.value,
-					});
-				}}
+				value={option}
+				readOnly={!question}
+				onChange={(e) => setOption(e.target.value)}
 			/>
 
 			<button
 				type="button"
-				onClick={this.AddOption}
-				disabled={!this.state.option}
+				onClick={AddOption}
+				disabled={!option}
 				className="form-control w-25 b"
 				style={
-					this.state.option
+					option
 						? defaultColor.background_color
 						: { backgroundColor: "grey" }
 				}>
@@ -80,26 +63,26 @@ const CreatePoll = () => {
 	);
 	return (
 		<div>
-			<form action="">
+			<form onSubmit={submit}>
 				<div>
 					<textarea
 						style={{ borderRadius: "5px" }}
 						className="form-control is-rounded"
-						onChange={this.focusActivated}
+						onChange={focusActivated}
 						placeholder="What is your question"></textarea>
 				</div>
 				<div className="options">
-					{this.state.options.map((option, index) => {
+					{options.map((option, index) => {
 						return (
 							<div
 								key={index}
 								style={{ display: "flex", justifyContent: "space-around" }}>
-								<h6 onClick={this.RemoveOption}>
+								<h6 onClick={() => RemoveOption(option)}>
 									<span className="fa fa-check"></span> {option}
 								</h6>
 								<small
 									className="text-danger"
-									onClick={this.RemoveOption}
+									onClick={() => RemoveOption(option)}
 									style={{ cursor: "pointer" }}>
 									X
 									</small>
@@ -107,39 +90,61 @@ const CreatePoll = () => {
 						);
 					})}
 				</div>
-				<div className="mt-3">{this.state.showForm ? choiceform : ""}</div>
-				<div className="mt-3">
-					{this.state.showForm ? (
-						<input
-							type="date"
-							className="form-control is-rounded"
-							style={{ borderRadius: "5px" }}
-							disabled={this.state.options.length < 1}
-						/>
-					) : (
-							""
-						)}
-				</div>
-				<div>
-					{this.state.showForm ? (
-						<button
-							disabled={!this.state.question && !this.state.options && !this.state.date}
-							className="form-control mt-3"
-							style={
-								this.state.question
-									? defaultColor.background_color
-									: { backgroundColor: "grey" }
-							}
-							onSubmit={this.submitPoll}>
-							Submit
-						</button>
-					) : (
-							""
-						)}
-				</div>
+				{
+					showForm && (
+						<div className="mt-3">{choiceform}</div>
+					)
+				}
+
+				{
+					showForm && (
+						<div className="mt-3">
+							<input
+								type="date"
+								className="form-control is-rounded"
+								style={{ borderRadius: "5px" }}
+								disabled={Boolean(options.length)}
+							/>
+						</div>
+					)
+				}
+
+				{
+					showForm && (
+						<div className="d-flex">
+							<button
+								disabled={!question && !options && !date}
+								className="form-control mt-3"
+								style={
+									question
+										? defaultColor.background_color
+										: { backgroundColor: "grey" }
+								}>
+								Submit
+							</button>
+							<button
+								disabled={!question && !options && !date}
+								className="form-control mt-3"
+								style={
+									question
+										? defaultColor.background_color
+										: { backgroundColor: "grey" }
+								}>
+								Cancel
+							</button>
+						</div>
+					)
+				}
+
 			</form>
 		</div>
 	);
 }
 
+CreatePoll.propType = {
+	defaultColor: object,
+	Logger: func
+}
+
 export default CreatePoll;
+

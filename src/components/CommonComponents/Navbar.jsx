@@ -35,7 +35,8 @@ const NavbarPage = () => {
 	const dispatch_logout = useDispatch();
 
 	const onSubmit = (e) => {
-		dispatch_logout(logout);
+		console.log("logout pressed")
+		dispatch_logout(logout());
 	};
 
 	const dropdown = (
@@ -53,7 +54,7 @@ const NavbarPage = () => {
 					<MDBDropdownItem>
 						<Link onClick={onSubmit}>
 							Logout
-					</Link>
+						</Link>
 					</MDBDropdownItem>
 				</MDBDropdownMenu>
 			</MDBDropdown>

@@ -1,5 +1,6 @@
 import { combineReducers } from "redux";
 import userAuth from "./userAuthenticationReducer";
+import polls from "./poll_reducer"
 import storage from 'redux-persist/lib/storage'
 import { persistReducer } from 'redux-persist'
 
@@ -11,7 +12,7 @@ const persistConfig = {
 }
 
 const rootReducer = combineReducers({
-	userAuth
+	userAuth, polls
 })
 
 export default persistReducer(persistConfig, rootReducer)

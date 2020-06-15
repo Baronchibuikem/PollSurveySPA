@@ -50,7 +50,7 @@ export const login = ({ email, password }) => (dispatch) => {
 			// dispatch(loadUser(response.data.user.id));
 		})
 		.catch((error) => {
-			dispatch({ type: LOGIN_FAIL, payload: error.response.data });
+			dispatch({ type: LOGIN_FAIL, payload: error.response });
 		});
 };
 
@@ -74,21 +74,13 @@ export const register_action = ({ data }) => (dispatch) => {
 		});
 };
 
-// LOGOUT USER
+
 export const logout = () => (dispatch, getState) => {
-	route
-		.post("/api/v1/account/logout/", null, tokenConfig(getState))
-		.then((res) => {
-			dispatch({
-				type: LOGOUT_SUCCESS,
-			});
-		})
-		.catch((err) => {
-			dispatch({
-				type: LOGOUT_FAIL,
-			});
-			console.log(err);
-		});
+	// used for loging out a user, we dispatch a LOGOUT_SUCCESS action to our authenticationReducer
+	dispatch({
+		type: LOGOUT_SUCCESS,
+	});
+
 };
 
 
