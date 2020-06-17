@@ -9,7 +9,7 @@ const CreatePoll = () => {
 	const [question, setQuestion] = useState("");
 	const [option, setOption] = useState('')
 	const [options, setOptions] = useState([])
-	const [initialValue, setIntialValue] = useState({ choice_text: [{}] })
+	const [initialValue, setInitialValue] = useState([])
 	const [showForm, setShowForm] = useState(false)
 	const [date, setDate] = useState("")
 
@@ -25,10 +25,19 @@ const CreatePoll = () => {
 		setQuestion(e.target.value)
 	};
 
+	// const addOptionToArray = () => {
+	// 	setInitialValue.choice_name.push({ choice_name: option })
+	// }
+
 	const AddOption = () => {
+		// addOptionToArray()
+		// const list = setInitialValue.choice_name.concat({ choice_name: option })
+		// setInitialValue({ choice_name: list })
 		setOptions(options => {
 			return [...options, option]
 		})
+		console.log(initialValue)
+		setOption("")
 	};
 
 	// For removing an a choice from a poll question when it is being created
@@ -41,8 +50,14 @@ const CreatePoll = () => {
 	const submit = (e) => {
 		e.preventDefault()
 		const token = params.token
-		console.log(question, options, date, "FROM Poll SUBMIT", token)
-		dispatch_createpoll(create_poll({ question, options, date, token }));
+		const choices = options && options.length ? options.map(option => {
+			return {
+				choice_name: option
+			}
+		}) : []
+
+		// console.log(question, options, date, "FROM Poll SUBMIT", token)
+		dispatch_createpoll(create_poll({ question, choices, date, token }));
 	}
 
 	const choiceform = (
@@ -115,7 +130,9 @@ const CreatePoll = () => {
 								className="form-control is-rounded"
 								style={{ borderRadius: "5px" }}
 								disabled={Boolean(!options.length)}
+								onChange={(e) => setDate(e.target.value)}
 							/>
+
 						</div>
 					)
 				}

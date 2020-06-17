@@ -1,13 +1,13 @@
 import axios from 'axios';
 
 export const config = {
-  fetchUrl: 'https://staging-exalt-server.herokuapp.com/api/v1',
+  fetchUrl: "http://127.0.0.1:8000/api/v1/"
   // fetchUrl: 'http://192.168.0.187:8000/api/v1',
 };
 
 const callPlainApi = (url, data, method) =>
   new Promise((resolve, reject) => {
-    const axiosOptions = {timeout: 30000};
+    const axiosOptions = { timeout: 30000 };
     if (method === 'PUT') {
       axios
         .put(`${config.fetchUrl}${url}`, data, {
@@ -49,7 +49,8 @@ const callSecuredApi = (url, data, method, token, callback) => {
   const axiosOptions = {};
   if (token) {
     axiosOptions.headers = {
-      Authorization: `Bearer ${token}`,
+      // Authorization: `Bearer ${token}`,
+      Authorization: `Token ${token}`,
       'Content-Type': 'application/json',
     };
     axiosOptions.timeout = 30000;

@@ -1,9 +1,13 @@
-import { ALLPOLL, CREATEPOLL, SINGLEPOLL } from "../actions/actionTypes"
+import { ALLPOLL, CREATEPOLL, SINGLEPOLL, CREATEPOLL_FAIL } from "../actions/actionTypes"
 import route from "../../ApiClient";
 import { tokenConfig } from "../getTokenFromState"
+import { callApi } from "../index";
 
 
-
+/* 
+This can also be used to send a post request to the backend, but i choose not to use it, since the
+imported callApi has been probably customized and made reusuable for making CRUD request.
+----------------------------------------------------------------------------------------
 export const create_poll = (data) => {
     let config = {
         headers: {
@@ -16,5 +20,25 @@ export const create_poll = (data) => {
             poll_question: data.question, choices: data.options, poll_expiration_date: data.date
         }, config)
         dispatch({ type: ALLPOLL, payload: response.data });
+    };
+    -------------------------------------------------------------------------------------
+}; */
+
+/* Used for sending data to the backend to create a new poll */
+export const create_poll = (data) => {
+    return async dispatch => {
+        try {
+            const response = await callApi("polls/create-polls/", {
+                poll_question: data.question,
+                choices: data.choices,
+                poll_expiration_date: data.date
+            }, "POST", data.token)
+            if (response) {
+                dispatch({ type: ALLPOLL, payload: response.data });
+            }
+        } catch (error) {
+            dispatch({ type: CREATEPOLL_FAIL, payload: error.response })
+        }
+
     };
 };
