@@ -15,6 +15,7 @@ export const create_poll = (data) => {
             "Content-Type": "application/json"
         },
     };
+
     return async dispatch => {
         const response = await route.post("polls/create-polls/", {
             poll_question: data.question, choices: data.options, poll_expiration_date: data.date
@@ -34,6 +35,29 @@ export const create_poll = (data) => {
                 poll_expiration_date: data.date
             }, "POST", data.token)
             if (response) {
+                dispatch({ type: CREATEPOLL, payload: response.data });
+                dispatch(get_polls(data))
+            }
+        } catch (error) {
+            dispatch({ type: CREATEPOLL_FAIL, payload: error.response })
+        }
+
+    };
+};
+
+export const get_polls = (data) => {
+    let config = {
+        headers: {
+            Authorization: `Token ${data.token}`,
+            "Content-Type": "application/json"
+        },
+    };
+    return async dispatch => {
+        try {
+            const response = await route.get("polls/all-polls/", null,
+                config)
+            if (response) {
+                console.log(response.data)
                 dispatch({ type: ALLPOLL, payload: response.data });
             }
         } catch (error) {

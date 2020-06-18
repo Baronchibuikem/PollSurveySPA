@@ -5,15 +5,11 @@ import React, {
 import {
 	BrowserRouter as Router
 } from "react-router-dom";
-// import { loadUser } from "../store/actions/userAuthentication";
 import BaseRouter from "../routes";
 import Navbar from "./CommonComponents/Navbar";
-// import Footer from "./CommonComponents/Footer";
 
 export default class App extends Component {
-	// componentDidMount() {
-	// 	store.dispatch(loadUser());
-	// }
+
 	render() {
 		return (
 			<Fragment >

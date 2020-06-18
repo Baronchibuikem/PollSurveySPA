@@ -32,8 +32,8 @@ const ProfileHeader = () => {
 				</div>
 				<div className="text-center my-3">
 					<span className="text-light">
-						A software developer dedicated to becoming world class
-						</span>
+						{params.current_user.bio}
+					</span>
 				</div>
 				<hr style={{ borderTop: "1px solid white" }} />
 				<div className="d-flex text-dark mt-3 justify-content-center">

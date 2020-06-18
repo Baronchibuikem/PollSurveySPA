@@ -12,8 +12,9 @@ export default class homepage extends Component {
 					<div className="col-md-3">
 						<ProfileHeader />
 					</div>
-					<div className="col-md-6">
+					<div className="col-md-6 min-vh-100" style={{ backgroundColor: "#f6f9fa" }}>
 						<CreatePoll />
+						<hr />
 						<AllPolls />
 					</div>
 					<div className="col-md-3">

@@ -13,7 +13,9 @@ import { PersistGate } from 'redux-persist/integration/react'
 ReactDom.render(
 	<Provider store={store}>
 		<PersistGate loading={null} persistor={persistor}>
-			<App />
+			<div style={{ backgroundColor: "#f6f9fa" }}>
+				<App />
+			</div>
 		</PersistGate>
 	</Provider>,
 	document.querySelector("#root")

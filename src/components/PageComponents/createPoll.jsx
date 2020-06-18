@@ -25,6 +25,10 @@ const CreatePoll = () => {
 		setQuestion(e.target.value)
 	};
 
+	const focusDeactivated = (e) => {
+		setShowForm(false)
+	};
+
 	// const addOptionToArray = () => {
 	// 	setInitialValue.choice_name.push({ choice_name: option })
 	// }
@@ -58,6 +62,12 @@ const CreatePoll = () => {
 
 		// console.log(question, options, date, "FROM Poll SUBMIT", token)
 		dispatch_createpoll(create_poll({ question, choices, date, token }));
+		setQuestion("")
+		setOption("")
+		setOptions([])
+		setInitialValue([])
+		setDate("")
+		setShowForm(false)
 	}
 
 	const choiceform = (
@@ -94,7 +104,8 @@ const CreatePoll = () => {
 						style={{ borderRadius: "5px" }}
 						className="form-control is-rounded"
 						onChange={focusActivated}
-						placeholder="What is your question"></textarea>
+						placeholder="What is your question"
+						maxLength="150"></textarea>
 				</div>
 				<div className="options">
 					{options.map((option, index) => {
@@ -152,7 +163,8 @@ const CreatePoll = () => {
 								Submit
 							</button>
 							<button
-								disabled={!question && !options && !date}
+								// disabled={!question && !options && !date}
+								onClick={focusDeactivated}
 								className="form-control mt-3"
 								style={
 									question
