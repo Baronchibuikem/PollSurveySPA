@@ -25,7 +25,9 @@ const CreatePoll = () => {
 		setQuestion(e.target.value)
 	};
 
-	const focusDeactivated = (e) => {
+	const focusDeactivated = () => {
+		setQuestion("")
+		setOptions([])
 		setShowForm(false)
 	};
 
@@ -49,6 +51,7 @@ const CreatePoll = () => {
 		const newArr = options.filter(opt => opt !== o);
 		setOptions(newArr);
 		setOption("")
+
 	};
 
 	const submit = (e) => {

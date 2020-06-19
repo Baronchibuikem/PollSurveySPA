@@ -1,4 +1,4 @@
-import { ALLPOLL, CREATEPOLL, SINGLEPOLL, CREATEPOLL_FAIL } from "../actions/actionTypes"
+import { ALLPOLL, CREATEPOLL, SINGLEPOLL, CREATEPOLL_FAIL, SINGLEPOLL_FAIL } from "../actions/actionTypes"
 import route from "../../ApiClient";
 import { tokenConfig } from "../getTokenFromState"
 import { callApi } from "../index";
@@ -62,6 +62,32 @@ export const get_polls = (data) => {
             }
         } catch (error) {
             dispatch({ type: CREATEPOLL_FAIL, payload: error.response })
+        }
+
+    };
+};
+
+export const get_single_poll = (data) => {
+    return async (dispatch, getState) => {
+        const token = getState().userAuth.token
+        console.log(token)
+        let config = {
+            headers: {
+                Authorization: `Token ${token}`,
+                "Content-Type": "application/json"
+            },
+        };
+        console.log(config, "CONFIG")
+
+        try {
+            const response = await route.get(`polls/all-polls/${data}/`,
+                config)
+            if (response) {
+                console.log(response.data)
+                dispatch({ type: SINGLEPOLL, payload: response.data });
+            }
+        } catch (error) {
+            dispatch({ type: SINGLEPOLL_FAIL, payload: error.response })
         }
 
     };

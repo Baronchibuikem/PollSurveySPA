@@ -13,4 +13,5 @@ export const LOGOUT_FAIL = "LOGOUT_FAIL";
 export const ALLPOLL = "ALLPOLL";
 export const CREATEPOLL = "CREATEPOLL"
 export const SINGLEPOLL = "SINGLEPOLL"
+export const SINGLEPOLL_FAIL = "SINGLEPOLL_FAIL"
 export const CREATEPOLL_FAIL = "CREATEPOLL_FAIL"

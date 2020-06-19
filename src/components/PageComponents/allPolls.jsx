@@ -1,18 +1,24 @@
-import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux"
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { get_polls } from "../../store/actions/poll_action"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/AllPolls.css"
+import { Link, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux"
+import { get_single_poll, get_polls } from "../../store/actions/poll_action"
+import { useHistory } from "react-router";
 
 const AllPolls = () => {
 
+
+	const { id, setId } = useState("")
 	const params = useSelector((state) => ({
 		all: state.polls.poll,
 		token: state.userAuth.token
 	}));
 
 	const dispatch_logout = useDispatch();
+	const dispatch_single_poll = useDispatch();
+	const history = useHistory()
 
 
 	useEffect(() => {
@@ -20,15 +26,28 @@ const AllPolls = () => {
 		dispatch_logout(get_polls(token))
 	}, [])
 
+
+	const get_single_page = (id) => {
+		dispatch_single_poll(get_single_poll(id))
+		history.push({
+			pathname: `/${id}`
+		})
+	}
+
 	return (
 		<div className="mt-5">
 			{
 				params.all.map(poll => (
 					<div>
-						<div className="mb-3" key={poll.id} >
+						<div className="mb-3 card" key={poll.id} style={{ borderColor: "lightblue" }} >
 							<div className="card-body poll" style={{ borderLeft: "1px solid #F0F0F0", position: "relative" }}>
 								<div>
-									<span className="font-weight-bold">{poll.poll_creator_fullname} @{poll.poll_creator}</span>
+									<span className="font-weight-bold">
+										<span className="" onClick={() => get_single_page(poll.id)}>
+											{poll.poll_creator_fullname} @{poll.poll_creator}
+										</span>
+									</span>
+
 								</div>
 								<p className="card-title">{poll.poll_question}</p>
 								<div className="card-text">
