@@ -8,6 +8,8 @@ export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 export const LOGOUT_FAIL = "LOGOUT_FAIL";
+export const CURRENT_LOGGEDIN_USER = "CURRENT_LOGGEDIN_USER"
+export const CURRENT_LOGGEDIN_USER_FAIL = "CURRENT_LOGGEDIN_USER_FAIL"
 
 // for polls
 export const ALLPOLL = "ALLPOLL";

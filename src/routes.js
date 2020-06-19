@@ -8,6 +8,7 @@ import LoginForm from "./components/PageComponents/loginPage";
 import RegistrationForm from "./components/PageComponents/registerPage";
 import PrivateRoute from "./components/CommonComponents/PrivateRoute";
 import singlePoll from "./components/PageComponents/singlePoll";
+import userProfile from "./components/PageComponents/userProfile";
 
 const BaseRouter = () => (
 	<Switch>
@@ -16,6 +17,7 @@ const BaseRouter = () => (
 		<Route exact path="/login" component={LoginForm} />
 		<Route exact path="/:id" component={singlePoll} />
 		<Route exact path="/register" component={RegistrationForm} />
+		<Route exact path="/user/:id" component={userProfile} />
 	</Switch>
 );
 export default BaseRouter;

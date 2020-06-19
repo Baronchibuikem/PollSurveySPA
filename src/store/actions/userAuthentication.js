@@ -1,45 +1,18 @@
 import {
 	USER_LOADED,
 	LOGIN_FAIL,
-	LOGIN_SUCCESS,
 	LOGOUT_SUCCESS,
-	LOGOUT_FAIL,
 	REGISTER_FAIL,
 	REGISTER_SUCCESS,
 	REQUEST_LOADING,
+	CURRENT_LOGGEDIN_USER,
+	CURRENT_LOGGEDIN_USER_FAIL
 } from "./actionTypes";
 import route from "../../ApiClient";
 
-// Setup config with token - helper function
 
-export const tokenConfig = (getState) => {
-	// Get token
-	const token = getState().userAuth.token;
-	const config = {
-		headers: {
-			"Content-Type": "application/json",
-		},
-	};
-	if (token) {
-		config.headers["Authorization"] = `Token ${token}`;
-	}
-
-	return config;
-};
 
 let config = { headers: { "Content-Type": "application/json" } };
-
-
-export const loadUser = (id) => {
-	return async (dispatch, getState) => {
-		const response = await route.get(
-			`account/user/${id}`,
-			tokenConfig(getState)
-		);
-
-		dispatch({ type: USER_LOADED, payload: response.data.user });
-	};
-};
 
 // LOGIN USER
 export const login = ({ email, password }) => (dispatch) => {
@@ -83,5 +56,30 @@ export const logout = () => (dispatch, getState) => {
 	});
 
 };
+
+
+// For fetching the data of the current logged in user
+export const getUserById = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+
+		try {
+			const response = await route.get(`/account/user/${data}/`,
+				config)
+			if (response) {
+				console.log(response.data)
+				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
+			}
+		} catch (error) {
+			dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response })
+		}
+	}
+}
 
 

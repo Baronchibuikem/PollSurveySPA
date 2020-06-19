@@ -1,6 +1,5 @@
 import { ALLPOLL, CREATEPOLL, SINGLEPOLL, CREATEPOLL_FAIL, SINGLEPOLL_FAIL } from "../actions/actionTypes"
 import route from "../../ApiClient";
-import { tokenConfig } from "../getTokenFromState"
 import { callApi } from "../index";
 
 
@@ -70,7 +69,6 @@ export const get_polls = (data) => {
 export const get_single_poll = (data) => {
     return async (dispatch, getState) => {
         const token = getState().userAuth.token
-        console.log(token)
         let config = {
             headers: {
                 Authorization: `Token ${token}`,
