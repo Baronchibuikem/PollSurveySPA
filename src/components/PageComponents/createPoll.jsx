@@ -101,7 +101,7 @@ const CreatePoll = () => {
 	);
 	return (
 		<div>
-			<form onSubmit={submit}>
+			<form>
 				<div>
 					<textarea
 						style={{ borderRadius: "5px" }}
@@ -166,13 +166,8 @@ const CreatePoll = () => {
 								Submit
 							</button>
 							<button
-								// disabled={!question && !options && !date}
-								onClick={focusDeactivated}
 								className="form-control mt-3"
-								style={
-									question
-										? defaultColor.background_color
-										: { backgroundColor: "grey" }
+								style={defaultColor.background_color
 								}>
 								Cancel
 							</button>

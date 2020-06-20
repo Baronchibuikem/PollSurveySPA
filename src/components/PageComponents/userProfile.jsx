@@ -9,7 +9,6 @@ export default function UserProfile() {
 
     return (
         <div>
-            <h1>User Profile</h1>
             <ul className="nav nav-tabs profile-tab" role="tablist">
                 <li className="nav-item">
                     <a
@@ -53,30 +52,59 @@ export default function UserProfile() {
             <div className="tab-content">
                 <div className="tab-pane active" id="profile" role="tabpanel">
                 <div className="col-md-12 col sm-12 mt-3">
-										<div v-if="show === true">
+										<div >
 											<h6>
-												<b>Username</b>
-												@{ params.single_user.username }
+                                                <div className="row">
+                                                    <div className="col-md-4">
+                                                    Username
+                                                    </div>
+                                                    <div className="col font-weight-bold">
+                                                    { params.single_user.username }
+                                                    </div>
+                                                </div>
+											
+												
 											</h6>
 											<h6 className="mt-4">
-												<b>First Name</b>
-												@{ params.single_user.first_name }
+                                                <div className="row">
+                                                    <div className="col-md-4">
+                                                    Full Name
+                                                    </div>
+                                                    <div className="col font-weight-bold">
+                                                    { params.single_user.user_fullname }
+                                                    </div>
+                                                </div>												
+											</h6>
+											
+											<h6 className="mt-4">
+                                            <div className="row">
+                                                <div className="col-md-4">
+                                                Email
+                                                </div>
+                                                <div className="col font-weight-bold">
+                                                { params.single_user.email }
+                                                </div>
+                                                </div>												
 											</h6>
 											<h6 className="mt-4">
-												<b>Last Name</b>
-												@{ params.single_user.last_name }
+                                            <div className="row">
+                                            <div className="col-md-4">
+                                                Position
+                                                </div>
+                                                <div className="col font-weight-bold">
+                                               { params.single_user.position }
+                                                </div>
+                                                </div>
 											</h6>
 											<h6 className="mt-4">
-												<b>Email</b>
-												@{ params.single_user.email }
-											</h6>
-											<h6 className="mt-4">
-												<b>Position</b>
-												@{ params.single_user.position }
-											</h6>
-											<h6 className="mt-4">
-											<b>About</b>
-											@{ params.single_user.bio }
+                                            <div className="row">
+                                            <div className="col-md-4">
+                                                About Me
+                                                </div>
+                                                <div className="col font-weight-bold">
+                                                { params.single_user.bio }
+                                                </div>	
+                                            </div>
 											</h6>
 											
 										</div>
