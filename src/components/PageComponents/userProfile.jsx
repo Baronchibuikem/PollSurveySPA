@@ -52,29 +52,29 @@ export default function UserProfile() {
             </ul>
             <div className="tab-content">
                 <div className="tab-pane active" id="profile" role="tabpanel">
-                <div class="col-md-12 col sm-12 mt-3">
+                <div className="col-md-12 col sm-12 mt-3">
 										<div v-if="show === true">
 											<h6>
 												<b>Username</b>
 												@{ params.single_user.username }
 											</h6>
-											<h6 class="mt-4">
+											<h6 className="mt-4">
 												<b>First Name</b>
 												@{ params.single_user.first_name }
 											</h6>
-											<h6 class="mt-4">
+											<h6 className="mt-4">
 												<b>Last Name</b>
 												@{ params.single_user.last_name }
 											</h6>
-											<h6 class="mt-4">
+											<h6 className="mt-4">
 												<b>Email</b>
 												@{ params.single_user.email }
 											</h6>
-											<h6 class="mt-4">
+											<h6 className="mt-4">
 												<b>Position</b>
 												@{ params.single_user.position }
 											</h6>
-											<h6 class="mt-4">
+											<h6 className="mt-4">
 											<b>About</b>
 											@{ params.single_user.bio }
 											</h6>
