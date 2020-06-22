@@ -55,7 +55,7 @@ const CreatePoll = () => {
 	};
 
 	const submit = (e) => {
-		e.preventDefault()
+		// e.preventDefault()
 		const token = params.token
 		const choices = options && options.length ? options.map(option => {
 			return {
@@ -155,7 +155,7 @@ const CreatePoll = () => {
 					showForm && (
 						<div className="d-flex">
 							<button
-								onSubmit={submit}
+								onClick={submit}
 								disabled={!question && !options && !date}
 								className="form-control mt-3"
 								style={
@@ -167,8 +167,9 @@ const CreatePoll = () => {
 							</button>
 							<button
 								className="form-control mt-3"
-								style={defaultColor.background_color
-								}>
+								style={defaultColor.background_color}
+								onClick={focusDeactivated}
+							>
 								Cancel
 							</button>
 						</div>

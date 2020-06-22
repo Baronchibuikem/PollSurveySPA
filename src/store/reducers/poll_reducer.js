@@ -1,4 +1,4 @@
-import { ALLPOLL, CREATEPOLL, SINGLEPOLL } from "../actions/actionTypes"
+import { ALLPOLL, CREATEPOLL, SINGLEPOLL, ALLPOLL_FAIL, VOTE_FAIL } from "../actions/actionTypes"
 
 const initialState = {
     poll: [],
@@ -7,15 +7,20 @@ const initialState = {
         id: '',
         poll_creator: "",
         poll_creator_image: "",
+        poll_creator_id: "",
         poll_has_expired: "",
         poll_creator_fullname: "",
-        choice: [{
+        choices: [{
             id: "",
             poll_name: "",
             votes: [],
-            choice_name: ""
+            choice_name: "",
+            choice_vote_count: "",
+            registered_voter: []
+
         }]
-    }
+    },
+    vote_error: []
 
 }
 
@@ -32,13 +37,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 single_poll: action.payload
             };
-        // case SINGLEPOLL:
-        //     return{
-        //         ...state,
-        //         poll: action
-        //     }
+        case VOTE_FAIL:
+            return {
+                ...state,
+                vote_error: action.payload
+            };
         default:
-            return state
+            return { ...state }
     }
 }
 export default reducer;
