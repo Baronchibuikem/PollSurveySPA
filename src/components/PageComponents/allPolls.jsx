@@ -70,15 +70,29 @@ const AllPolls = () => {
 								</div>
 								<p className="card-title pollhover" onClick={() => get_single_page(poll.id)}>{poll.poll_question}</p>
 								<div className="card-text">
-									{poll.poll_has_expired ? <span className="text-danger">This poll has expired</span> :
-										<div className="row">
-											{/* {params.votedb_error ? params.votedb_error.map((error) => {
-											return <span>{error}</span>
-										}) : ""} */}
+									{poll.poll_has_expired ?
+										<div>
+											<span className="text-danger">This poll has expired</span>
+											<div className="row">
+												{
+													poll.choices ? poll.choices.map(choice => {
+														return (
 
+															<div className="col-md-6 my-1" key={choice.id}>
+																<button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Can't vote on your own poll">
+																	{choice.choice_name} {choice.choice_vote_count}
+																</button>
+															</div>
+														)
+													}) : ""
+												}
+											</div>
+										</div> :
+										<div className="row">
 											{
 												poll.choices ? poll.choices.map(choice => {
 													return params.user.username === poll.poll_creator ?
+
 														<div className="col-md-6 my-1" key={choice.id}>
 															<button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Can't vote on your own poll">
 																{choice.choice_name} {choice.choice_vote_count}
@@ -96,10 +110,17 @@ const AllPolls = () => {
 														</div>
 												}) : ""
 											}
-										</div>}
+										</div>
+									}
 								</div>
+								<div className="d-flex justify-content-between">
+									<span className="text-success">Total Votes : {poll.vote_count}</span>
+									<span className="text-success">Poll expires on : {poll.poll_expiration_date}</span>
+								</div>
+								<small className="text-danger">You can't vote on your own poll</small>
 							</div>
-						</div><hr /></div>
+						</div><hr />
+					</div>
 				))
 
 			}

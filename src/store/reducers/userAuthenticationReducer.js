@@ -45,6 +45,11 @@ const reducer = (state = initialState, action) => {
 				isAuthenticated: true,
 				token: action.payload.token
 			};
+		case CURRENT_LOGGEDIN_USER:
+			return {
+				...state,
+				user: action.payload.user
+			};
 		case AUTH_ERROR:
 		case REGISTER_FAIL:
 			localStorage.removeItem("token");

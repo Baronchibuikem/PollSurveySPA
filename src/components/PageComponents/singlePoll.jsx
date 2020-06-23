@@ -36,7 +36,9 @@ const SinglePoll = () => {
                                             {choice.choice_name}
                                         </button>
                                 })}
-                            </div>}
+                            </div>
+                        }
+                        <small className="text-danger">You can't vote on your own poll</small>
                     </div>
                 </div>
 

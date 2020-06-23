@@ -1,11 +1,15 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { useSelector } from "react-redux"
 
 
 export default function UserProfile() {
     const params = useSelector((state) => ({
-        single_user: state.userAuth.user,
+        single_user: state.userAuth.viewed_user,
     }));
+
+    useEffect(() => {
+		console.log("userprofile loaded")
+	}, [params.single_user])
 
     return (
         <div>

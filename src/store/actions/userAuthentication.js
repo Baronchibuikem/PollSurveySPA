@@ -6,7 +6,7 @@ import {
 	REGISTER_SUCCESS,
 	REQUEST_LOADING,
 	CURRENT_LOGGEDIN_USER,
-	CURRENT_LOGGEDIN_USER_FAIL
+	CURRENT_LOGGEDIN_USER_FAIL, VIEWED_LOGGEDIN_USER
 } from "./actionTypes";
 import route from "../../ApiClient";
 
@@ -21,7 +21,7 @@ export const login = ({ email, password }) => (dispatch) => {
 		.then((response) => {
 			console.log(response.data)
 			dispatch({ type: USER_LOADED, payload: response.data });
-			// dispatch(loadUser(response.data.user.id));
+
 		})
 		.catch((error) => {
 			dispatch({ type: LOGIN_FAIL, payload: error.response });
@@ -82,4 +82,26 @@ export const getUserById = (data) => {
 	}
 }
 
+// // For fetching the data of the current logged in user
+// export const viewClickedUserById = (data) => {
+// 	return async (dispatch, getState) => {
+// 		const token = getState().userAuth.token
+// 		let config = {
+// 			headers: {
+// 				Authorization: `Token ${token}`,
+// 				"Content-Type": "application/json"
+// 			},
+// 		};
 
+// 		try {
+// 			const response = await route.get(`/account/user/${data}/`,
+// 				config)
+// 			if (response) {
+// 				console.log(response.data)
+// 				dispatch({ type: VIEWED_LOGGEDIN_USER, payload: response.data });
+// 			}
+// 		} catch (error) {
+// 			// dispatch({ type: VIEWED_LOGGEDIN_USER_FAIL, payload: error.response })
+// 		}
+// 	}
+// }
