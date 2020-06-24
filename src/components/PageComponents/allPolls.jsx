@@ -4,7 +4,7 @@ import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/AllPolls.css"
 import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, get_polls, post_currentuser_vote } from "../../store/actions/poll_action"
-import { getUserById } from "../../store/actions/userAuthentication"
+import { getUserById, viewClickedUserById } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 
 const AllPolls = () => {
@@ -45,7 +45,7 @@ const AllPolls = () => {
 	// used to dipatch an action that that gets the profile of the clicked user and
 	// then change the route to user profile page
 	const get_user = (id) => {
-		dispatch_get_user(getUserById(id))
+		dispatch_get_user(viewClickedUserById(id))
 		history.push({
 			pathname: `/user/${id}`
 		})
@@ -64,7 +64,7 @@ const AllPolls = () => {
 						<div className="mb-3 card" style={{ borderColor: "lightblue" }} >
 							<div className="card-body poll" style={{ borderLeft: "1px solid #F0F0F0", position: "relative" }}>
 								<div>
-									<span className="font-weight-bold" onClick={() => get_user(poll.poll_creator_id)}>
+									<span className="font-weight-bold pollhover" onClick={() => get_user(poll.poll_creator_id)}>
 										{poll.poll_creator_fullname} @{poll.poll_creator}
 									</span>
 								</div>

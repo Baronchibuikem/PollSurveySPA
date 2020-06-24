@@ -16,6 +16,7 @@ let config = { headers: { "Content-Type": "application/json" } };
 
 // LOGIN USER
 export const login = ({ email, password }) => (dispatch) => {
+	dispatch({ type: REQUEST_LOADING })
 	route
 		.post("/account/login/", { email, password }, config)
 		.then((response) => {
@@ -24,7 +25,8 @@ export const login = ({ email, password }) => (dispatch) => {
 
 		})
 		.catch((error) => {
-			dispatch({ type: LOGIN_FAIL, payload: error.response });
+			console.log(error.response.data.data, "ERROR MESSAGE")
+			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data });
 		});
 };
 
@@ -45,6 +47,7 @@ export const register_action = ({ data }) => (dispatch) => {
 		.catch((err) => {
 
 			dispatch({ type: REGISTER_FAIL, payload: err.response.data });
+
 		});
 };
 
@@ -77,31 +80,31 @@ export const getUserById = (data) => {
 				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
 			}
 		} catch (error) {
-			dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response })
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
 		}
 	}
 }
 
 // // For fetching the data of the current logged in user
-// export const viewClickedUserById = (data) => {
-// 	return async (dispatch, getState) => {
-// 		const token = getState().userAuth.token
-// 		let config = {
-// 			headers: {
-// 				Authorization: `Token ${token}`,
-// 				"Content-Type": "application/json"
-// 			},
-// 		};
+export const viewClickedUserById = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
 
-// 		try {
-// 			const response = await route.get(`/account/user/${data}/`,
-// 				config)
-// 			if (response) {
-// 				console.log(response.data)
-// 				dispatch({ type: VIEWED_LOGGEDIN_USER, payload: response.data });
-// 			}
-// 		} catch (error) {
-// 			// dispatch({ type: VIEWED_LOGGEDIN_USER_FAIL, payload: error.response })
-// 		}
-// 	}
-// }
+		try {
+			const response = await route.get(`/account/user/${data}/`,
+				config)
+			if (response) {
+				console.log(response.data)
+				dispatch({ type: VIEWED_LOGGEDIN_USER, payload: response.data });
+			}
+		} catch (error) {
+			// dispatch({ type: VIEWED_LOGGEDIN_USER_FAIL, payload: error.response })
+		}
+	}
+}

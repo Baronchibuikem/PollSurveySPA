@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useSelector } from "react-redux"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
+import ProfileHeader from "./profileHeader"
+import GetTrends from "./getTrends"
 
 const SinglePoll = () => {
 
@@ -15,8 +17,11 @@ const SinglePoll = () => {
     }, [params.single_poll])
 
     return (
-        <div>
-            <div className="">
+        <div className="row">
+            <div className="col-md-3">
+                <ProfileHeader />
+            </div>
+            <div className="col-md-6">
                 <div className="card" style={{ borderColor: "darkblue" }}>
                     <img className="card-img-top" src="holder.js/100x180/" alt="" />
                     <div className="card-body">
@@ -41,9 +46,10 @@ const SinglePoll = () => {
                         <small className="text-danger">You can't vote on your own poll</small>
                     </div>
                 </div>
-
             </div>
-
+            <div className="col-md-3">
+                <GetTrends />
+            </div>
         </div>
     )
 }

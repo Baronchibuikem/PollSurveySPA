@@ -10,6 +10,7 @@ import Navbar from "./CommonComponents/Navbar";
 import ProfileHeader from "./PageComponents/profileHeader"
 import GetTrends from "./PageComponents/getTrends"
 import LoginPage from "./PageComponents/loginPage"
+import RegisterPage from "./PageComponents/registerPage"
 
 const App = () => {
 
@@ -21,20 +22,11 @@ const App = () => {
 			<Router >
 				<Navbar />
 				<div className="container" style={{ paddingTop: "70px" }} >
-					{
-						params.token !== null ?
-							<div className="row">
-								<div className="col-md-3">
-									<ProfileHeader />
-								</div>
-
-								<div className="col-md-6 min-vh-100" style={{ backgroundColor: "#f6f9fa" }}>
-									<BaseRouter />
-								</div>
-								<div className="col-md-3">
-									<GetTrends />
-								</div>
-							</div> : <LoginPage />}
+					<div className="row">
+						<div className="col-md-12 min-vh-100 mx-auto" style={{ backgroundColor: "#f6f9fa" }}>
+							<BaseRouter />
+						</div>
+					</div>
 				</div>
 			</Router>
 		</Fragment >

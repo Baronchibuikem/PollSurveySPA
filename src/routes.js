@@ -12,12 +12,12 @@ import userProfile from "./components/PageComponents/userProfile";
 
 const BaseRouter = () => (
 	<Switch>
-		<PrivateRoute exact path="/" component={Homepage} />
-		<Route exact path="/polls" component={AllPolls} />
+		{/* <Route exact path="/polls" component={AllPolls} /> */}
 		<Route exact path="/login" component={LoginForm} />
-		<Route exact path="/:id" component={singlePoll} />
 		<Route exact path="/register" component={RegistrationForm} />
-		<Route exact path="/user/:id" component={userProfile} />
+		<PrivateRoute exact path="/:id" component={singlePoll} />
+		<PrivateRoute exact path="/user/:id" component={userProfile} />
+		<PrivateRoute exact path="/" component={Homepage} />
 	</Switch>
 );
 export default BaseRouter;

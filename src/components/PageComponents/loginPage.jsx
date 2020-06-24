@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 // import PropTypes from "prop-types";
@@ -17,8 +17,12 @@ const LoginForm = () => {
 	const params = useSelector((state) => ({
 		authenticated: state.userAuth.isAuthenticated,
 		loading: state.userAuth.isLoading,
-		error: state.userAuth.auth_error,
+		email_error: state.userAuth.login_email_error,
+		login_error: state.userAuth.login_error,
 	}));
+
+	useEffect(() => {
+	}, [params.login_error])
 
 
 	// this is used to dispatch a redux action with the neeeded login data
@@ -45,16 +49,15 @@ const LoginForm = () => {
 	return (
 		<div className="my-5 py-5">
 			<form
-				className="text-center border border-light p-5 col-md-6 col-sm-12 mx-auto shadow login_background_image"
+				className="text-center border border-light p-5  col-md-6 col-sm-12 mx-auto shadow login_background_image"
 				style={{ backgroundColor: "#eee" }}
 				onSubmit={onSubmit}>
 				<p className="h4 mb-4 text-light font-weight-bold">
 					<span style={{ fontSize: "40px" }}>L</span>ogin
 				</p>
 
-				<h6>{params.error}</h6>
-
 				<div className="mb-4">
+					<span className="text-light font-weight-bold">{params.email_error}</span>
 					<input
 						type="email"
 						name="email"
@@ -65,6 +68,7 @@ const LoginForm = () => {
 					/>
 				</div>
 
+				<span className="text-light font-weight-bold">{params.password_error}</span>
 				<input
 					type="password"
 					name="password"
@@ -81,10 +85,10 @@ const LoginForm = () => {
 					Don't have an
 					<em> account </em>
 					<Link to="/register" className="lg mx-1">
-						{" "}
 						Register
 					</Link>
 				</p>
+				{params.login_error}
 			</form>
 			<hr />
 		</div>

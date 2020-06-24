@@ -1,10 +1,12 @@
 import React, {useEffect} from 'react'
 import { useSelector } from "react-redux"
+import ProfileHeader from "./profileHeader"
+import GetTrends from "./getTrends"
 
 
 export default function UserProfile() {
     const params = useSelector((state) => ({
-        single_user: state.userAuth.viewed_user,
+        single_user: state.userAuth.view_user,
     }));
 
     useEffect(() => {
@@ -12,8 +14,12 @@ export default function UserProfile() {
 	}, [params.single_user])
 
     return (
-        <div>
-            <ul className="nav nav-tabs profile-tab" role="tablist">
+        <div className="row">
+            <div className="col-md-3">
+                <ProfileHeader/>
+            </div>
+            <div className="col-md-6">
+<ul className="nav nav-tabs profile-tab" role="tablist">
                 <li className="nav-item">
                     <a
                         className="nav-link active"
@@ -63,7 +69,7 @@ export default function UserProfile() {
                                                     Username
                                                     </div>
                                                     <div className="col font-weight-bold">
-                                                    { params.single_user.username }
+                                                    { params.single_user.user.username }
                                                     </div>
                                                 </div>
 											
@@ -75,7 +81,7 @@ export default function UserProfile() {
                                                     Full Name
                                                     </div>
                                                     <div className="col font-weight-bold">
-                                                    { params.single_user.user_fullname }
+                                                    { params.single_user.user.user_fullname }
                                                     </div>
                                                 </div>												
 											</h6>
@@ -86,7 +92,7 @@ export default function UserProfile() {
                                                 Email
                                                 </div>
                                                 <div className="col font-weight-bold">
-                                                { params.single_user.email }
+                                                { params.single_user.user.email }
                                                 </div>
                                                 </div>												
 											</h6>
@@ -96,7 +102,7 @@ export default function UserProfile() {
                                                 Position
                                                 </div>
                                                 <div className="col font-weight-bold">
-                                               { params.single_user.position }
+                                               { params.single_user.user.position }
                                                 </div>
                                                 </div>
 											</h6>
@@ -106,7 +112,7 @@ export default function UserProfile() {
                                                 About Me
                                                 </div>
                                                 <div className="col font-weight-bold">
-                                                { params.single_user.bio }
+                                                { params.single_user.user.bio }
                                                 </div>	
                                             </div>
 											</h6>
@@ -116,7 +122,7 @@ export default function UserProfile() {
                 </div>
 
                 <div className="tab-pane" id="polls" role="tabpanel">
-                Polls	
+                     Polls	
                 </div>
                 <div className="tab-pane" id="followers" role="tabpanel">
                     Followers
@@ -127,6 +133,14 @@ export default function UserProfile() {
                 <div className="tab-pane" id="likes" role="tabpanel">
                     Likes
                 </div>
-                </div>     </div>
+                </div> 
+
+            </div>
+            <div className="col-md-3">
+                <GetTrends/>
+            </div>
+                
+                
+                </div>
     )
 }
