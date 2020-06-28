@@ -108,3 +108,54 @@ export const viewClickedUserById = (data) => {
 		}
 	}
 }
+
+export const post_followUser = (data) => {
+	console.log(data)
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		try {
+			const response = await route.post(`/account/follow-user/`, {
+				follower: data.follower_id,
+				following: data.following_id
+			}, config)
+			if (response) {
+				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
+			}
+
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+
+export const post_likepost = (data) => {
+	console.log(data)
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		try {
+			const response = await route.post(`/account/like-poll/`, {
+				poll: data.poll_id,
+				user: data.user_id
+			}, config)
+			if (response) {
+				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
+			}
+
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+

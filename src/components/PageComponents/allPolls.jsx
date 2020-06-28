@@ -4,7 +4,7 @@ import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/AllPolls.css"
 import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, get_polls, post_currentuser_vote } from "../../store/actions/poll_action"
-import { getUserById, viewClickedUserById } from "../../store/actions/userAuthentication"
+import { viewClickedUserById } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 
 const AllPolls = () => {
@@ -19,6 +19,7 @@ const AllPolls = () => {
 	const dispatch_single_poll = useDispatch();
 	const dispatch_get_user = useDispatch()
 	const dispatch_vote = useDispatch()
+	const dispatch_follow_user = useDispatch()
 	const history = useHistory()
 
 
@@ -27,6 +28,7 @@ const AllPolls = () => {
 		dispatch_get_polls(get_polls())
 		console.log("poll loaded")
 	}, [])
+
 
 	// used to dispatch an action that gets all polls from the database
 	useEffect(() => {
@@ -118,13 +120,17 @@ const AllPolls = () => {
 									<span className="text-success">Poll expires on : {poll.poll_expiration_date}</span>
 								</div>
 								<small className="text-danger">You can't vote on your own poll</small>
+								<div className="mt-4">
+									<span className="mr-5"><i class="fa fa-book" ></i> bookmark</span>
+									<span><i class="fa fa-heart" ></i>Like</span>
+								</div>
 							</div>
 						</div><hr />
 					</div>
 				))
 
 			}
-		</div>
+		</div >
 	);
 
 }

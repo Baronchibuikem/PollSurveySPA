@@ -46,7 +46,7 @@ const NavbarPage = () => {
 			<MDBDropdown>
 				<MDBDropdownToggle nav caret className="text-light">
 					<MDBIcon icon="user" className="text-light" />
-					<div className="d-none d-md-inline mx-2 font-weight-bold">{params.current_user ? params.current_user.username : ""}</div>
+					<div className="d-md-inline mx-2 font-weight-bold">{params.current_user ? params.current_user.username : ""}</div>
 				</MDBDropdownToggle>
 				<MDBDropdownMenu className="dropdown-default text-light">
 					<MDBDropdownItem href="/">View Profile</MDBDropdownItem>
@@ -78,7 +78,10 @@ const NavbarPage = () => {
 			fixed="top">
 			<div className="container">
 				<MDBNavbarBrand>
-					<strong className="text-light">LOGO</strong>
+					<Link to="/">
+					CollegeFun
+					</Link>
+				
 				</MDBNavbarBrand>
 				<MDBNavbarToggler onClick={toggleCollapse} />
 				<MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>

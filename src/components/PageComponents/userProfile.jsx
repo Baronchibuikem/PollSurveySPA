@@ -1,146 +1,281 @@
-import React, {useEffect} from 'react'
-import { useSelector } from "react-redux"
+import React, { useEffect } from 'react'
 import ProfileHeader from "./profileHeader"
 import GetTrends from "./getTrends"
+import { useSelector, useDispatch } from "react-redux"
+import { get_single_poll, post_currentuser_vote } from "../../store/actions/poll_action"
+import { post_followUser } from "../../store/actions/userAuthentication"
+import { defaultColor } from "../UtilityComponents/HelperFunctions";
+import { useHistory } from "react-router";
 
 
 export default function UserProfile() {
     const params = useSelector((state) => ({
         single_user: state.userAuth.view_user,
+        viewed_user: state.userAuth.user
     }));
 
+    const dispatch_single_poll = useDispatch();
+    const dispatch_vote = useDispatch()
+    const dispatch_follow_user = useDispatch()
+    const history = useHistory()
+
     useEffect(() => {
-		console.log("userprofile loaded")
-	}, [params.single_user])
+        console.log("userprofile loaded")
+    }, [params.single_user])
+
+    const get_single_page = (id) => {
+        dispatch_single_poll(get_single_poll(id))
+        history.push({
+            pathname: `/${id}`
+        })
+    }
+
+    // used to dispatch an action that sends a post request to follow a user
+    const follow_user = (follower_id, following_id) => {
+        console.log(follower_id, following_id)
+        dispatch_follow_user(post_followUser({ follower_id, following_id }))
+    }
+
+    // used to dispatch an action that allows an authenticated user to vote on a particular choice
+    const cast_vote = (poll_id, choice_id) => {
+        dispatch_vote(post_currentuser_vote({ poll_id, choice_id }))
+    }
 
     return (
         <div className="row">
             <div className="col-md-3">
-                <ProfileHeader/>
+                <ProfileHeader />
             </div>
             <div className="col-md-6">
-<ul className="nav nav-tabs profile-tab" role="tablist">
-                <li className="nav-item">
-                    <a
-                        className="nav-link active"
-                        data-toggle="tab"
-                        href="#profile"
-                        role="tab"
+                <div>
+                    <button className="form-control mb-4"
+                        style={defaultColor.background_color}
+                        onClick={() => follow_user(params.viewed_user.id, params.single_user.user.id)}>Follow user</button>
+                </div>
+                <ul className="nav nav-tabs profile-tab" role="tablist">
+                    <li className="nav-item">
+                        <a
+                            className="nav-link active"
+                            data-toggle="tab"
+                            href="#profile"
+                            role="tab"
                         >User Profile</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link" data-toggle="tab" href="#polls" role="tab"
-                        >Polls</a>
-                </li>
-                <li className="nav-item">
-                    <a
-                        className="nav-link"
-                        data-toggle="tab"
-                        href="#followers"
-                        role="tab"
-                        >Followers </a>
-                </li>
-                <li className="nav-item">
-                    <a
-                        className="nav-link"
-                        data-toggle="tab"
-                        href="#following"
-                        role="tab"
-                        >Following
-                        
+                    </li>
+                    <li className="nav-item">
+                        <a className="nav-link" data-toggle="tab" href="#polls" role="tab"
+                        >Polls
+                        <span className="mx-1">
+                                {params.single_user.polls.length}</span>
                         </a>
-                </li>
-                <li className="nav-item">
-                    <a
-                        className="nav-link"
-                        data-toggle="tab"
-                        href="#likes"
-                        role="tab"
-                        >Likes</a>
-                </li>
-            </ul>
-            <div className="tab-content">
-                <div className="tab-pane active" id="profile" role="tabpanel">
-                <div className="col-md-12 col sm-12 mt-3">
-										<div >
-											<h6>
-                                                <div className="row">
-                                                    <div className="col-md-4">
-                                                    Username
-                                                    </div>
-                                                    <div className="col font-weight-bold">
-                                                    { params.single_user.user.username }
-                                                    </div>
-                                                </div>
-											
-												
-											</h6>
-											<h6 className="mt-4">
-                                                <div className="row">
-                                                    <div className="col-md-4">
-                                                    Full Name
-                                                    </div>
-                                                    <div className="col font-weight-bold">
-                                                    { params.single_user.user.user_fullname }
-                                                    </div>
-                                                </div>												
-											</h6>
-											
-											<h6 className="mt-4">
-                                            <div className="row">
-                                                <div className="col-md-4">
-                                                Email
-                                                </div>
-                                                <div className="col font-weight-bold">
-                                                { params.single_user.user.email }
-                                                </div>
-                                                </div>												
-											</h6>
-											<h6 className="mt-4">
-                                            <div className="row">
-                                            <div className="col-md-4">
-                                                Position
-                                                </div>
-                                                <div className="col font-weight-bold">
-                                               { params.single_user.user.position }
-                                                </div>
-                                                </div>
-											</h6>
-											<h6 className="mt-4">
-                                            <div className="row">
-                                            <div className="col-md-4">
-                                                About Me
-                                                </div>
-                                                <div className="col font-weight-bold">
-                                                { params.single_user.user.bio }
-                                                </div>	
-                                            </div>
-											</h6>
-											
-										</div>
-									</div>
-                </div>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            className="nav-link"
+                            data-toggle="tab"
+                            href="#followers"
+                            role="tab"
+                        >Followers
+                        <span className="mx-1">{params.single_user.followers.map(follower => (follower.total_followers_no))}</span> </a>
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            className="nav-link"
+                            data-toggle="tab"
+                            href="#following"
+                            role="tab"
+                        >Following
+                        <span className="mx-1">{params.single_user.followed.map(followed => (followed.total_followed_no))}</span>
+                        </a>
 
-                <div className="tab-pane" id="polls" role="tabpanel">
-                     Polls	
+                    </li>
+                    <li className="nav-item">
+                        <a
+                            className="nav-link"
+                            data-toggle="tab"
+                            href="#likes"
+                            role="tab"
+                        >Likes</a>
+                    </li>
+                </ul>
+                <div className="tab-content">
+                    <div className="tab-pane active" id="profile" role="tabpanel">
+                        <div className="col-md-12 col sm-12 mt-3">
+                            <div >
+                                <h6>
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            Username
+                                                    </div>
+                                        <div className="col font-weight-bold">
+                                            {params.single_user.user.username}
+                                        </div>
+                                    </div>
+
+
+                                </h6>
+                                <h6 className="mt-4">
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            Full Name
+                                                    </div>
+                                        <div className="col font-weight-bold">
+                                            {params.single_user.user.user_fullname}
+                                        </div>
+                                    </div>
+                                </h6>
+
+                                <h6 className="mt-4">
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            Email
+                                                </div>
+                                        <div className="col font-weight-bold">
+                                            {params.single_user.user.email}
+                                        </div>
+                                    </div>
+                                </h6>
+                                <h6 className="mt-4">
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            Position
+                                                </div>
+                                        <div className="col font-weight-bold">
+                                            {params.single_user.user.position}
+                                        </div>
+                                    </div>
+                                </h6>
+                                <h6 className="mt-4">
+                                    <div className="row">
+                                        <div className="col-md-4">
+                                            About Me
+                                                </div>
+                                        <div className="col font-weight-bold">
+                                            {params.single_user.user.bio}
+                                        </div>
+                                    </div>
+                                </h6>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="tab-pane" id="polls" role="tabpanel">
+                        <div className="mt-5">
+                            {
+                                params.single_user.polls.map(poll => (
+                                    <div key={poll.id} >
+                                        <div className="mb-3 card" style={{ borderColor: "lightblue" }} >
+                                            <div className="card-body poll" style={{ borderLeft: "1px solid #F0F0F0", position: "relative" }}>
+                                                <div>
+                                                    <span className="font-weight-bold">
+                                                        {params.single_user.user.user_fullname} @ {params.single_user.user.username}
+                                                    </span>
+                                                </div>
+                                                <p className="card-title pollhover" onClick={() => get_single_page(poll.id)}>{poll.poll_question}</p>
+                                                <div className="card-text">
+                                                    {poll.poll_has_expired ?
+                                                        <div>
+                                                            <span className="text-danger">This poll has expired</span>
+                                                            <div className="row">
+                                                                {
+                                                                    poll.choices ? poll.choices.map(choice => {
+                                                                        return (
+
+                                                                            <div className="col-md-6 my-1" key={choice.id}>
+                                                                                <button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Can't vote on your own poll">
+                                                                                    {choice.choice_name} {choice.choice_vote_count}
+                                                                                </button>
+                                                                            </div>
+                                                                        )
+                                                                    }) : ""
+                                                                }
+                                                            </div>
+                                                        </div> :
+                                                        <div className="row">
+                                                            {
+                                                                poll.choices ? poll.choices.map(choice => {
+                                                                    return params.user.username === poll.poll_creator ?
+
+                                                                        <div className="col-md-6 my-1" key={choice.id}>
+                                                                            <button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Can't vote on your own poll">
+                                                                                {choice.choice_name} {choice.choice_vote_count}
+                                                                            </button>
+                                                                        </div>
+
+                                                                        :
+                                                                        <div className="col-md-6 my-1" key={choice.id}>
+
+
+                                                                            <button className="form-control" style={defaultColor.background_color}
+                                                                                onClick={() => cast_vote(poll.id, choice.id)}>
+                                                                                {choice.choice_name} {choice.choice_vote_count}
+                                                                            </button>
+                                                                        </div>
+                                                                }) : ""
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <div className="d-flex justify-content-between">
+                                                    <span className="text-success">Total Votes : {poll.vote_count}</span>
+                                                    <span className="text-success">Poll expires on : {poll.poll_expiration_date}</span>
+                                                </div>
+                                                <small className="text-danger">You can't vote on your own poll</small>
+                                            </div>
+                                        </div><hr />
+                                    </div>
+                                ))
+
+                            }
+                        </div>
+
+                    </div>
+                    <div className="tab-pane" id="followers" role="tabpanel">
+                        {params.single_user.followers.map(follower => {
+                            return (
+                                <div key={follower.id}>
+                                    {follower.follower_user_fullname ?
+                                        <div class="card text-left">
+                                            <img class="card-img-top" src="holder.js/100px180/" alt="" />
+                                            <div class="card-body">
+                                                <h6 class="card-title">{follower.follower_user_fullname} @{follower.follower_username}</h6>
+                                                <p class="card-text">{follower.follower_user_bio}</p>
+                                            </div>
+                                        </div> : " "
+                                    }
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className="tab-pane" id="following" role="tabpanel">
+                        {params.single_user.followed.map(followed => {
+                            return (
+                                <div key={followed.id}>
+                                    {followed.following_user_fullname ?
+                                        <div class="card text-left">
+                                            <img class="card-img-top" src="holder.js/100px180/" alt="" />
+                                            <div class="card-body">
+                                                <h6 class="card-title">{followed.following_user_fullname} @{followed.following_username}</h6>
+                                                <p class="card-text">{followed.following_user_bio}</p>
+                                            </div>
+                                        </div> : ""
+                                    }
+
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className="tab-pane" id="likes" role="tabpanel">
+                        Likes
                 </div>
-                <div className="tab-pane" id="followers" role="tabpanel">
-                    Followers
                 </div>
-                <div className="tab-pane" id="following" role="tabpanel">
-                    Following
-                </div>
-                <div className="tab-pane" id="likes" role="tabpanel">
-                    Likes
-                </div>
-                </div> 
 
             </div>
             <div className="col-md-3">
-                <GetTrends/>
+                <GetTrends />
             </div>
-                
-                
-                </div>
+
+
+        </div>
     )
 }
