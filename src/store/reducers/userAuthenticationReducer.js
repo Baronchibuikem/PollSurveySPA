@@ -60,14 +60,17 @@ const reducer = (state = initialState, action) => {
 			localStorage.setItem("token", action.payload.token);
 			return {
 				...state,
-				user: action.payload.user,
-				isAuthenticated: true,
+				// user: action.payload.user,
+				// isAuthenticated: true,
 				token: action.payload.token
 			};
 		case CURRENT_LOGGEDIN_USER:
 			return {
 				...state,
-				user: action.payload
+				user: action.payload,
+				isAuthenticated: true,
+				// token: action.payload.user.
+
 			};
 		case VIEWED_LOGGEDIN_USER:
 			return {

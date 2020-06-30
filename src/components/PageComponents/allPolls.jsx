@@ -4,7 +4,7 @@ import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/AllPolls.css"
 import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, get_polls, post_currentuser_vote } from "../../store/actions/poll_action"
-import { viewClickedUserById } from "../../store/actions/userAuthentication"
+import { viewClickedUserById, post_likepost } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 
 const AllPolls = () => {
@@ -15,17 +15,17 @@ const AllPolls = () => {
 		user: state.userAuth.user
 	}));
 
-	const dispatch_get_polls = useDispatch();
-	const dispatch_single_poll = useDispatch();
-	const dispatch_get_user = useDispatch()
-	const dispatch_vote = useDispatch()
-	const dispatch_follow_user = useDispatch()
+	const dispatch = useDispatch();
+	// const dispatch_single_poll = useDispatch();
+	// const dispatch_get_user = useDispatch()
+	// const dispatch_vote = useDispatch()
+	// const dispatch_like_poll = useDispatch()
 	const history = useHistory()
 
 
 	// used to dispatch an action that gets all polls from the database
 	useEffect(() => {
-		dispatch_get_polls(get_polls())
+		dispatch(get_polls())
 		console.log("poll loaded")
 	}, [])
 
@@ -38,7 +38,7 @@ const AllPolls = () => {
 	// used to dispatch an action to get a single poll and then change the route to 
 	// the id of the poll
 	const get_single_page = (id) => {
-		dispatch_single_poll(get_single_poll(id))
+		dispatch(get_single_poll(id))
 		history.push({
 			pathname: `/${id}`
 		})
@@ -47,7 +47,7 @@ const AllPolls = () => {
 	// used to dipatch an action that that gets the profile of the clicked user and
 	// then change the route to user profile page
 	const get_user = (id) => {
-		dispatch_get_user(viewClickedUserById(id))
+		dispatch(viewClickedUserById(id))
 		history.push({
 			pathname: `/user/${id}`
 		})
@@ -55,7 +55,11 @@ const AllPolls = () => {
 
 	// used to dispatch an action that allows an authenticated user to vote on a particular choice
 	const cast_vote = (poll_id, choice_id) => {
-		dispatch_vote(post_currentuser_vote({ poll_id, choice_id }))
+		dispatch(post_currentuser_vote({ poll_id, choice_id }))
+	}
+
+	const like_poll = (poll_id) => {
+		dispatch(post_likepost({ user_id: params.user.id, poll_id }))
 	}
 
 	return (
@@ -122,7 +126,8 @@ const AllPolls = () => {
 								<small className="text-danger">You can't vote on your own poll</small>
 								<div className="mt-4">
 									<span className="mr-5"><i class="fa fa-book" ></i> bookmark</span>
-									<span><i class="fa fa-heart" ></i>Like</span>
+									<span
+										onClick={() => like_poll(poll.id, params.user.id)}><i class="fa fa-heart" ></i>Like</span>
 								</div>
 							</div>
 						</div><hr />

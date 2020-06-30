@@ -27,29 +27,29 @@ const ProfileHeader = () => {
 							className="fa fa-eye text-light"
 							data-toggle="tooltip"
 							title="view profile"></i>
-						{params.current_user.username}
+						{params.current_user.user.username}
 					</span>
 				</div>
 				<div className="text-center my-3">
 					<span className="text-light">
-						{params.current_user.bio}
+						{params.current_user.user.bio}
 					</span>
 				</div>
 				<hr style={{ borderTop: "1px solid white" }} />
 				<div className="d-flex text-dark mt-3 justify-content-center">
 					<span className="mr-3 text-light">
-						Followers
-							<br />
+						Followers {params.current_user.followers.length}
+						<br />
 						<MDBIcon icon="user" className="text-light" />
 					</span>
 					<span className="mr-3 text-light">
-						Following
-							<br />
+						Following {params.current_user.followed.length}
+						<br />
 						<MDBIcon icon="user" className="text-light" />
 					</span>
 					<span className="text-light">
-						Polls
-							<br />
+						Polls {params.current_user.polls.length}
+						<br />
 						<MDBIcon icon="list" className="text-light" />
 					</span>
 				</div>

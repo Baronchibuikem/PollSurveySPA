@@ -21,6 +21,7 @@ export const login = ({ email, password }) => (dispatch) => {
 		.post("/account/login/", { email, password }, config)
 		.then((response) => {
 			console.log(response.data)
+			dispatch(getUserById(response.data.user, response.data.token))
 			dispatch({ type: USER_LOADED, payload: response.data });
 
 		})
@@ -62,7 +63,7 @@ export const logout = () => (dispatch, getState) => {
 
 
 // For fetching the data of the current logged in user
-export const getUserById = (data) => {
+export const getUserById = (data, get_token) => {
 	return async (dispatch, getState) => {
 		const token = getState().userAuth.token
 		let config = {
@@ -71,17 +72,31 @@ export const getUserById = (data) => {
 				"Content-Type": "application/json"
 			},
 		};
-
-		try {
-			const response = await route.get(`/account/user/${data}/`,
-				config)
-			if (response) {
-				console.log(response.data)
-				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
+		if (token) {
+			try {
+				const response = await route.get(`/account/user/${data}/`,
+					config)
+				if (response) {
+					console.log(response.data)
+					dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
+				}
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
 			}
-		} catch (error) {
-			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		} else {
+			try {
+				const response = await route.get(`/account/user/${data}/`,
+					get_token)
+				if (response) {
+					console.log(response.data)
+					dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
+				}
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
 		}
+
+
 	}
 }
 
@@ -150,7 +165,7 @@ export const post_likepost = (data) => {
 				user: data.user_id
 			}, config)
 			if (response) {
-				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
+				dispatch({ type: VIEWED_LOGGEDIN_USER, payload: response.data })
 			}
 
 		} catch (error) {

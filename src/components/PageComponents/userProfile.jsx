@@ -94,7 +94,9 @@ export default function UserProfile() {
                             data-toggle="tab"
                             href="#likes"
                             role="tab"
-                        >Likes</a>
+                        >Likes
+                         <span className="mx-1">
+                                {params.single_user.likes.length}</span></a>
                     </li>
                 </ul>
                 <div className="tab-content">
@@ -233,7 +235,7 @@ export default function UserProfile() {
                     <div className="tab-pane" id="followers" role="tabpanel">
                         {params.single_user.followers.map(follower => {
                             return (
-                                <div key={follower.id}>
+                                <div key={follower.id} className="mt-2">
                                     {follower.follower_user_fullname ?
                                         <div class="card text-left">
                                             <img class="card-img-top" src="holder.js/100px180/" alt="" />
@@ -250,7 +252,7 @@ export default function UserProfile() {
                     <div className="tab-pane" id="following" role="tabpanel">
                         {params.single_user.followed.map(followed => {
                             return (
-                                <div key={followed.id}>
+                                <div key={followed.id} className="mt-2">
                                     {followed.following_user_fullname ?
                                         <div class="card text-left">
                                             <img class="card-img-top" src="holder.js/100px180/" alt="" />
@@ -266,8 +268,23 @@ export default function UserProfile() {
                         })}
                     </div>
                     <div className="tab-pane" id="likes" role="tabpanel">
-                        Likes
-                </div>
+                        {params.single_user.likes.map(like => {
+                            return (
+                                <div key={like.id} className="mt-2">
+                                    {like.question ?
+                                        <div class="card text-left">
+                                            <img class="card-img-top" src="holder.js/100px180/" alt="" />
+                                            <div class="card-body">
+                                                <h6 class="card-title">{like.poll_creator_firstname} {like.poll_creator_lastname} @{like.poll_creator_username}</h6>
+                                                <p class="card-text">{like.question}</p>
+                                            </div>
+                                        </div> : ""
+                                    }
+
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
 
             </div>

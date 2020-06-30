@@ -43,7 +43,7 @@ const reducer = (state = initialState, action) => {
                 vote_error: action.payload
             };
         default:
-            return { ...state }
+            return state
     }
 }
 export default reducer;
