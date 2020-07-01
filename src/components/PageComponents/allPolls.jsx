@@ -4,7 +4,7 @@ import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/AllPolls.css"
 import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, get_polls, post_currentuser_vote } from "../../store/actions/poll_action"
-import { viewClickedUserById, post_likepost } from "../../store/actions/userAuthentication"
+import { viewClickedUserById, post_likepost, post_bookmarkpoll } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 
 const AllPolls = () => {
@@ -37,31 +37,25 @@ const AllPolls = () => {
 		console.log("Poll updated")
 	}, [params.all])
 
-	// useEffect(() => {
-	// 	console.log("Get user likes updated")
-	// 	get_user_likes()
-	// }, [])
 
-
-	// const get_user_likes = () => {
-	// 	return params.user.likes.map(like => {
-	// 		return (
-	// 			<div key={like.id}>
-	// 				{like.question}
-	// 			</div>
-	// 		)
-	// 	})
-
-	// }
-	const get_user_likes = () => {
-		const like_array = []
-		params.user.likes.map(like => {
-
-			like_array.push(like.question)
-
+	// here we iterate through all bookmarks in the user state and push the poll question
+	// into the bookmarked_poll array
+	const get_user_bookmarks = () => {
+		const bookmarked_poll = []
+		params.user.bookmarks.map(like => {
+			bookmarked_poll.push(like.question)
 		})
-		return like_array
+		return bookmarked_poll
+	}
 
+	// here we iterate through all likes in the user state and push the poll question
+	// into the liked_poll
+	const get_user_likes = () => {
+		const liked_poll = []
+		params.user.likes.map(like => {
+			liked_poll.push(like.question)
+		})
+		return liked_poll
 	}
 
 	// used to dispatch an action to get a single poll and then change the route to 
@@ -87,10 +81,15 @@ const AllPolls = () => {
 		dispatch(post_currentuser_vote({ poll_id, choice_id }))
 	}
 
+	// used to dispatch an action for liking a poll
 	const like_poll = (poll_id) => {
 		dispatch(post_likepost({ user_id: params.user.user.id, poll_id }))
 	}
 
+	// used to dispatch an action for bookmarking a poll
+	const bookmark_poll = (poll_id) => {
+		dispatch(post_bookmarkpoll({ user_id: params.user.user.id, poll_id }))
+	}
 
 
 	return (
@@ -101,11 +100,11 @@ const AllPolls = () => {
 						<div className="mb-3 card" style={{ borderColor: "lightblue" }} >
 							<div className="card-body poll" style={{ borderLeft: "1px solid #F0F0F0", position: "relative" }}>
 								<div>
-									<span className="font-weight-bold pollhover" onClick={() => get_user(poll.poll_creator_id)}>
+									<h4 className="font-weight-bold pollhover" onClick={() => get_user(poll.poll_creator_id)}>
 										{poll.poll_creator_fullname} @{poll.poll_creator}
-									</span>
+									</h4>
 								</div>
-								<p className="card-title pollhover" onClick={() => get_single_page(poll.id)}>{poll.poll_question}</p>
+								<h5 className="card-title pollhover" onClick={() => get_single_page(poll.id)}>{poll.poll_question}</h5>
 								<div className="card-text">
 									{poll.poll_has_expired ?
 										<div>
@@ -116,7 +115,7 @@ const AllPolls = () => {
 														return (
 
 															<div className="col-md-6 my-1" key={choice.id}>
-																<button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Can't vote on your own poll">
+																<button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Voting disabled">
 																	{choice.choice_name} {choice.choice_vote_count}
 																</button>
 															</div>
@@ -131,7 +130,7 @@ const AllPolls = () => {
 													return params.user.username === poll.poll_creator ?
 
 														<div className="col-md-6 my-1" key={choice.id}>
-															<button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Can't vote on your own poll">
+															<button disabled="disabled" className="form-control bg-secondary">
 																{choice.choice_name} {choice.choice_vote_count}
 															</button>
 														</div>
@@ -141,7 +140,8 @@ const AllPolls = () => {
 
 
 															<button className="form-control" style={defaultColor.background_color}
-																onClick={() => cast_vote(poll.id, choice.id)}>
+																onClick={() => cast_vote(poll.id, choice.id)}
+																data-toggle="tooltip" data-placement="top" title="Click to vote">
 																{choice.choice_name} {choice.choice_vote_count}
 															</button>
 														</div>
@@ -151,24 +151,35 @@ const AllPolls = () => {
 									}
 								</div>
 								<div className="d-flex justify-content-between">
-									<span className="text-success">Total Votes : {poll.vote_count}</span>
-									<span className="text-success">Poll expires on : {poll.poll_expiration_date}</span>
+									<span style={{ color: "#413a76" }}>Total Votes : {poll.vote_count}</span>
+									<span style={{ color: "#413a76" }}>Poll expires on : {poll.poll_expiration_date}</span>
 								</div>
-								<small className="text-danger">You can't vote on your own poll</small>
+								{
+									params.user.user.username === poll.poll_creator ? <small className="text-danger">You can't vote on your own poll</small> : ""
+								}
+
 								<div className="mt-4">
-									<span className="mr-5"><i class="fa fa-book" ></i> bookmark</span>
 									{
-										// get_user_likes.indexOf(poll.question) !== -1 ?
+										get_user_bookmarks().indexOf(poll.poll_question) !== -1 ?
+											<span className="mr-5"><i class="fa fa-book" style={{ color: "#413a76" }}></i> bookmarked</span>
+											:
+											<span
+												onClick={() => bookmark_poll(poll.id, params.user.id)} className="pollhover mr-5"><i class="fa fa-book" ></i>Bookmark</span>
+
+
+									}
+
+									{
 										get_user_likes().indexOf(poll.poll_question) !== -1 ?
-											<span><i className="fa fa-heart text-danger" ></i>Liked</span>
+											<span><i className="fa fa-heart" style={{ color: "#413a76" }} ></i>Liked</span>
 											:
 											<span
 												onClick={() => like_poll(poll.id, params.user.id)} className="pollhover"><i className="fa fa-heart" ></i>Like</span>
 
 
-									}<br />
+									}
 
-									<h1>{get_user_likes().indexOf(poll.poll_question)}</h1>
+									{/* <h1>{get_user_likes().indexOf(poll.poll_question)}</h1> */}
 
 
 								</div>

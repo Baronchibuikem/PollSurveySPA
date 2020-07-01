@@ -6,7 +6,10 @@ import {
 	LOGIN_SUCCESS,
 	LOGOUT_SUCCESS,
 	REGISTER_SUCCESS,
-	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, CURRENT_LOGGEDIN_USER_FAIL, VIEWED_LOGGEDIN_USER
+	REGISTER_FAIL, CURRENT_LOGGEDIN_USER,
+	CURRENT_LOGGEDIN_USER_FAIL,
+	VIEWED_LOGGEDIN_USER, LIKE_POLL
+
 } from "../actions/actionTypes";
 
 const initialState = {
@@ -113,6 +116,11 @@ const reducer = (state = initialState, action) => {
 				isAuthenticated: false,
 				isLoading: "Submit",
 
+			}
+		case LIKE_POLL:
+			return {
+				...state,
+				user: action.payload
 			}
 		default:
 			return state;

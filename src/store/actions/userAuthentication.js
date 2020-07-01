@@ -6,7 +6,7 @@ import {
 	REGISTER_SUCCESS,
 	REQUEST_LOADING,
 	CURRENT_LOGGEDIN_USER,
-	CURRENT_LOGGEDIN_USER_FAIL, VIEWED_LOGGEDIN_USER
+	CURRENT_LOGGEDIN_USER_FAIL, VIEWED_LOGGEDIN_USER, LIKE_POLL
 } from "./actionTypes";
 import route from "../../ApiClient";
 
@@ -165,7 +165,31 @@ export const post_likepost = (data) => {
 				user: data.user_id
 			}, config)
 			if (response) {
-				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
+				dispatch({ type: LIKE_POLL, payload: response.data })
+			}
+
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+
+export const post_bookmarkpoll = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		try {
+			const response = await route.post(`/account/bookmark-poll/`, {
+				poll: data.poll_id,
+				user: data.user_id
+			}, config)
+			if (response) {
+				dispatch({ type: LIKE_POLL, payload: response.data })
 			}
 
 		} catch (error) {
