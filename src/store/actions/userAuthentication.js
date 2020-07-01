@@ -165,7 +165,7 @@ export const post_likepost = (data) => {
 				user: data.user_id
 			}, config)
 			if (response) {
-				dispatch({ type: VIEWED_LOGGEDIN_USER, payload: response.data })
+				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
 			}
 
 		} catch (error) {

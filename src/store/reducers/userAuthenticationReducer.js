@@ -14,14 +14,20 @@ const initialState = {
 	isAuthenticated: false,
 	isLoading: "Submit",
 	user: {
-		id: "",
-		first_name: "",
-		last_name: "",
-		username: "",
-		gender: "",
-		email: "",
-		position: "",
-		bio: "",
+		user: {
+			id: "",
+			first_name: "",
+			last_name: "",
+			username: "",
+			gender: "",
+			email: "",
+			position: "",
+			bio: ""
+		},
+		boomarks: [],
+		followed: [{}],
+		likes: [],
+		polls: []
 	},
 	view_user: {
 		user: {

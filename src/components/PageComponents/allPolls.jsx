@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 // import PropTypes from "prop-types";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/AllPolls.css"
@@ -8,6 +8,8 @@ import { viewClickedUserById, post_likepost } from "../../store/actions/userAuth
 import { useHistory } from "react-router";
 
 const AllPolls = () => {
+
+	const { likes, setLikes } = useState([])
 
 	const params = useSelector((state) => ({
 		all: state.polls.poll,
@@ -35,6 +37,33 @@ const AllPolls = () => {
 		console.log("Poll updated")
 	}, [params.all])
 
+	// useEffect(() => {
+	// 	console.log("Get user likes updated")
+	// 	get_user_likes()
+	// }, [])
+
+
+	// const get_user_likes = () => {
+	// 	return params.user.likes.map(like => {
+	// 		return (
+	// 			<div key={like.id}>
+	// 				{like.question}
+	// 			</div>
+	// 		)
+	// 	})
+
+	// }
+	const get_user_likes = () => {
+		const like_array = []
+		params.user.likes.map(like => {
+
+			like_array.push(like.question)
+
+		})
+		return like_array
+
+	}
+
 	// used to dispatch an action to get a single poll and then change the route to 
 	// the id of the poll
 	const get_single_page = (id) => {
@@ -59,8 +88,10 @@ const AllPolls = () => {
 	}
 
 	const like_poll = (poll_id) => {
-		dispatch(post_likepost({ user_id: params.user.id, poll_id }))
+		dispatch(post_likepost({ user_id: params.user.user.id, poll_id }))
 	}
+
+
 
 	return (
 		<div className="mt-5">
@@ -126,8 +157,20 @@ const AllPolls = () => {
 								<small className="text-danger">You can't vote on your own poll</small>
 								<div className="mt-4">
 									<span className="mr-5"><i class="fa fa-book" ></i> bookmark</span>
-									<span
-										onClick={() => like_poll(poll.id, params.user.id)}><i class="fa fa-heart" ></i>Like</span>
+									{
+										// get_user_likes.indexOf(poll.question) !== -1 ?
+										get_user_likes().indexOf(poll.poll_question) !== -1 ?
+											<span><i className="fa fa-heart text-danger" ></i>Liked</span>
+											:
+											<span
+												onClick={() => like_poll(poll.id, params.user.id)} className="pollhover"><i className="fa fa-heart" ></i>Like</span>
+
+
+									}<br />
+
+									<h1>{get_user_likes().indexOf(poll.poll_question)}</h1>
+
+
 								</div>
 							</div>
 						</div><hr />
