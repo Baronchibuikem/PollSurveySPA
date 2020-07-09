@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, get_polls, post_currentuser_vote } from "../../store/actions/poll_action"
 import { viewClickedUserById, post_likepost, post_bookmarkpoll } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
+import profileImage from "../../assets/images/no-profile-image.jpg";
 
 const AllPolls = () => {
 
@@ -18,10 +19,6 @@ const AllPolls = () => {
 	}));
 
 	const dispatch = useDispatch();
-	// const dispatch_single_poll = useDispatch();
-	// const dispatch_get_user = useDispatch()
-	// const dispatch_vote = useDispatch()
-	// const dispatch_like_poll = useDispatch()
 	const history = useHistory()
 
 
@@ -92,6 +89,7 @@ const AllPolls = () => {
 	}
 
 
+
 	return (
 		<div className="mt-5">
 			{
@@ -99,12 +97,16 @@ const AllPolls = () => {
 					<div key={poll.id} >
 						<div className="mb-3 card" style={{ borderColor: "lightblue" }} >
 							<div className="card-body poll" style={{ borderLeft: "1px solid #F0F0F0", position: "relative" }}>
-								<div>
-									<h4 className="font-weight-bold pollhover" onClick={() => get_user(poll.poll_creator_id)}>
+								<div className="d-flex">
+									{
+										poll.image !== null ? <img src={poll.image} alt="poll_creator_image" width="30px" className="mr-3" style={{ borderRadius: "50%" }} />
+											: <img src={profileImage} alt="poll_creator_image" width="30px" className="mr-3" style={{ borderRadius: "50%" }} />
+									}
+									<h6 className="font-weight-bold pollhover mt-2" onClick={() => get_user(poll.poll_creator_id)}>
 										{poll.poll_creator_fullname} @{poll.poll_creator}
-									</h4>
-								</div>
-								<h5 className="card-title pollhover" onClick={() => get_single_page(poll.id)}>{poll.poll_question}</h5>
+									</h6>
+								</div><hr></hr>
+								<p className="card-title pollhover mt-3" onClick={() => get_single_page(poll.id)}>{poll.poll_question}</p>
 								<div className="card-text">
 									{poll.poll_has_expired ?
 										<div>
@@ -115,7 +117,9 @@ const AllPolls = () => {
 														return (
 
 															<div className="col-md-6 my-1" key={choice.id}>
-																<button disabled="disabled" className="form-control bg-secondary" data-toggle="tooltip" data-placement="top" title="Voting disabled">
+																<button disabled="disabled" className="form-control"
+																	data-toggle="tooltip" data-placement="top" title="Voting disabled"
+																	style={{ backgroundColor: "grey" }}>
 																	{choice.choice_name} {choice.choice_vote_count}
 																</button>
 															</div>
@@ -127,10 +131,10 @@ const AllPolls = () => {
 										<div className="row">
 											{
 												poll.choices ? poll.choices.map(choice => {
-													return params.user.username === poll.poll_creator ?
+													return params.user.user.username === poll.poll_creator ?
 
 														<div className="col-md-6 my-1" key={choice.id}>
-															<button disabled="disabled" className="form-control bg-secondary">
+															<button disabled="disabled" className="form-control" style={{ backgroundColor: "grey" }}>
 																{choice.choice_name} {choice.choice_vote_count}
 															</button>
 														</div>
@@ -151,8 +155,10 @@ const AllPolls = () => {
 									}
 								</div>
 								<div className="d-flex justify-content-between">
-									<span style={{ color: "#413a76" }}>Total Votes : {poll.vote_count}</span>
-									<span style={{ color: "#413a76" }}>Poll expires on : {poll.poll_expiration_date}</span>
+									{
+										!poll.poll_has_expired ? <span style={{ color: "#413a76" }}>Voting stops @ ({poll.poll_expiration_date})</span> : ""
+									}
+
 								</div>
 								{
 									params.user.user.username === poll.poll_creator ? <small className="text-danger">You can't vote on your own poll</small> : ""
@@ -161,22 +167,23 @@ const AllPolls = () => {
 								<div className="mt-4">
 									{
 										get_user_bookmarks().indexOf(poll.poll_question) !== -1 ?
-											<span className="mr-5"><i class="fa fa-book" style={{ color: "#413a76" }}></i> bookmarked</span>
+											<span className="mr-3"><i class="fa fa-book" style={{ color: "#413a76" }}></i> bookmarked</span>
 											:
 											<span
-												onClick={() => bookmark_poll(poll.id, params.user.id)} className="pollhover mr-5"><i class="fa fa-book" ></i>Bookmark</span>
-
-
+												onClick={() => bookmark_poll(poll.id, params.user.id)} className="pollhover mr-3"><i className="fa fa-book" ></i>Bookmark</span>
 									}
 
 									{
 										get_user_likes().indexOf(poll.poll_question) !== -1 ?
-											<span><i className="fa fa-heart" style={{ color: "#413a76" }} ></i>Liked</span>
+											<span className="mr-3"><i className="fa fa-heart" style={{ color: "#413a76" }} ></i>Liked ({poll.total_likes})</span>
 											:
 											<span
-												onClick={() => like_poll(poll.id, params.user.id)} className="pollhover"><i className="fa fa-heart" ></i>Like</span>
+												onClick={() => like_poll(poll.id, params.user.id)} className="pollhover mr-3"><i className="fa fa-heart" ></i>Like</span>
 
 
+									}
+									{
+										poll.vote_count > 0 ? <span style={{ color: "#413a76" }}>Total Votes ({poll.vote_count})</span> : ""
 									}
 
 									{/* <h1>{get_user_likes().indexOf(poll.poll_question)}</h1> */}
@@ -184,7 +191,7 @@ const AllPolls = () => {
 
 								</div>
 							</div>
-						</div><hr />
+						</div>
 					</div>
 				))
 

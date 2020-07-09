@@ -6,6 +6,7 @@ import { get_single_poll, post_currentuser_vote } from "../../store/actions/poll
 import { post_followUser } from "../../store/actions/userAuthentication"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { useHistory } from "react-router";
+import profileImage from "../../assets/images/no-profile-image.jpg";
 
 
 export default function UserProfile() {
@@ -14,9 +15,7 @@ export default function UserProfile() {
         viewed_user: state.userAuth.user
     }));
 
-    const dispatch_single_poll = useDispatch();
-    const dispatch_vote = useDispatch()
-    const dispatch_follow_user = useDispatch()
+    const dispatch = useDispatch();
     const history = useHistory()
 
     useEffect(() => {
@@ -24,7 +23,7 @@ export default function UserProfile() {
     }, [params.single_user])
 
     const get_single_page = (id) => {
-        dispatch_single_poll(get_single_poll(id))
+        dispatch(get_single_poll(id))
         history.push({
             pathname: `/${id}`
         })
@@ -33,14 +32,22 @@ export default function UserProfile() {
     // used to dispatch an action that sends a post request to follow a user
     const follow_user = (follower_id, following_id) => {
         console.log(follower_id, following_id)
-        dispatch_follow_user(post_followUser({ follower_id, following_id }))
+        dispatch(post_followUser({ follower_id, following_id }))
     }
 
     // used to dispatch an action that allows an authenticated user to vote on a particular choice
     const cast_vote = (poll_id, choice_id) => {
-        dispatch_vote(post_currentuser_vote({ poll_id, choice_id }))
+        dispatch(post_currentuser_vote({ poll_id, choice_id }))
     }
 
+
+    const get_user_followers = () => {
+        const followed_users = []
+        params.single_user.followers.map(follower => {
+            followed_users.push(follower.follower_username)
+        })
+        return followed_users
+    }
     return (
         <div className="row">
             <div className="col-md-3">
@@ -48,9 +55,19 @@ export default function UserProfile() {
             </div>
             <div className="col-md-6">
                 <div>
-                    <button className="form-control mb-4"
-                        style={defaultColor.background_color}
-                        onClick={() => follow_user(params.viewed_user.id, params.single_user.user.id)}>Follow user</button>
+                    {get_user_followers().indexOf(params.viewed_user.user.username) !== -1 ?
+                        // params.viewed_user.user.username === params.single_user.user.username ? "" :
+                        <button className="form-control mb-4"
+                            style={defaultColor.background_color}
+                            onClick={() => follow_user(params.viewed_user.id, params.single_user.user.id)}>
+                            Follow
+                            </button>
+                        :
+                        <button className="form-control mb-4"
+                            style={defaultColor.background_color}
+                            onClick={() => follow_user(params.viewed_user.id, params.single_user.user.id)}>Following
+                        </button>
+                    }
                 </div>
                 <ul className="nav nav-tabs profile-tab" role="tablist">
                     <li className="nav-item">
@@ -103,6 +120,15 @@ export default function UserProfile() {
                     <div className="tab-pane active" id="profile" role="tabpanel">
                         <div className="col-md-12 col sm-12 mt-3">
                             <div >
+                                <div className="row my-3">
+                                    <div className="col-md-4">Profile Image</div>
+                                    <div className="col-md-4">
+                                        {params.single_user.user.image !== null ?
+                                            <img src={params.single_user.user.image} alt="profile image" className="w-100 img-responsive" /> :
+                                            <img src={profileImage} alt="" />
+                                        }
+                                    </div>
+                                </div>
                                 <h6>
                                     <div className="row">
                                         <div className="col-md-4">

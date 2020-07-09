@@ -8,7 +8,7 @@ import {
 	REGISTER_SUCCESS,
 	REGISTER_FAIL, CURRENT_LOGGEDIN_USER,
 	CURRENT_LOGGEDIN_USER_FAIL,
-	VIEWED_LOGGEDIN_USER, LIKE_POLL
+	VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN
 
 } from "../actions/actionTypes";
 
@@ -45,6 +45,7 @@ const initialState = {
 		},
 		boomarks: [],
 		followed: [{}],
+		followers: [{}],
 		likes: [],
 		polls: []
 	},
@@ -70,7 +71,8 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				// user: action.payload.user,
-				// isAuthenticated: true,
+				isAuthenticated: true,
+				isLoading: "Submit",
 				token: action.payload.token
 			};
 		case CURRENT_LOGGEDIN_USER:
@@ -78,9 +80,15 @@ const reducer = (state = initialState, action) => {
 				...state,
 				user: action.payload,
 				isAuthenticated: true,
-				// token: action.payload.user.
+				// token: action.payload
 
 			};
+		case SET_USER_TOKEN:
+			return {
+				...state,
+				token: action.payload,
+				// isAuthenticated: true
+			}
 		case VIEWED_LOGGEDIN_USER:
 			return {
 				...state,

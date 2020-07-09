@@ -4,11 +4,16 @@ export const defaultColor = {
 		backgroundColor: "#413a76",
 		color: "white",
 	},
+	text_color: {
+		color: "#413a76"
+	},
 	profile_header: {
 		backgroundColor: "#413a76",
 		color: "white",
-		height: "400px",
 	},
+	disable_button_color: {
+		backgroundColor: "grey"
+	}
 };
 export const defaultImage = {
 	login_background_image: {

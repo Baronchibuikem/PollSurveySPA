@@ -6,7 +6,10 @@ import {
 	REGISTER_SUCCESS,
 	REQUEST_LOADING,
 	CURRENT_LOGGEDIN_USER,
-	CURRENT_LOGGEDIN_USER_FAIL, VIEWED_LOGGEDIN_USER, LIKE_POLL
+	CURRENT_LOGGEDIN_USER_FAIL,
+	VIEWED_LOGGEDIN_USER,
+	LIKE_POLL,
+	SET_USER_TOKEN
 } from "./actionTypes";
 import route from "../../ApiClient";
 
@@ -20,34 +23,37 @@ export const login = ({ email, password }) => (dispatch) => {
 	route
 		.post("/account/login/", { email, password }, config)
 		.then((response) => {
-			console.log(response.data)
-			dispatch(getUserById(response.data.user, response.data.token))
-			dispatch({ type: USER_LOADED, payload: response.data });
+			console.log(response.data, "Login")
+			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
+			dispatch(getUserById(response.data.user))
+			// dispatch({ type: USER_LOADED, payload: response.data });
 
 		})
 		.catch((error) => {
-			console.log(error.response.data.data, "ERROR MESSAGE")
+			// console.log(error.response.data.data, "ERROR MESSAGE")
 			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data });
 		});
 };
 
 // Register user
 export const register_action = ({ data }) => (dispatch) => {
+	console.log(data, "from actions")
 	dispatch({ type: REQUEST_LOADING })
 	route
-		.post("/api/v1/account/register/", {
+		.post("/account/register/", {
 			first_name: data.firstname,
 			last_name: data.lastname,
 			email: data.email,
 			username: data.username,
 			password: data.password
 		}, config)
-		.then((res) => {
-			dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+		.then((response) => {
+			console.log(response.data)
+			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
+			dispatch(getUserById(response.data.user))
 		})
 		.catch((err) => {
-
-			dispatch({ type: REGISTER_FAIL, payload: err.response.data });
+			dispatch({ type: REGISTER_FAIL, payload: err.response });
 
 		});
 };
@@ -63,7 +69,7 @@ export const logout = () => (dispatch, getState) => {
 
 
 // For fetching the data of the current logged in user
-export const getUserById = (data, get_token) => {
+export const getUserById = (data) => {
 	return async (dispatch, getState) => {
 		const token = getState().userAuth.token
 		let config = {
@@ -72,31 +78,16 @@ export const getUserById = (data, get_token) => {
 				"Content-Type": "application/json"
 			},
 		};
-		if (token) {
-			try {
-				const response = await route.get(`/account/user/${data}/`,
-					config)
-				if (response) {
-					console.log(response.data)
-					dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
-				}
-			} catch (error) {
-				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		try {
+			const response = await route.get(`/account/user/${data}/`,
+				config)
+			if (response) {
+				console.log(response.data)
+				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
 			}
-		} else {
-			try {
-				const response = await route.get(`/account/user/${data}/`,
-					get_token)
-				if (response) {
-					console.log(response.data)
-					dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
-				}
-			} catch (error) {
-				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
-			}
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
 		}
-
-
 	}
 }
 

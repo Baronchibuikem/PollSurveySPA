@@ -77,7 +77,7 @@ const CreatePoll = () => {
 		<div className="d-flex">
 			<input
 				type="text"
-				placeholder="Pleae enter the choices"
+				placeholder="Enter Choices for this poll (Optional)"
 				className="form-control"
 				style={{ borderRadius: "5px" }}
 				value={option}
@@ -107,7 +107,7 @@ const CreatePoll = () => {
 						style={{ borderRadius: "5px" }}
 						className="form-control is-rounded"
 						onChange={focusActivated}
-						placeholder="What is your question"
+						placeholder="What is on your mind"
 						maxLength="150"></textarea>
 				</div>
 				<div className="options">
