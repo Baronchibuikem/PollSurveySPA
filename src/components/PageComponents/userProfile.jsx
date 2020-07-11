@@ -3,7 +3,7 @@ import ProfileHeader from "./profileHeader"
 import GetTrends from "./getTrends"
 import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, post_currentuser_vote } from "../../store/actions/poll_action"
-import { post_followUser } from "../../store/actions/userAuthentication"
+import { post_followUser, post_unfollowUser } from "../../store/actions/userAuthentication"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { useHistory } from "react-router";
 import profileImage from "../../assets/images/no-profile-image.jpg";
@@ -35,6 +35,11 @@ export default function UserProfile() {
         dispatch(post_followUser({ follower_id, following_id }))
     }
 
+    // for unfollowing a user
+    const unfollow_user = (id) => {
+        dispatch(post_unfollowUser(id))
+    }
+
     // used to dispatch an action that allows an authenticated user to vote on a particular choice
     const cast_vote = (poll_id, choice_id) => {
         dispatch(post_currentuser_vote({ poll_id, choice_id }))
@@ -42,12 +47,23 @@ export default function UserProfile() {
 
 
     const get_user_followers = () => {
-        const followed_users = []
-        params.single_user.followers.map(follower => {
-            followed_users.push(follower.follower_username)
+        const followed_user = []
+        const unfollowed_user = []
+        // const currentUser_loggedin_user = params.viewed_user.user.username
+        const profile_of_clicked_user = params.single_user.user.username
+        params.viewed_user.followed.map(follower => {
+            if (follower.following_username === profile_of_clicked_user) {
+                followed_user.push(follower.id, follower.following_username)
+            } else {
+                unfollowed_user.push(follower.following_username, follower.id)
+            }
         })
-        return followed_users
+        return followed_user
     }
+
+
+
+
     return (
         <div className="row">
             <div className="col-md-3">
@@ -55,20 +71,23 @@ export default function UserProfile() {
             </div>
             <div className="col-md-6">
                 <div>
-                    {get_user_followers().indexOf(params.viewed_user.user.username) !== -1 ?
+                    {get_user_followers()[1] === params.single_user.user.username ?
                         // params.viewed_user.user.username === params.single_user.user.username ? "" :
                         <button className="form-control mb-4"
                             style={defaultColor.background_color}
-                            onClick={() => follow_user(params.viewed_user.id, params.single_user.user.id)}>
-                            Follow
-                            </button>
+                            onClick={() => unfollow_user(get_user_followers()[0])}>Following
+                        </button>
                         :
                         <button className="form-control mb-4"
                             style={defaultColor.background_color}
-                            onClick={() => follow_user(params.viewed_user.id, params.single_user.user.id)}>Following
-                        </button>
+                            onClick={() => follow_user(params.viewed_user.user.id, params.single_user.user.id)}>
+                            Follow
+                            </button>
+
                     }
                 </div>
+
+                <h1>{get_user_followers()} Followers</h1>
                 <ul className="nav nav-tabs profile-tab" role="tablist">
                     <li className="nav-item">
                         <a
@@ -147,7 +166,7 @@ export default function UserProfile() {
                                             Full Name
                                                     </div>
                                         <div className="col font-weight-bold">
-                                            {params.single_user.user.user_fullname}
+                                            {params.single_user.user.first_name} {params.single_user.user.last_name}
                                         </div>
                                     </div>
                                 </h6>

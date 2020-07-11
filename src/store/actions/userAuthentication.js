@@ -131,6 +131,37 @@ export const post_followUser = (data) => {
 				following: data.following_id
 			}, config)
 			if (response) {
+				dispatch(getUserById(response.data.follower))
+				dispatch(viewClickedUserById(response.data))
+				// dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
+			}
+
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+
+
+// For sending post request to unfollow a user
+export const post_unfollowUser = (id) => {
+	console.log(id)
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		// let config = {
+		// 	headers: {
+		// 		Authorization: `Token ${token}`,
+		// 		"Content-Type": "application/json"
+		// 	},
+		// };
+		try {
+			const response = await route.delete(`/account/unfollow-user/${id}/`, {
+				headers: {
+					Authorization: `Token ${getState().userAuth.token}`,
+					"Content-Type": "application/json"
+				}
+			}, id)
+			if (response) {
 				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
 			}
 
