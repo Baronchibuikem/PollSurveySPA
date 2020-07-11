@@ -36,8 +36,9 @@ export default function UserProfile() {
     }
 
     // for unfollowing a user
-    const unfollow_user = (id) => {
-        dispatch(post_unfollowUser(id))
+    const unfollow_user = (id, user_id, clicked_user_id) => {
+        console.log(clicked_user_id, "clicked user id from component")
+        dispatch(post_unfollowUser({ id, user_id, clicked_user_id }))
     }
 
     // used to dispatch an action that allows an authenticated user to vote on a particular choice
@@ -75,7 +76,7 @@ export default function UserProfile() {
                         // params.viewed_user.user.username === params.single_user.user.username ? "" :
                         <button className="form-control mb-4"
                             style={defaultColor.background_color}
-                            onClick={() => unfollow_user(get_user_followers()[0])}>Following
+                            onClick={() => unfollow_user(get_user_followers()[0], params.viewed_user.user.id, params.single_user.user.id)}>Following
                         </button>
                         :
                         <button className="form-control mb-4"

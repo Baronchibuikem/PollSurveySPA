@@ -9,7 +9,8 @@ import {
 	CURRENT_LOGGEDIN_USER_FAIL,
 	VIEWED_LOGGEDIN_USER,
 	LIKE_POLL,
-	SET_USER_TOKEN
+	SET_USER_TOKEN,
+	UNFOLLOW_USER
 } from "./actionTypes";
 import route from "../../ApiClient";
 
@@ -132,7 +133,7 @@ export const post_followUser = (data) => {
 			}, config)
 			if (response) {
 				dispatch(getUserById(response.data.follower))
-				dispatch(viewClickedUserById(response.data))
+				dispatch(viewClickedUserById(data.following_id))
 				// dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
 			}
 
@@ -144,25 +145,21 @@ export const post_followUser = (data) => {
 
 
 // For sending post request to unfollow a user
-export const post_unfollowUser = (id) => {
-	console.log(id)
+export const post_unfollowUser = (data) => {
+	console.log(data.id, "clicked user", data.clicked_user_id)
 	return async (dispatch, getState) => {
-		const token = getState().userAuth.token
-		// let config = {
-		// 	headers: {
-		// 		Authorization: `Token ${token}`,
-		// 		"Content-Type": "application/json"
-		// 	},
-		// };
 		try {
-			const response = await route.delete(`/account/unfollow-user/${id}/`, {
+			const response = await route.delete(`/account/unfollow-user/${data.id}/`, {
 				headers: {
 					Authorization: `Token ${getState().userAuth.token}`,
 					"Content-Type": "application/json"
 				}
-			}, id)
+			}, data.id)
 			if (response) {
-				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
+				console.log(response, "from unfoloow")
+				dispatch(getUserById(data.user_id))
+				dispatch(viewClickedUserById(data.clicked_user_id))
+				// dispatch({ type: UNFOLLOW_USER, payload: response.data })
 			}
 
 		} catch (error) {
