@@ -1,16 +1,12 @@
 import {
-	USER_LOADED,
 	LOGIN_FAIL,
 	LOGOUT_SUCCESS,
 	REGISTER_FAIL,
-	REGISTER_SUCCESS,
 	REQUEST_LOADING,
 	CURRENT_LOGGEDIN_USER,
-	CURRENT_LOGGEDIN_USER_FAIL,
 	VIEWED_LOGGEDIN_USER,
 	LIKE_POLL,
 	SET_USER_TOKEN,
-	UNFOLLOW_USER
 } from "./actionTypes";
 import route from "../../ApiClient";
 
@@ -24,7 +20,6 @@ export const login = ({ email, password }) => (dispatch) => {
 	route
 		.post("/account/login/", { email, password }, config)
 		.then((response) => {
-			console.log(response.data, "Login")
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 			// dispatch({ type: USER_LOADED, payload: response.data });
@@ -38,7 +33,6 @@ export const login = ({ email, password }) => (dispatch) => {
 
 // Register user
 export const register_action = ({ data }) => (dispatch) => {
-	console.log(data, "from actions")
 	dispatch({ type: REQUEST_LOADING })
 	route
 		.post("/account/register/", {
@@ -49,7 +43,6 @@ export const register_action = ({ data }) => (dispatch) => {
 			password: data.password
 		}, config)
 		.then((response) => {
-			console.log(response.data)
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 		})
@@ -146,7 +139,6 @@ export const post_followUser = (data) => {
 
 // For sending post request to unfollow a user
 export const post_unfollowUser = (data) => {
-	console.log(data.id, "clicked user", data.clicked_user_id)
 	return async (dispatch, getState) => {
 		try {
 			const response = await route.delete(`/account/unfollow-user/${data.id}/`, {
@@ -156,10 +148,8 @@ export const post_unfollowUser = (data) => {
 				}
 			}, data.id)
 			if (response) {
-				console.log(response, "from unfoloow")
 				dispatch(getUserById(data.user_id))
 				dispatch(viewClickedUserById(data.clicked_user_id))
-				// dispatch({ type: UNFOLLOW_USER, payload: response.data })
 			}
 
 		} catch (error) {
@@ -168,8 +158,9 @@ export const post_unfollowUser = (data) => {
 	}
 }
 
+
+// action for liking a poll
 export const post_likepost = (data) => {
-	console.log(data)
 	return async (dispatch, getState) => {
 		const token = getState().userAuth.token
 		let config = {
@@ -184,15 +175,16 @@ export const post_likepost = (data) => {
 				user: data.user_id
 			}, config)
 			if (response) {
-				dispatch({ type: LIKE_POLL, payload: response.data })
+				dispatch(getUserById(data.user_id))
 			}
-
 		} catch (error) {
 			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
 		}
 	}
 }
 
+
+// action for bookmarking a poll
 export const post_bookmarkpoll = (data) => {
 	return async (dispatch, getState) => {
 		const token = getState().userAuth.token
@@ -208,7 +200,7 @@ export const post_bookmarkpoll = (data) => {
 				user: data.user_id
 			}, config)
 			if (response) {
-				dispatch({ type: LIKE_POLL, payload: response.data })
+				dispatch(getUserById(data.user_id))
 			}
 
 		} catch (error) {

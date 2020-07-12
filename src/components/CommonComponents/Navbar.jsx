@@ -20,25 +20,39 @@ import { Divider } from "antd";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { Link } from "react-router-dom";
 import { logout } from "../../store/actions/userAuthentication"
+import { useHistory } from "react-router";
+import { viewClickedUserById } from "../../store/actions/userAuthentication"
 
 const NavbarPage = () => {
 
+	// Internal state
 	const [isOpen, setIsOpen] = useState(false)
 
+	// hooks
+	const history = useHistory()
+	const dispatch = useDispatch()
+
+	const get_user = (id) => {
+		dispatch(viewClickedUserById(id))
+		history.push({
+			pathname: `/user/${id}`
+		})
+	}
+
+	// for nav toggler
 	const toggleCollapse = () => {
 		setIsOpen(!isOpen)
 	};
 
+	// used to fetch the value of state from the reducer
 	const params = useSelector((state) => ({
 		authenticated: state.userAuth.isAuthenticated,
 		current_user: state.userAuth.user
 	}));
 
-	const dispatch_logout = useDispatch();
-
 	const onSubmit = (e) => {
-		console.log("logout pressed")
-		dispatch_logout(logout());
+		// used to dispatch an action that logs a user out
+		dispatch(logout());
 	};
 
 	const dropdown = (
@@ -49,9 +63,9 @@ const NavbarPage = () => {
 					<div className="d-md-inline mx-2 font-weight-bold">{params.authenticated ? params.current_user.user.username : ""}</div>
 				</MDBDropdownToggle>
 				<MDBDropdownMenu className="dropdown-default text-light">
-					<MDBDropdownItem href="/">View Profile</MDBDropdownItem>
-					<MDBDropdownItem href="#!">My polls</MDBDropdownItem>
-					<MDBDropdownItem href="#!">My inbox</MDBDropdownItem>
+					<MDBDropdownItem onClick={() => { get_user(params.current_user.user.id) }}>View Profile</MDBDropdownItem>
+					{/* <MDBDropdownItem href="#!">My polls</MDBDropdownItem> */}
+					{/* <MDBDropdownItem href="#!">My inbox</MDBDropdownItem> */}
 
 					<MDBDropdownItem onClick={onSubmit}>
 						Logout

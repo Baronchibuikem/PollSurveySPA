@@ -19,7 +19,7 @@ export default function UserProfile() {
     const history = useHistory()
 
     useEffect(() => {
-        console.log("userprofile loaded")
+        // used to load profile of the clicked user once the page loads
     }, [params.single_user])
 
     const get_single_page = (id) => {
@@ -31,12 +31,21 @@ export default function UserProfile() {
 
     // used to dispatch an action that sends a post request to follow a user
     const follow_user = (follower_id, following_id) => {
+        /*
+        follower_id : id of the current logged in user
+        following_id : id of the current user whose profile is being viewed
+        */
         console.log(follower_id, following_id)
         dispatch(post_followUser({ follower_id, following_id }))
     }
 
     // for unfollowing a user
     const unfollow_user = (id, user_id, clicked_user_id) => {
+        /*
+            id : id returned when a successful follow request was made.
+            user_id: id of the current logged in user
+            clicked_user_id: id of the current user whose profile is being viewed
+        */
         console.log(clicked_user_id, "clicked user id from component")
         dispatch(post_unfollowUser({ id, user_id, clicked_user_id }))
     }
@@ -87,8 +96,6 @@ export default function UserProfile() {
 
                     }
                 </div>
-
-                <h1>{get_user_followers()} Followers</h1>
                 <ul className="nav nav-tabs profile-tab" role="tablist">
                     <li className="nav-item">
                         <a
