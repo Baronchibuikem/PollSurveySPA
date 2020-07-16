@@ -1,4 +1,4 @@
-import { ALLPOLL, ALLPOLL_FAIL, CREATEPOLL, VOTE_FAIL, SINGLEPOLL, CREATEPOLL_FAIL, SINGLEPOLL_FAIL } from "../actions/actionTypes"
+import { ALLPOLL, ALLPOLL_FAIL, VOTE_FAIL, SINGLEPOLL, CREATEPOLL_FAIL, SINGLEPOLL_FAIL } from "../actions/actionTypes"
 import route from "../../ApiClient";
 import { callApi } from "../index";
 
@@ -107,6 +107,30 @@ export const post_currentuser_vote = (data) => {
                 config)
             if (response) {
                 dispatch(get_polls())
+            }
+        } catch (error) {
+            console.log(error.response.data.non_field_errors)
+            dispatch({ type: VOTE_FAIL, payload: error.response.data.non_field_errors })
+        }
+
+    };
+};
+
+export const post_edit_poll = (data) => {
+    console.log(data, "from poll patch")
+    return async (dispatch, getState) => {
+        const token = getState().userAuth.token
+        let config = {
+            headers: {
+                Authorization: `Token ${token}`,
+                "Content-Type": "application/json"
+            },
+        };
+        try {
+            const response = await route.patch(`/polls/all-polls/${data.poll_id}/`, { poll_question: data.question }, config)
+            if (response) {
+                dispatch(get_polls())
+                dispatch(get_single_poll(data.poll_id))
             }
         } catch (error) {
             console.log(error.response.data.non_field_errors)

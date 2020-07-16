@@ -1,4 +1,4 @@
-import { ALLPOLL, CREATEPOLL, SINGLEPOLL, ALLPOLL_FAIL, VOTE_FAIL } from "../actions/actionTypes"
+import { ALLPOLL, CREATEPOLL, SINGLEPOLL, VOTE_FAIL } from "../actions/actionTypes"
 
 const initialState = {
     poll: [],

@@ -1,19 +1,24 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux"
+import { useForm } from "react-hook-form"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import ProfileHeader from "./profileHeader"
 import GetTrends from "./getTrends"
 import "../StyleComponents/AllPolls.css"
-import { post_currentuser_vote } from "../../store/actions/poll_action"
+import { post_currentuser_vote, post_edit_poll } from "../../store/actions/poll_action"
 import { post_likepost, post_bookmarkpoll } from "../../store/actions/userAuthentication"
 import profileImage from "../../assets/images/no-profile-image.jpg";
 
 const SinglePoll = () => {
 
+    // data coming from reducer state
     const params = useSelector((state) => ({
         single_poll: state.polls.single_poll,
         user: state.userAuth.user
     }));
+
+    // hooks form 
+    const { register, handleSubmit, errors } = useForm();
 
     // here we iterate through all bookmarks in the user state and push the poll question
     // into the bookmarked_poll array
@@ -58,6 +63,11 @@ const SinglePoll = () => {
         dispatch(post_currentuser_vote({ poll_id, choice_id }))
     }
 
+    // used to dispatch an action that allows poll owner to edit a particular poll of his/her
+    const edit_poll = (data) => {
+        dispatch(post_edit_poll({ question: data, poll_id: params.single_poll.id }))
+    }
+
     return (
         <div className="row">
             <div className="col-md-3">
@@ -78,29 +88,33 @@ const SinglePoll = () => {
                                 : ""}
 
                             {/* modal begins */}
-                            <div className="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                <div className="modal-dialog" role="document">
-                                    <div className="modal-content">
-                                        <div className="modal-header">
-                                            <h5 className="modal-title">Edit this poll</h5>
-                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div className="modal-body">
-                                            <div className="container-fluid">
-                                                <form action="">
-                                                    <input type="text" className="form-control" value={params.single_poll.poll_question} />
-                                                </form>
+                            <form >
+                                <div className="modal fade" id="modelId" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                    <div className="modal-dialog" role="document">
+                                        <div className="modal-content">
+                                            <div className="modal-header">
+                                                <h5 className="modal-title">Edit this poll</h5>
+                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
-                                        </div>
-                                        <div className="modal-footer">
-                                            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" className="btn btn-primary">Save</button>
+                                            <div className="modal-body">
+                                                <div className="container-fluid">
+                                                    <input type="text"
+                                                        className="form-control"
+                                                        name="question"
+                                                        placeholder={params.single_poll.poll_question}
+                                                        ref={register({ required: true })} />
+                                                </div>
+                                            </div>
+                                            <div className="modal-footer">
+                                                <button type="submit" className="btn btn-primary"
+                                                    onSubmit={handleSubmit(edit_poll)}>Save</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
 
                             {/* modal ends */}
                         </div><hr />

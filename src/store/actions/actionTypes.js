@@ -14,6 +14,7 @@ export const VIEWED_LOGGEDIN_USER = "VIEWED_LOGGEDIN_USER"
 export const SET_USER_TOKEN = "SET_USER_TOKEN"
 export const UNFOLLOW_USER = "UNFOLLOW_USER"
 
+
 // for polls
 export const ALLPOLL = "ALLPOLL";
 export const CREATEPOLL = "CREATEPOLL"
@@ -23,3 +24,5 @@ export const CREATEPOLL_FAIL = "CREATEPOLL_FAIL"
 export const ALLPOLL_FAIL = "ALLPOLL_FAIL"
 export const VOTE_FAIL = "VOTE_FAIL"
 export const LIKE_POLL = "LIKE_POLL"
+
+export const MESSAGE = "MESSAGE"

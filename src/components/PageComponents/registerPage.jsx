@@ -10,7 +10,7 @@ const RegistrationForm = () => {
 	const { register, handleSubmit, errors, watch } = useForm();
 
 	// Here we are instantiating our dispatch action
-	const dispatch_register = useDispatch()
+	const dispatch = useDispatch()
 
 	// Here we fetching data from our global state store in redux
 	// email_exist_error and username_exist_error are errors coming from the server side if the email and username entered already exist
@@ -23,8 +23,7 @@ const RegistrationForm = () => {
 
 	// This is used to dispatch a redux action with the needed registration data
 	const regSubmit = (data) => {
-		console.log(data, "from component")
-		dispatch_register(register_action({
+		dispatch(register_action({
 			data
 		}))
 	};

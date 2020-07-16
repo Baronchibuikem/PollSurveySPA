@@ -1,6 +1,6 @@
 import {
 	USER_LOADED, REQUEST_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UNFOLLOW_USER,
-	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, CURRENT_LOGGEDIN_USER_FAIL, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN,
+	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN, MESSAGE
 
 } from "../actions/actionTypes";
 
@@ -8,6 +8,7 @@ const initialState = {
 	token: localStorage.getItem("token"),
 	isAuthenticated: false,
 	isLoading: "Submit",
+	status: false,
 	user: {
 		user: {
 			id: "",
@@ -86,10 +87,16 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 			}
+		case MESSAGE:
+			return {
+				...state,
+				status: false
+			}
 		case VIEWED_LOGGEDIN_USER:
 			return {
 				...state,
-				view_user: action.payload
+				view_user: action.payload,
+				status: true,
 			}
 		case AUTH_ERROR:
 		case REGISTER_FAIL:

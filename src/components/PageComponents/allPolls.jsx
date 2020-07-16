@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 // import PropTypes from "prop-types";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import "../StyleComponents/AllPolls.css"
@@ -10,7 +10,7 @@ import profileImage from "../../assets/images/no-profile-image.jpg";
 
 const AllPolls = () => {
 
-	const { likes, setLikes } = useState([])
+	// const { likes, setLikes } = useState([])
 
 	const params = useSelector((state) => ({
 		all: state.polls.poll,
@@ -25,7 +25,6 @@ const AllPolls = () => {
 	// used to dispatch an action that gets all polls from the database
 	useEffect(() => {
 		dispatch(get_polls())
-		console.log("poll loaded")
 	}, [])
 
 
@@ -167,7 +166,7 @@ const AllPolls = () => {
 								<div className="mt-4">
 									{
 										get_user_bookmarks().indexOf(poll.poll_question) !== -1 ?
-											<span className="mr-3"><i class="fa fa-book" style={{ color: "#413a76" }}></i> bookmarked</span>
+											<span className="mr-3"><i className="fa fa-book" style={{ color: "#413a76" }}></i> bookmarked</span>
 											:
 											<span
 												onClick={() => bookmark_poll(poll.id, params.user.id)} className="pollhover mr-3"><i className="fa fa-book" ></i>Bookmark</span>

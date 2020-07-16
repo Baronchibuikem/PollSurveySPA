@@ -4,19 +4,16 @@ import React, {
 import {
 	BrowserRouter as Router
 } from "react-router-dom";
-import { useSelector } from "react-redux"
+// import { useSelector } from "react-redux"
 import BaseRouter from "../routes";
 import Navbar from "./CommonComponents/Navbar";
-import ProfileHeader from "./PageComponents/profileHeader"
-import GetTrends from "./PageComponents/getTrends"
-import LoginPage from "./PageComponents/loginPage"
-import RegisterPage from "./PageComponents/registerPage"
+
 
 const App = () => {
 
-	const params = useSelector((state) => ({
-		token: state.userAuth.token
-	}));
+	// const params = useSelector((state) => ({
+	// 	token: state.userAuth.token
+	// }));
 	return (
 		<Fragment >
 			<Router >

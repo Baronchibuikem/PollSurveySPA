@@ -1,21 +1,40 @@
 import React, { useEffect } from 'react'
+import { useForm } from "react-hook-form"
 import ProfileHeader from "./profileHeader"
 import GetTrends from "./getTrends"
 import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, post_currentuser_vote } from "../../store/actions/poll_action"
-import { post_followUser, post_unfollowUser } from "../../store/actions/userAuthentication"
+import { post_followUser, post_unfollowUser, post_edit_userprofile } from "../../store/actions/userAuthentication"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { useHistory } from "react-router";
 import profileImage from "../../assets/images/no-profile-image.jpg";
+import "../StyleComponents/AllPolls.css"
+// import Modal from "./modal"
 
 
 export default function UserProfile() {
+
+
+    // hooks form, because we are using multiple forms, it was neccessary to instantiate different hook instances
+    const { register, handleSubmit } = useForm();
+    const { register: register_email, handleSubmit: handleSubmit_email } = useForm()
+    const { register: register_bio, handleSubmit: handleSubmit_bio } = useForm()
+
+    // Getting data from redux state
     const params = useSelector((state) => ({
+        // data for user whose profile is being viewed
         single_user: state.userAuth.view_user,
-        viewed_user: state.userAuth.user
+        // data for current logged in user
+        viewed_user: state.userAuth.user,
+        // For checking the loading state of the data being sent to the server
+        loading: state.userAuth.isLoading,
+        // For checking the status of a request
+        status: state.userAuth.status
     }));
 
+    // used to create a dispatch action
     const dispatch = useDispatch();
+
     const history = useHistory()
 
     useEffect(() => {
@@ -55,6 +74,31 @@ export default function UserProfile() {
         dispatch(post_currentuser_vote({ poll_id, choice_id }))
     }
 
+    // for submitting username edit method
+    const post_edit_username = (data) => {
+        // console.log(data)
+        dispatch(post_edit_userprofile({ username: data.username, user_id: params.viewed_user.user.id }))
+    }
+
+    // for submitting email edit method
+    const post_edit_email = (data) => {
+        dispatch(post_edit_userprofile({ email: data.email, user_id: params.viewed_user.user.id }))
+    }
+
+    // for submitting user password change method
+    // const post_edit_password = (data) => {
+    //     console.log(data)
+    // }
+
+    // for submitting bio edit method
+    const post_edit_bio = (data) => {
+        dispatch(post_edit_userprofile({ bio: data.bio, user_id: params.viewed_user.user.id }))
+    }
+
+    // // for submitting position edit method
+    // const post_edit_position = (data) => {
+    //     console.log(data)
+    // }
 
     const get_user_followers = () => {
         const followed_user = []
@@ -80,22 +124,24 @@ export default function UserProfile() {
                 <ProfileHeader />
             </div>
             <div className="col-md-6">
-                <div>
-                    {get_user_followers()[1] === params.single_user.user.username ?
-                        // params.viewed_user.user.username === params.single_user.user.username ? "" :
-                        <button className="form-control mb-4"
-                            style={defaultColor.background_color}
-                            onClick={() => unfollow_user(get_user_followers()[0], params.viewed_user.user.id, params.single_user.user.id)}>Following
+                {params.single_user.user.username === params.viewed_user.user.username ? "" :
+                    <div>
+                        {get_user_followers()[1] === params.single_user.user.username ?
+                            // params.viewed_user.user.username === params.single_user.user.username ? "" :
+                            <button className="form-control mb-4"
+                                style={defaultColor.background_color}
+                                onClick={() => unfollow_user(get_user_followers()[0], params.viewed_user.user.id, params.single_user.user.id)}>Following
                         </button>
-                        :
-                        <button className="form-control mb-4"
-                            style={defaultColor.background_color}
-                            onClick={() => follow_user(params.viewed_user.user.id, params.single_user.user.id)}>
-                            Follow
+                            :
+                            <button className="form-control mb-4"
+                                style={defaultColor.background_color}
+                                onClick={() => follow_user(params.viewed_user.user.id, params.single_user.user.id)}>
+                                Follow
                             </button>
 
-                    }
-                </div>
+                        }
+                    </div>
+                }
                 <ul className="nav nav-tabs profile-tab" role="tablist">
                     <li className="nav-item">
                         <a
@@ -151,8 +197,9 @@ export default function UserProfile() {
                                     <div className="col-md-4">Profile Image</div>
                                     <div className="col-md-4">
                                         {params.single_user.user.image !== null ?
-                                            <img src={params.single_user.user.image} alt="profile image" className="w-100 img-responsive" /> :
-                                            <img src={profileImage} alt="" />
+                                            <img src={params.single_user.user.image} alt="profile_image" className="w-100 img-responsive" /> :
+                                            <img src={profileImage} alt="" data-toggle="tooltip" data-placement="top" title="Edit" />
+
                                         }
                                     </div>
                                 </div>
@@ -161,9 +208,48 @@ export default function UserProfile() {
                                         <div className="col-md-4">
                                             Username
                                                     </div>
-                                        <div className="col font-weight-bold">
+                                        <div className="col font-weight-bold d-flex">
                                             {params.single_user.user.username}
+
+                                            {params.single_user.user.username === params.viewed_user.user.username ?
+
+                                                <i className="fa fa-pen ml-1 pollhover" data-toggle="modal" data-target="#modelId"
+                                                    data-placement="top" title="Edit" style={{ color: "blue" }}
+                                                ></i> : ""}
+
+                                            <form onSubmit={handleSubmit(post_edit_username)}>
+                                                <div class="modal fade" id="modelId" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Edit your username</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="container-fluid">
+                                                                    <input type="text"
+                                                                        name="username"
+                                                                        className="form-control"
+                                                                        placeholder={params.single_user.user.username}
+                                                                        ref={register({ required: true })} />
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                {params.status ? "updated successfully" : ""}
+                                                                <button type="submit" class="btn btn-primary"
+                                                                    onClick={handleSubmit(post_edit_username)}>Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
+
                                         </div>
+
                                     </div>
 
 
@@ -173,8 +259,35 @@ export default function UserProfile() {
                                         <div className="col-md-4">
                                             Full Name
                                                     </div>
-                                        <div className="col font-weight-bold">
+                                        <div className="col font-weight-bold d-flex">
                                             {params.single_user.user.first_name} {params.single_user.user.last_name}
+                                            {/* <i className="fa fa-pen ml-1 pollhover" data-toggle="modal" data-target="#modelId2"
+                                                data-placement="top" title="Edit" style={{ color: "blue" }}
+                                            ></i>
+
+                                            <div class="modal fade" id="modelId2" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Modal title</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="container-fluid">
+                                                                Add rows here
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="button" class="btn btn-primary">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> */}
+
+
                                         </div>
                                     </div>
                                 </h6>
@@ -184,28 +297,90 @@ export default function UserProfile() {
                                         <div className="col-md-4">
                                             Email
                                                 </div>
-                                        <div className="col font-weight-bold">
+                                        <div className="col font-weight-bold d-flex">
                                             {params.single_user.user.email}
-                                        </div>
-                                    </div>
-                                </h6>
-                                <h6 className="mt-4">
-                                    <div className="row">
-                                        <div className="col-md-4">
-                                            Position
+                                            {/* <Modal title="Edit Email" id="3" /> */}
+                                            {params.single_user.user.username === params.viewed_user.user.username ?
+
+                                                <i className="fa fa-pen ml-1 pollhover" data-toggle="modal" data-target="#modelId3"
+                                                    data-placement="top" title="Edit" style={{ color: "blue" }}
+                                                ></i> : ""}
+
+                                            <form onSubmit={handleSubmit_email(post_edit_email)}>
+                                                <div class="modal fade" id="modelId3" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Edit your Email Address</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="container-fluid">
+                                                                    <input type="text"
+                                                                        name="email"
+                                                                        className="form-control"
+                                                                        placeholder={params.single_user.user.email}
+                                                                        ref={register_email({ required: true })} />
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                {params.status ? "updated successfully" : ""}
+                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                        <div className="col font-weight-bold">
-                                            {params.single_user.user.position}
+                                            </form>
+
+
                                         </div>
                                     </div>
                                 </h6>
+
                                 <h6 className="mt-4">
                                     <div className="row">
                                         <div className="col-md-4">
                                             About Me
                                                 </div>
-                                        <div className="col font-weight-bold">
+                                        <div className="col font-weight-bold d-flex">
                                             {params.single_user.user.bio}
+                                            {/* <Modal title="Edit About Me" id="5" /> */}
+                                            {params.single_user.user.username === params.viewed_user.user.username ?
+                                                <i className="fa fa-pen ml-1 pollhover" data-toggle="modal" data-target="#modelId5"
+                                                    data-placement="top" title="Edit" style={{ color: "blue" }}
+                                                ></i> : ""}
+
+                                            <form onSubmit={handleSubmit_bio(post_edit_bio)}>
+                                                <div class="modal fade" id="modelId5" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Edit your bio</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="container-fluid">
+                                                                    <input type="text"
+                                                                        name="bio"
+                                                                        className="form-control"
+                                                                        placeholder="Please enter your your bio here"
+                                                                        ref={register_bio({ required: true })} />
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                {params.status ? "updated successfully" : ""}
+                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+
                                         </div>
                                     </div>
                                 </h6>
@@ -218,7 +393,7 @@ export default function UserProfile() {
                         <div className="mt-5">
                             {
                                 params.single_user.polls.map(poll => (
-                                    <div key={poll.id} >
+                                    <div key={poll.pk} >
                                         <div className="mb-3 card" style={{ borderColor: "lightblue" }} >
                                             <div className="card-body poll" style={{ borderLeft: "1px solid #F0F0F0", position: "relative" }}>
                                                 <div>
@@ -226,7 +401,8 @@ export default function UserProfile() {
                                                         {params.single_user.user.user_fullname} @ {params.single_user.user.username}
                                                     </span>
                                                 </div>
-                                                <p className="card-title pollhover" onClick={() => get_single_page(poll.id)}>{poll.poll_question}</p>
+                                                <p className="card-title pollhover" onClick={() => get_single_page(poll.pk)}>{poll.poll_question}</p>
+
                                                 <div className="card-text">
                                                     {poll.poll_has_expired ?
                                                         <div>
@@ -346,6 +522,6 @@ export default function UserProfile() {
             </div>
 
 
-        </div>
+        </div >
     )
 }

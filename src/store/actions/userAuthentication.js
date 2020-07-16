@@ -5,8 +5,8 @@ import {
 	REQUEST_LOADING,
 	CURRENT_LOGGEDIN_USER,
 	VIEWED_LOGGEDIN_USER,
-	LIKE_POLL,
 	SET_USER_TOKEN,
+	MESSAGE
 } from "./actionTypes";
 import route from "../../ApiClient";
 
@@ -209,3 +209,52 @@ export const post_bookmarkpoll = (data) => {
 	}
 }
 
+// for editing username
+export const post_edit_userprofile = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		if (data.username) {
+			dispatch({ type: REQUEST_LOADING })
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, { username: data.username }, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
+		} else if (data.email) {
+			dispatch({ type: REQUEST_LOADING })
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, { email: data.email }, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
+		} else if (data.bio) {
+			dispatch({ type: REQUEST_LOADING })
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, { bio: data.bio }, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+				dispatch({ type: MESSAGE })
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
+		}
+	}
+}

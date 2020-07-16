@@ -3,7 +3,7 @@ import { Route, Switch } from "react-router-dom";
 
 // import PrivateRoute from "./components/UtilityComponents/SecuredRoutes";
 import Homepage from "./components/PageComponents/homepage";
-import AllPolls from "./components/PageComponents/allPolls";
+// import AllPolls from "./components/PageComponents/allPolls";
 import LoginForm from "./components/PageComponents/loginPage";
 import RegistrationForm from "./components/PageComponents/registerPage";
 import PrivateRoute from "./components/CommonComponents/PrivateRoute";
