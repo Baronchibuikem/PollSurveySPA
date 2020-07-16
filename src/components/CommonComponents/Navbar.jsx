@@ -90,8 +90,8 @@ const NavbarPage = () => {
 			fixed="top">
 			<div className="container">
 				<MDBNavbarBrand>
-					<Link to="/">
-						CollegeFun
+					<Link to="/" className="text-light">
+						VotePoll
 					</Link>
 
 				</MDBNavbarBrand>

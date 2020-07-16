@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from "react-hook-form"
 import ProfileHeader from "./profileHeader"
 import GetTrends from "./getTrends"
 import { useSelector, useDispatch } from "react-redux"
 import { get_single_poll, post_currentuser_vote } from "../../store/actions/poll_action"
-import { post_followUser, post_unfollowUser, post_edit_userprofile } from "../../store/actions/userAuthentication"
+import { post_followUser, post_unfollowUser, post_edit_userprofile, viewClickedUserById } from "../../store/actions/userAuthentication"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { useHistory } from "react-router";
 import profileImage from "../../assets/images/no-profile-image.jpg";
@@ -14,11 +14,14 @@ import "../StyleComponents/AllPolls.css"
 
 export default function UserProfile() {
 
+    // For managing state in this component
+    const [image_file, setImage] = useState(null)
 
     // hooks form, because we are using multiple forms, it was neccessary to instantiate different hook instances
     const { register, handleSubmit } = useForm();
     const { register: register_email, handleSubmit: handleSubmit_email } = useForm()
     const { register: register_bio, handleSubmit: handleSubmit_bio } = useForm()
+    const { register: register_image, handleSubmit: handleSubmit_image } = useForm()
 
     // Getting data from redux state
     const params = useSelector((state) => ({
@@ -95,10 +98,24 @@ export default function UserProfile() {
         dispatch(post_edit_userprofile({ bio: data.bio, user_id: params.viewed_user.user.id }))
     }
 
-    // // for submitting position edit method
-    // const post_edit_position = (data) => {
-    //     console.log(data)
-    // }
+    // for submitting image edit method
+    const post_edit_image = (e, data) => {
+        e.preventDefault()
+        let form = new FormData()
+        let image = image_file
+        form.append("image", image)
+        console.log(form, "form from image")
+        dispatch(post_edit_userprofile({ image: form, user_id: params.viewed_user.user.id }))
+    }
+
+    // used to dipatch an action that that gets the profile of the clicked user and
+    // then change the route to user profile page
+    const get_user = (id) => {
+        dispatch(viewClickedUserById(id))
+        history.push({
+            pathname: `/user/${id}`
+        })
+    }
 
     const get_user_followers = () => {
         const followed_user = []
@@ -116,7 +133,11 @@ export default function UserProfile() {
     }
 
 
-
+    // for getting the selected image/file when user wants to update his image profile
+    const selectFile = (event) => {
+        console.log(event.target.files[0], "from image ")
+        setImage(event.target.files[0]);
+    };
 
     return (
         <div className="row">
@@ -201,6 +222,45 @@ export default function UserProfile() {
                                             <img src={profileImage} alt="" data-toggle="tooltip" data-placement="top" title="Edit" />
 
                                         }
+
+                                        {params.single_user.user.username === params.viewed_user.user.username ?
+
+                                            <i className="fa fa-pen ml-1 pollhover" data-toggle="modal" data-target="#modelId6"
+                                                data-placement="top" title="Edit" style={{ color: "blue" }}
+                                            ></i> : ""}
+
+                                        <form>
+                                            <div class="modal fade" id="modelId6" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Update your Image</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div className="modal-body">
+                                                            <div className="container-fluid">
+                                                                <input
+                                                                    type="file"
+                                                                    name="image"
+                                                                    className="form-control"
+                                                                    accept="image/*"
+                                                                    onChange={selectFile}
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div className="modal-footer">
+                                                            {params.status ? "updated successfully" : ""}
+                                                            <button type="button" class="btn btn-primary" onClick={post_edit_image}>Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+
+
                                     </div>
                                 </div>
                                 <h6>
@@ -469,7 +529,8 @@ export default function UserProfile() {
                                         <div class="card text-left">
                                             <img class="card-img-top" src="holder.js/100px180/" alt="" />
                                             <div class="card-body">
-                                                <h6 class="card-title">{follower.follower_user_fullname} @{follower.follower_username}</h6>
+                                                <h6 class="card-title pollhover"
+                                                    onClick={() => get_user(follower.follower_id)}>{follower.follower_user_fullname} @{follower.follower_username}</h6>
                                                 <p class="card-text">{follower.follower_user_bio}</p>
                                             </div>
                                         </div> : " "
@@ -486,7 +547,8 @@ export default function UserProfile() {
                                         <div class="card text-left">
                                             <img class="card-img-top" src="holder.js/100px180/" alt="" />
                                             <div class="card-body">
-                                                <h6 class="card-title">{followed.following_user_fullname} @{followed.following_username}</h6>
+                                                <h6 class="card-title pollhover"
+                                                    onClick={() => get_user(followed.following_id)}>{followed.following_user_fullname} @{followed.following_username}</h6>
                                                 <p class="card-text">{followed.following_user_bio}</p>
                                             </div>
                                         </div> : ""

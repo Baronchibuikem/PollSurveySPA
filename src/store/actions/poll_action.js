@@ -116,7 +116,7 @@ export const post_currentuser_vote = (data) => {
     };
 };
 
-export const post_edit_poll = (data) => {
+export const post_delete_poll = (data) => {
     console.log(data, "from poll patch")
     return async (dispatch, getState) => {
         const token = getState().userAuth.token
@@ -127,10 +127,9 @@ export const post_edit_poll = (data) => {
             },
         };
         try {
-            const response = await route.patch(`/polls/all-polls/${data.poll_id}/`, { poll_question: data.question }, config)
+            const response = await route.delete(`/polls/all-polls/${data.poll_id}/`, config)
             if (response) {
                 dispatch(get_polls())
-                dispatch(get_single_poll(data.poll_id))
             }
         } catch (error) {
             console.log(error.response.data.non_field_errors)

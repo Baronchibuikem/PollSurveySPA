@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { useForm } from "react-hook-form"
+import { useHistory } from "react-router";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import ProfileHeader from "./profileHeader"
 import GetTrends from "./getTrends"
 import "../StyleComponents/AllPolls.css"
-import { post_currentuser_vote, post_edit_poll } from "../../store/actions/poll_action"
-import { post_likepost, post_bookmarkpoll } from "../../store/actions/userAuthentication"
+import { post_currentuser_vote, post_delete_poll } from "../../store/actions/poll_action"
+import { post_likepost, post_bookmarkpoll, viewClickedUserById } from "../../store/actions/userAuthentication"
 import profileImage from "../../assets/images/no-profile-image.jpg";
 
 const SinglePoll = () => {
@@ -19,6 +20,10 @@ const SinglePoll = () => {
 
     // hooks form 
     const { register, handleSubmit, errors } = useForm();
+
+
+    const dispatch = useDispatch();
+    const history = useHistory()
 
     // here we iterate through all bookmarks in the user state and push the poll question
     // into the bookmarked_poll array
@@ -56,7 +61,6 @@ const SinglePoll = () => {
         console.log("single updated")
     }, [params.single_poll])
 
-    const dispatch = useDispatch();
 
     // used to dispatch an action that allows an authenticated user to vote on a particular choice
     const cast_vote = (poll_id, choice_id) => {
@@ -64,8 +68,20 @@ const SinglePoll = () => {
     }
 
     // used to dispatch an action that allows poll owner to edit a particular poll of his/her
-    const edit_poll = (data) => {
-        dispatch(post_edit_poll({ question: data, poll_id: params.single_poll.id }))
+    const delete_poll = () => {
+        dispatch(post_delete_poll({ poll_id: params.single_poll.id }))
+        history.push({
+            pathname: "/"
+        })
+    }
+
+    // used to dipatch an action that that gets the profile of the clicked user and
+    // then change the route to user profile page
+    const get_user = (id) => {
+        dispatch(viewClickedUserById(id))
+        history.push({
+            pathname: `/user/${id}`
+        })
     }
 
     return (
@@ -77,48 +93,20 @@ const SinglePoll = () => {
                 <div className="card" style={{ borderColor: "darkblue" }}>
                     <img className="card-img-top" src="holder.js/100x180/" alt="" />
                     <div className="card-body">
-                        <div className="d-flex">
+                        <div className="d-flex justify-content-start">
                             {
                                 params.single_poll.image !== null ? <img src={params.single_poll.image} alt="poll_creator_image" width="30px" className="mr-3" style={{ borderRadius: "50%" }} />
                                     : <img src={profileImage} alt="poll_creator_image" width="30px" className="mr-3" style={{ borderRadius: "50%" }} />
                             }
-                            <h6 className="card-title mr-5 mt-2">{params.single_poll.poll_creator_fullname} @{params.single_poll.poll_creator}</h6>
-                            {params.user.user.username === params.single_poll.poll_creator ?
-                                <span className="font-weight-bold pollhover mt-2" style={defaultColor.text_color} data-toggle="modal" data-target="#modelId">Edit Poll</span>
-                                : ""}
+                            <h6 className="card-title mr-5 mt-2 pollhover"
+                                onClick={() => get_user(params.single_poll.poll_creator_id)}>{params.single_poll.poll_creator_fullname} @{params.single_poll.poll_creator}</h6>
 
-                            {/* modal begins */}
-                            <form >
-                                <div className="modal fade" id="modelId" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                    <div className="modal-dialog" role="document">
-                                        <div className="modal-content">
-                                            <div className="modal-header">
-                                                <h5 className="modal-title">Edit this poll</h5>
-                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div className="modal-body">
-                                                <div className="container-fluid">
-                                                    <input type="text"
-                                                        className="form-control"
-                                                        name="question"
-                                                        placeholder={params.single_poll.poll_question}
-                                                        ref={register({ required: true })} />
-                                                </div>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="submit" className="btn btn-primary"
-                                                    onSubmit={handleSubmit(edit_poll)}>Save</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-                            {/* modal ends */}
                         </div><hr />
-                        <p className="card-text">{params.single_poll.poll_question}</p>
+                        <p className="card-text">{params.single_poll.poll_question}
+                            {params.user.user.username === params.single_poll.poll_creator ?
+                                <i className="fa fa-trash mt-2 ml-3" style={{ color: "red" }} onClick={handleSubmit(delete_poll)}></i>
+                                : ""}</p>
+
                         {params.single_poll.poll_has_expired ?
                             <div>
                                 <span className="text-danger">Voting has ended on this poll choices</span>

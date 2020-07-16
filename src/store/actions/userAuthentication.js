@@ -255,6 +255,25 @@ export const post_edit_userprofile = (data) => {
 			} catch (error) {
 				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
 			}
+		} else if (data.image) {
+			console.log(data, "from image action HEREEEEEEEEEE")
+			dispatch({ type: REQUEST_LOADING })
+			let config = {
+				headers: {
+					Authorization: `Token ${token}`,
+					"Content-Type": "multipart/form-data",
+				},
+			};
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, data.image, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+				dispatch({ type: MESSAGE })
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
 		}
 	}
 }
