@@ -13,10 +13,7 @@ import {
 	MDBDropdownItem,
 	MDBIcon,
 } from "mdbreact";
-<<<<<<< HEAD
 import { Divider } from "antd";
-=======
->>>>>>> Added config header and authorization to poll_action
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { Link } from "react-router-dom";
 import { logout } from "../../store/actions/userAuthentication"
