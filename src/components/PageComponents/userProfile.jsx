@@ -230,12 +230,12 @@ export default function UserProfile() {
                                             ></i> : ""}
 
                                         <form>
-                                            <div class="modal fade" id="modelId6" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">Update your Image</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <div className="modal fade" id="modelId6" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                <div className="modal-dialog" role="document">
+                                                    <div className="modal-content">
+                                                        <div className="modal-header">
+                                                            <h5 className="modal-title">Update your Image</h5>
+                                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
@@ -252,7 +252,7 @@ export default function UserProfile() {
                                                         </div>
                                                         <div className="modal-footer">
                                                             {params.status ? "updated successfully" : ""}
-                                                            <button type="button" class="btn btn-primary" onClick={post_edit_image}>Submit</button>
+                                                            <button type="button" className="btn btn-primary" onClick={post_edit_image}>Submit</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -278,17 +278,17 @@ export default function UserProfile() {
                                                 ></i> : ""}
 
                                             <form onSubmit={handleSubmit(post_edit_username)}>
-                                                <div class="modal fade" id="modelId" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Edit your username</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <div className="modal fade" id="modelId" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                    <div className="modal-dialog" role="document">
+                                                        <div className="modal-content">
+                                                            <div className="modal-header">
+                                                                <h5 className="modal-title">Edit your username</h5>
+                                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">
-                                                                <div class="container-fluid">
+                                                            <div className="modal-body">
+                                                                <div className="container-fluid">
                                                                     <input type="text"
                                                                         name="username"
                                                                         className="form-control"
@@ -296,7 +296,7 @@ export default function UserProfile() {
                                                                         ref={register({ required: true })} />
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
+                                                            <div className="modal-footer">
                                                                 {params.status ? "updated successfully" : ""}
                                                                 <button type="submit" class="btn btn-primary"
                                                                     onClick={handleSubmit(post_edit_username)}>Submit</button>
@@ -367,17 +367,17 @@ export default function UserProfile() {
                                                 ></i> : ""}
 
                                             <form onSubmit={handleSubmit_email(post_edit_email)}>
-                                                <div class="modal fade" id="modelId3" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Edit your Email Address</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <div className="modal fade" id="modelId3" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                    <div className="modal-dialog" role="document">
+                                                        <div className="modal-content">
+                                                            <div className="modal-header">
+                                                                <h5 className="modal-title">Edit your Email Address</h5>
+                                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">
-                                                                <div class="container-fluid">
+                                                            <div className="modal-body">
+                                                                <div className="container-fluid">
                                                                     <input type="text"
                                                                         name="email"
                                                                         className="form-control"
@@ -385,9 +385,9 @@ export default function UserProfile() {
                                                                         ref={register_email({ required: true })} />
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
+                                                            <div className="modal-footer">
                                                                 {params.status ? "updated successfully" : ""}
-                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                                <button type="submit" className="btn btn-primary">Submit</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -413,17 +413,17 @@ export default function UserProfile() {
                                                 ></i> : ""}
 
                                             <form onSubmit={handleSubmit_bio(post_edit_bio)}>
-                                                <div class="modal fade" id="modelId5" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-                                                    <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Edit your bio</h5>
-                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <div className="modal fade" id="modelId5" tabIndex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                                    <div className="modal-dialog" role="document">
+                                                        <div className="modal-content">
+                                                            <div className="modal-header">
+                                                                <h5 className="modal-title">Edit your bio</h5>
+                                                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                 </button>
                                                             </div>
-                                                            <div class="modal-body">
-                                                                <div class="container-fluid">
+                                                            <div className="modal-body">
+                                                                <div className="container-fluid">
                                                                     <input type="text"
                                                                         name="bio"
                                                                         className="form-control"
@@ -431,9 +431,9 @@ export default function UserProfile() {
                                                                         ref={register_bio({ required: true })} />
                                                                 </div>
                                                             </div>
-                                                            <div class="modal-footer">
+                                                            <div className="modal-footer">
                                                                 {params.status ? "updated successfully" : ""}
-                                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                                <button type="submit" className="btn btn-primary">Submit</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -526,12 +526,12 @@ export default function UserProfile() {
                             return (
                                 <div key={follower.id} className="mt-2">
                                     {follower.follower_user_fullname ?
-                                        <div class="card text-left">
-                                            <img class="card-img-top" src="holder.js/100px180/" alt="" />
-                                            <div class="card-body">
-                                                <h6 class="card-title pollhover"
+                                        <div className="card text-left">
+                                            <img className="card-img-top" src="holder.js/100px180/" alt="" />
+                                            <div className="card-body">
+                                                <h6 className="card-title pollhover"
                                                     onClick={() => get_user(follower.follower_id)}>{follower.follower_user_fullname} @{follower.follower_username}</h6>
-                                                <p class="card-text">{follower.follower_user_bio}</p>
+                                                <p className="card-text">{follower.follower_user_bio}</p>
                                             </div>
                                         </div> : " "
                                     }
@@ -544,12 +544,12 @@ export default function UserProfile() {
                             return (
                                 <div key={followed.id} className="mt-2">
                                     {followed.following_user_fullname ?
-                                        <div class="card text-left">
-                                            <img class="card-img-top" src="holder.js/100px180/" alt="" />
-                                            <div class="card-body">
-                                                <h6 class="card-title pollhover"
+                                        <div className="card text-left">
+                                            <img className="card-img-top" src="holder.js/100px180/" alt="" />
+                                            <div className="card-body">
+                                                <h6 className="card-title pollhover"
                                                     onClick={() => get_user(followed.following_id)}>{followed.following_user_fullname} @{followed.following_username}</h6>
-                                                <p class="card-text">{followed.following_user_bio}</p>
+                                                <p className="card-text">{followed.following_user_bio}</p>
                                             </div>
                                         </div> : ""
                                     }
@@ -563,11 +563,11 @@ export default function UserProfile() {
                             return (
                                 <div key={like.id} className="mt-2">
                                     {like.question ?
-                                        <div class="card text-left">
-                                            <img class="card-img-top" src="holder.js/100px180/" alt="" />
-                                            <div class="card-body">
-                                                <h6 class="card-title">{like.poll_creator_firstname} {like.poll_creator_lastname} @{like.poll_creator_username}</h6>
-                                                <p class="card-text">{like.question}</p>
+                                        <div className="card text-left">
+                                            <img className="card-img-top" src="holder.js/100px180/" alt="" />
+                                            <div className="card-body">
+                                                <h6 className="card-title">{like.poll_creator_firstname} {like.poll_creator_lastname} @{like.poll_creator_username}</h6>
+                                                <p className="card-text">{like.question}</p>
                                             </div>
                                         </div> : ""
                                     }

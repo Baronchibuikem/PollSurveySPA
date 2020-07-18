@@ -155,7 +155,7 @@ const AllPolls = () => {
 								</div>
 								<div className="d-flex justify-content-between">
 									{
-										!poll.poll_has_expired ? <span style={{ color: "#413a76" }}>Voting stops @ ({poll.poll_expiration_date})</span> : ""
+										!poll.poll_has_expired ? <small style={{ color: "#413a76" }}>Voting stops @ ({poll.poll_expiration_date})</small> : ""
 									}
 
 								</div>
