@@ -1,140 +1,190 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { useState } from "react";
+import { func, object } from "prop-types";
+import { useDispatch, useSelector } from "react-redux"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
+import { create_poll } from "../../store/actions/poll_action";
 
-class createPoll extends Component {
-	state = {
-		question: "",
-		option: "",
-		options: [],
-		initialValue: { choice_text: [{}] },
-		choice_type: "TEXT",
-		showForm: false,
-		date: "",
-	};
-	static propTypes = {
-		defaultColor: PropTypes.object,
-		Logger: PropTypes.func,
-	};
-	focusActivated = (e) => {
-		this.setState({
-			showForm: true,
-			question: e.target.value,
-		});
+
+const CreatePoll = () => {
+	const [question, setQuestion] = useState("");
+	const [option, setOption] = useState('')
+	const [options, setOptions] = useState([])
+	const [initialValue, setInitialValue] = useState([])
+	const [showForm, setShowForm] = useState(false)
+	const [date, setDate] = useState("")
+
+	const dispatch_createpoll = useDispatch()
+
+	const params = useSelector((state) => ({
+		token: state.userAuth.token
+	}));
+
+
+	const focusActivated = (e) => {
+		setShowForm(true)
+		setQuestion(e.target.value)
 	};
 
-	AddOption = (e) => {
-		e.preventDefault();
-		let option = this.state.option;
-		this.setState((prevState) => {
-			return { options: [...prevState.options, option], option: "" };
-		});
+	const focusDeactivated = () => {
+		setQuestion("")
+		setOptions([])
+		setShowForm(false)
+	};
+
+	// const addOptionToArray = () => {
+	// 	setInitialValue.choice_name.push({ choice_name: option })
+	// }
+
+	const AddOption = () => {
+		// addOptionToArray()
+		// const list = setInitialValue.choice_name.concat({ choice_name: option })
+		// setInitialValue({ choice_name: list })
+		setOptions(options => {
+			return [...options, option]
+		})
+		console.log(initialValue)
+		setOption("")
 	};
 
 	// For removing an a choice from a poll question when it is being created
-	RemoveOption = (e) => {
-		e.preventDefault();
-		let array = this.state.options;
-		let index = array.indexOf(e);
+	const RemoveOption = o => {
+		const newArr = options.filter(opt => opt !== o);
+		setOptions(newArr);
+		setOption("")
 
-		array.splice(index, 1);
-		this.setState({
-			options: array,
-		});
 	};
 
-	render() {
-		const choiceform = (
-			<div className="d-flex">
-				<input
-					type="text"
-					placeholder="Pleae enter the choices"
-					className="form-control"
-					style={{ borderRadius: "5px" }}
-					value={this.state.option}
-					readOnly={!this.state.question}
-					onChange={(e) => {
-						this.setState({
-							option: e.target.value,
-						});
-					}}
-				/>
+	const submit = (e) => {
+		// e.preventDefault()
+		const token = params.token
+		const choices = options && options.length ? options.map(option => {
+			return {
+				choice_name: option
+			}
+		}) : []
 
-				<button
-					type="button"
-					onClick={this.AddOption}
-					disabled={!this.state.option}
-					className="form-control w-25 b"
-					style={
-						this.state.option
-							? defaultColor.background_color
-							: { backgroundColor: "grey" }
-					}>
-					Add
+		// console.log(question, options, date, "FROM Poll SUBMIT", token)
+		dispatch_createpoll(create_poll({ question, choices, date, token }));
+		setQuestion("")
+		setOption("")
+		setOptions([])
+		setInitialValue([])
+		setDate("")
+		setShowForm(false)
+	}
+
+	const choiceform = (
+		<div className="d-flex">
+			<input
+				type="text"
+				placeholder="Enter Choices for this poll (Optional)"
+				className="form-control"
+				style={{ borderRadius: "5px" }}
+				value={option}
+				readOnly={!question}
+				onChange={(e) => setOption(e.target.value)}
+			/>
+
+			<button
+				type="button"
+				onClick={AddOption}
+				disabled={!option}
+				className="form-control w-25 b"
+				style={
+					option
+						? defaultColor.background_color
+						: { backgroundColor: "grey" }
+				}>
+				Add
 				</button>
-			</div>
-		);
-		return (
-			<div>
-				<form action="">
-					<div>
-						<textarea
-							style={{ borderRadius: "5px" }}
-							className="form-control is-rounded"
-							onChange={this.focusActivated}
-							placeholder="What is your question"></textarea>
-					</div>
-					<div className="options">
-						{this.state.options.map((option, index) => {
-							return (
-								<div
-									key={index}
-									style={{ display: "flex", justifyContent: "space-around" }}>
-									<h6 onClick={this.RemoveOption}>
-										<span className="fa fa-check"></span> {option}
-									</h6>
-									<small
-										className="text-danger"
-										onClick={this.RemoveOption}
-										style={{ cursor: "pointer" }}>
-										X
+		</div>
+	);
+	return (
+		<div>
+			<form>
+				<div>
+					<textarea
+						style={{ borderRadius: "5px" }}
+						className="form-control is-rounded"
+						onChange={focusActivated}
+						placeholder="What is on your mind"
+						maxLength="150"></textarea>
+				</div>
+				<div className="options">
+					{options.map((option, index) => {
+						return (
+							<div
+								key={index}
+								style={{ display: "flex", justifyContent: "space-around" }}>
+								<h6 onClick={() => RemoveOption(option)}>
+									<span className="fa fa-check"></span> {option}
+								</h6>
+								<small
+									className="text-danger"
+									onClick={() => RemoveOption(option)}
+									style={{ cursor: "pointer" }}>
+									X
 									</small>
-								</div>
-							);
-						})}
-					</div>
-					<div className="mt-3">{this.state.showForm ? choiceform : ""}</div>
-					<div className="mt-3">
-						{this.state.showForm ? (
+							</div>
+						);
+					})}
+				</div>
+				{
+					showForm && (
+						<div className="mt-3">{choiceform}</div>
+					)
+				}
+
+				{
+					showForm && (
+						<div className="mt-3">
 							<input
 								type="date"
+								value={date}
 								className="form-control is-rounded"
 								style={{ borderRadius: "5px" }}
-								disabled={this.state.options.length < 1}
+								disabled={Boolean(!options.length)}
+								onChange={(e) => setDate(e.target.value)}
 							/>
-						) : (
-								""
-							)}
-					</div>
-					<div>
-						{this.state.showForm ? (
+
+						</div>
+					)
+				}
+
+				{
+					showForm && (
+						<div className="d-flex">
 							<button
-								disabled={!this.state.question && !this.state.options && !this.state.date}
+								onClick={submit}
+								disabled={!question && !options && !date}
 								className="form-control mt-3"
 								style={
-									this.state.question
+									question
 										? defaultColor.background_color
 										: { backgroundColor: "grey" }
 								}>
 								Submit
 							</button>
-						) : (
-								""
-							)}
-					</div>
-				</form>
-			</div>
-		);
-	}
+							<button
+								className="form-control mt-3"
+								style={defaultColor.background_color}
+								onClick={focusDeactivated}
+							>
+								Cancel
+							</button>
+						</div>
+					)
+				}
+
+			</form>
+		</div>
+	);
 }
-export default createPoll;
+
+CreatePoll.propType = {
+	defaultColor: object,
+	Logger: func
+}
+
+export default CreatePoll;
+

@@ -1,0 +1,7 @@
+.poll:hover{
+    background-color: white !important;
+}
+.pollhover:hover{
+    cursor: pointer;
+    color: blue;
+}

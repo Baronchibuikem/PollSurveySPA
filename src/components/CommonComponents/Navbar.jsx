@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import {
 	MDBNavbar,
 	MDBNavbarBrand,
@@ -12,41 +12,63 @@ import {
 	MDBDropdownMenu,
 	MDBDropdownItem,
 	MDBIcon,
-	MDBFormInline,
 } from "mdbreact";
+<<<<<<< HEAD
 import { Divider } from "antd";
+=======
+>>>>>>> Added config header and authorization to poll_action
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { Link } from "react-router-dom";
 import { logout } from "../../store/actions/userAuthentication"
+import { useHistory } from "react-router";
+import { viewClickedUserById } from "../../store/actions/userAuthentication"
 
 const NavbarPage = () => {
 
+	// Internal state
 	const [isOpen, setIsOpen] = useState(false)
 
+	// hooks
+	const history = useHistory()
+	const dispatch = useDispatch()
+
+	const get_user = (id) => {
+		dispatch(viewClickedUserById(id))
+		history.push({
+			pathname: `/user/${id}`
+		})
+	}
+
+	// for nav toggler
 	const toggleCollapse = () => {
 		setIsOpen(!isOpen)
 	};
 
+	// used to fetch the value of state from the reducer
 	const params = useSelector((state) => ({
-		authenticated: state.userAuth.isAuthenticated
+		authenticated: state.userAuth.isAuthenticated,
+		current_user: state.userAuth.user
 	}));
+
+	const onSubmit = (e) => {
+		// used to dispatch an action that logs a user out
+		dispatch(logout());
+	};
 
 	const dropdown = (
 		<MDBNavItem>
 			<MDBDropdown>
 				<MDBDropdownToggle nav caret className="text-light">
 					<MDBIcon icon="user" className="text-light" />
-					<div className="d-none d-md-inline mx-2 font-weight-bold">Username</div>
+					<div className="d-md-inline mx-2 font-weight-bold">{params.authenticated ? params.current_user.user.username : ""}</div>
 				</MDBDropdownToggle>
 				<MDBDropdownMenu className="dropdown-default text-light">
-					<MDBDropdownItem to="/">View Profile</MDBDropdownItem>
-					<MDBDropdownItem href="#!">My polls</MDBDropdownItem>
-					<MDBDropdownItem href="#!">My inbox</MDBDropdownItem>
+					<MDBDropdownItem onClick={() => { get_user(params.current_user.user.id) }}>View Profile</MDBDropdownItem>
+					{/* <MDBDropdownItem href="#!">My polls</MDBDropdownItem> */}
+					{/* <MDBDropdownItem href="#!">My inbox</MDBDropdownItem> */}
 
-					<MDBDropdownItem>
-						<Link onClick={logout}>
-							LOGOUT
-					</Link>
+					<MDBDropdownItem onClick={onSubmit}>
+						Logout
 					</MDBDropdownItem>
 				</MDBDropdownMenu>
 			</MDBDropdown>
@@ -56,7 +78,7 @@ const NavbarPage = () => {
 		<MDBNavItem>
 			<Link to="/login" className="text-light font-weight-bold">
 				LOGIN
-	</Link>
+			</Link>
 		</MDBNavItem>
 	)
 
@@ -68,13 +90,16 @@ const NavbarPage = () => {
 			fixed="top">
 			<div className="container">
 				<MDBNavbarBrand>
-					<strong className="text-light">LOGO</strong>
+					<Link to="/" className="text-light">
+						VotePoll
+					</Link>
+
 				</MDBNavbarBrand>
 				<MDBNavbarToggler onClick={toggleCollapse} />
 				<MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>
 
 					<MDBNavbarNav right>
-						{params.authenticated ? dropdown : not_signed_in}
+						{params.authenticated === true ? dropdown : not_signed_in}
 
 					</MDBNavbarNav>
 				</MDBCollapse>

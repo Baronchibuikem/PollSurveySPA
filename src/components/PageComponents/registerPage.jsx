@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, Redirect } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux"
@@ -10,22 +10,28 @@ const RegistrationForm = () => {
 	const { register, handleSubmit, errors, watch } = useForm();
 
 	// Here we are instantiating our dispatch action
-	const dispatch_register = useDispatch()
+	const dispatch = useDispatch()
 
 	// Here we fetching data from our global state store in redux
 	// email_exist_error and username_exist_error are errors coming from the server side if the email and username entered already exist
 	const params = useSelector((state) => ({
 		loading: state.userAuth.isLoading,
 		email_exist_error : state.userAuth.email_exist_error,
-		username_exist_error: state.userAuth.username_exist_error
+		username_exist_error: state.userAuth.username_exist_error,
+		authenticated: state.userAuth.isAuthenticated,
 	}));
 
 	// This is used to dispatch a redux action with the needed registration data
 	const regSubmit = (data) => {
-		dispatch_register(register_action({
+		dispatch(register_action({
 			data
 		}))
 	};
+
+	// Here we are checking if our authenticated value from the state is true, it yes we redirect to the homepage
+	if (params.authenticated === true) {
+		return <Redirect to="/" />;
+	}
 
 	return (
 		<div className="my-2">
@@ -71,8 +77,7 @@ const RegistrationForm = () => {
 						type="text"
 						name="username"
 						className="form-control"
-						placeholder="Username"
-						// value={username}
+						placeholder="username"
 						ref={register({ required: true })}
 					/>
 				</div>

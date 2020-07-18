@@ -1,32 +1,33 @@
 import React, {
-	Component,
 	Fragment
 } from "react";
 import {
 	BrowserRouter as Router
 } from "react-router-dom";
-// import { loadUser } from "../store/actions/userAuthentication";
+// import { useSelector } from "react-redux"
 import BaseRouter from "../routes";
 import Navbar from "./CommonComponents/Navbar";
-// import Footer from "./CommonComponents/Footer";
 
-export default class App extends Component {
-	// componentDidMount() {
-	// 	store.dispatch(loadUser());
-	// }
-	render() {
-		return (
-			<Fragment >
-				<Router >
-					<Navbar />
-					<div className="container" style={{ paddingTop: "70px" }} >
-						<BaseRouter />
+
+const App = () => {
+
+	// const params = useSelector((state) => ({
+	// 	token: state.userAuth.token
+	// }));
+	return (
+		<Fragment >
+			<Router >
+				<Navbar />
+				<div className="container" style={{ paddingTop: "70px" }} >
+					<div className="row">
+						<div className="col-md-12 min-vh-100 mx-auto" style={{ backgroundColor: "#f6f9fa" }}>
+							<BaseRouter />
+						</div>
 					</div>
-					{
-						/* <Footer /> */
-					}
-				</Router>
-			</Fragment >
-		);
-	}
+				</div>
+			</Router>
+		</Fragment >
+	);
 }
+
+export default App

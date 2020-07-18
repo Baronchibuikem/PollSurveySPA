@@ -1,105 +1,279 @@
 import {
-
 	LOGIN_FAIL,
-	LOGIN_SUCCESS,
 	LOGOUT_SUCCESS,
-	LOGOUT_FAIL,
 	REGISTER_FAIL,
-	REGISTER_SUCCESS,
 	REQUEST_LOADING,
+	CURRENT_LOGGEDIN_USER,
+	VIEWED_LOGGEDIN_USER,
+	SET_USER_TOKEN,
+	MESSAGE
 } from "./actionTypes";
 import route from "../../ApiClient";
 
 
-const config = { headers: { "Content-Type": "application/json" } };
 
-
-// export const loadUser = () => {
-// 	return async (dispatch, getState) => {
-// 		const response = await route.get(
-// 			"api/v1/account/auth/user",
-// 			tokenConfig(getState)
-// 		);
-// 		dispatch({ type: USER_LOADED, payload: response.data });
-// 	};
-// };
+let config = { headers: { "Content-Type": "application/json" } };
 
 // LOGIN USER
 export const login = ({ email, password }) => (dispatch) => {
 	dispatch({ type: REQUEST_LOADING })
-	const config = {
-		headers: {
-			"Content-Type": "application/json",
-		},
-	};
-	const body = JSON.stringify({ email, password });
 	route
-		.post("api/v1/account/login/", body, config)
+		.post("/account/login/", { email, password }, config)
 		.then((response) => {
-			dispatch({ type: LOGIN_SUCCESS, payload: response.data });
+			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
+			dispatch(getUserById(response.data.user))
+			// dispatch({ type: USER_LOADED, payload: response.data });
+
 		})
 		.catch((error) => {
-			dispatch({ type: LOGIN_FAIL, payload: error.response.data });
+			// console.log(error.response.data.data, "ERROR MESSAGE")
+			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data });
 		});
 };
 
 // Register user
 export const register_action = ({ data }) => (dispatch) => {
 	dispatch({ type: REQUEST_LOADING })
-	const body = JSON.stringify({
-		data
-	});
 	route
-		.post("/api/v1/account/register/", {
+		.post("/account/register/", {
 			first_name: data.firstname,
 			last_name: data.lastname,
 			email: data.email,
 			username: data.username,
 			password: data.password
 		}, config)
-		.then((res) => {
-			dispatch({ type: REGISTER_SUCCESS, payload: res.data });
+		.then((response) => {
+			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
+			dispatch(getUserById(response.data.user))
 		})
 		.catch((err) => {
+			dispatch({ type: REGISTER_FAIL, payload: err.response });
 
-			dispatch({ type: REGISTER_FAIL, payload: err.response.data });
-			console.log(err.response.data.email.error, "ERROR DQATA");
 		});
 };
 
-// LOGOUT USER
+
 export const logout = () => (dispatch, getState) => {
-	route
-		.post("/api/v1/account/auth/logout", null, tokenConfig(getState))
-		.then((res) => {
-			dispatch({
-				type: LOGOUT_SUCCESS,
-			});
-		})
-		.catch((err) => {
-			dispatch({
-				type: LOGOUT_FAIL,
-			});
-			console.log(err);
-		});
+	// used for loging out a user, we dispatch a LOGOUT_SUCCESS action to our authenticationReducer
+	dispatch({
+		type: LOGOUT_SUCCESS,
+	});
+
 };
 
-// Setup config with token - helper function
 
-export const tokenConfig = (getState) => {
-	// Get token
-	const token = getState().userAuth.token;
-
-	// Headers
-	const config = {
-		headers: {
-			"Content-Type": "application/json",
-		},
-	};
-
-	if (token) {
-		config.headers["Authorization"] = `Token ${token}`;
+// For fetching the data of the current logged in user
+export const getUserById = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		try {
+			const response = await route.get(`/account/user/${data}/`,
+				config)
+			if (response) {
+				console.log(response.data)
+				dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data });
+			}
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
 	}
+}
 
-	return config;
-};
+// // For fetching the data of the current logged in user
+export const viewClickedUserById = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+
+		try {
+			const response = await route.get(`/account/user/${data}/`,
+				config)
+			if (response) {
+				console.log(response.data)
+				dispatch({ type: VIEWED_LOGGEDIN_USER, payload: response.data });
+			}
+		} catch (error) {
+			// dispatch({ type: VIEWED_LOGGEDIN_USER_FAIL, payload: error.response })
+		}
+	}
+}
+
+export const post_followUser = (data) => {
+	console.log(data)
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		try {
+			const response = await route.post(`/account/follow-user/`, {
+				follower: data.follower_id,
+				following: data.following_id
+			}, config)
+			if (response) {
+				dispatch(getUserById(response.data.follower))
+				dispatch(viewClickedUserById(data.following_id))
+				// dispatch({ type: CURRENT_LOGGEDIN_USER, payload: response.data })
+			}
+
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+
+
+// For sending post request to unfollow a user
+export const post_unfollowUser = (data) => {
+	return async (dispatch, getState) => {
+		try {
+			const response = await route.delete(`/account/unfollow-user/${data.id}/`, {
+				headers: {
+					Authorization: `Token ${getState().userAuth.token}`,
+					"Content-Type": "application/json"
+				}
+			}, data.id)
+			if (response) {
+				dispatch(getUserById(data.user_id))
+				dispatch(viewClickedUserById(data.clicked_user_id))
+			}
+
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+
+
+// action for liking a poll
+export const post_likepost = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		try {
+			const response = await route.post(`/account/like-poll/`, {
+				poll: data.poll_id,
+				user: data.user_id
+			}, config)
+			if (response) {
+				dispatch(getUserById(data.user_id))
+			}
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+
+
+// action for bookmarking a poll
+export const post_bookmarkpoll = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		try {
+			const response = await route.post(`/account/bookmark-poll/`, {
+				poll: data.poll_id,
+				user: data.user_id
+			}, config)
+			if (response) {
+				dispatch(getUserById(data.user_id))
+			}
+
+		} catch (error) {
+			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+		}
+	}
+}
+
+// for editing username
+export const post_edit_userprofile = (data) => {
+	return async (dispatch, getState) => {
+		const token = getState().userAuth.token
+		let config = {
+			headers: {
+				Authorization: `Token ${token}`,
+				"Content-Type": "application/json"
+			},
+		};
+		if (data.username) {
+			dispatch({ type: REQUEST_LOADING })
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, { username: data.username }, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
+		} else if (data.email) {
+			dispatch({ type: REQUEST_LOADING })
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, { email: data.email }, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
+		} else if (data.bio) {
+			dispatch({ type: REQUEST_LOADING })
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, { bio: data.bio }, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+				dispatch({ type: MESSAGE })
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
+		} else if (data.image) {
+			console.log(data, "from image action HEREEEEEEEEEE")
+			dispatch({ type: REQUEST_LOADING })
+			let config = {
+				headers: {
+					Authorization: `Token ${token}`,
+					"Content-Type": "multipart/form-data",
+				},
+			};
+			try {
+				const response = await route.patch(`/account/user/${data.user_id}/`, data.image, config)
+				if (response) {
+					dispatch(getUserById(data.user_id))
+					dispatch(viewClickedUserById(data.user_id))
+				}
+				dispatch({ type: MESSAGE })
+			} catch (error) {
+				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+			}
+		}
+	}
+}

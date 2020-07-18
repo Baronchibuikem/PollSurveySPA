@@ -7,11 +7,16 @@ import "bootstrap/dist/js/bootstrap.min";
 import "antd/dist/antd.css";
 import "mdbreact";
 import { Provider } from "react-redux";
-import store from "./store";
+import { store, persistor } from "./store";
+import { PersistGate } from 'redux-persist/integration/react'
 
 ReactDom.render(
 	<Provider store={store}>
-		<App />
+		<PersistGate loading={null} persistor={persistor}>
+			<div style={{ backgroundColor: "#f6f9fa" }}>
+				<App />
+			</div>
+		</PersistGate>
 	</Provider>,
 	document.querySelector("#root")
 );
