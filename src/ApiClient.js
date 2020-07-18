@@ -8,5 +8,5 @@ import axios from "axios";
 // });
 
 export default axios.create({
-	baseURL: "http://pollsurvey.herokuapp.com/"
+	baseURL: "http://pollsurvey.herokuapp.com/api/v1/"
 });
