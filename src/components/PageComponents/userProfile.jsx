@@ -30,7 +30,7 @@ export default function UserProfile() {
         // data for current logged in user
         viewed_user: state.userAuth.user,
         // For checking the loading state of the data being sent to the server
-        loading: state.userAuth.isLoading,
+        error: state.userAuth.error_message,
         // For checking the status of a request
         status: state.userAuth.status
     }));
@@ -218,7 +218,7 @@ export default function UserProfile() {
                                     <div className="col-md-4">Profile Image</div>
                                     <div className="col-md-4">
                                         {params.single_user.user.image !== null ?
-                                            <img src={params.single_user.user.image} alt="profile_image" className="w-100 img-responsive" /> :
+                                            <img src={params.single_user.user.image_url} alt="profile_image" className="w-100 img-responsive" /> :
                                             <img src={profileImage} alt="" data-toggle="tooltip" data-placement="top" title="Edit" />
 
                                         }
@@ -251,8 +251,17 @@ export default function UserProfile() {
                                                             </div>
                                                         </div>
                                                         <div className="modal-footer">
-                                                            {params.status ? "updated successfully" : ""}
-                                                            <button type="button" className="btn btn-primary" onClick={post_edit_image}>Submit</button>
+                                                            <button type="button" className="btn btn-primary" onClick={post_edit_image}>
+                                                                {params.status ?
+                                                                    <div>
+                                                                        {
+                                                                            params.error && !params.status ? "Try again" :
+                                                                                <div class="spinner-border" role="status">
+                                                                                </div>
+                                                                        }
+                                                                    </div> :
+                                                                    "Save"}
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -297,9 +306,18 @@ export default function UserProfile() {
                                                                 </div>
                                                             </div>
                                                             <div className="modal-footer">
-                                                                {params.status ? "updated successfully" : ""}
-                                                                <button type="submit" class="btn btn-primary"
-                                                                    onClick={handleSubmit(post_edit_username)}>Submit</button>
+
+                                                                <button type="submit" className="btn btn-primary"
+                                                                    onClick={handleSubmit(post_edit_username)}>
+                                                                    {params.status ?
+                                                                        <div>
+                                                                            {
+                                                                                params.error && !params.status ? "Try again" :
+                                                                                    <div class="spinner-border" role="status">
+                                                                                    </div>
+                                                                            }
+                                                                        </div> :
+                                                                        "Save"}</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -386,8 +404,18 @@ export default function UserProfile() {
                                                                 </div>
                                                             </div>
                                                             <div className="modal-footer">
-                                                                {params.status ? "updated successfully" : ""}
-                                                                <button type="submit" className="btn btn-primary">Submit</button>
+
+                                                                <button type="submit" className="btn btn-primary">
+                                                                    {params.status ?
+                                                                        <div>
+                                                                            {
+                                                                                params.error && !params.status ? "Try again" :
+                                                                                    <div class="spinner-border" role="status">
+                                                                                    </div>
+                                                                            }
+                                                                        </div> :
+                                                                        "Save"}
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -432,8 +460,18 @@ export default function UserProfile() {
                                                                 </div>
                                                             </div>
                                                             <div className="modal-footer">
-                                                                {params.status ? "updated successfully" : ""}
-                                                                <button type="submit" className="btn btn-primary">Submit</button>
+
+                                                                <button type="submit" className="btn btn-primary">
+                                                                    {params.status ?
+                                                                        <div>
+                                                                            {
+                                                                                params.error && !params.status ? "Try again" :
+                                                                                    <div class="spinner-border" role="status">
+                                                                                    </div>
+                                                                            }
+                                                                        </div> :
+                                                                        "Save"}
+                                                                </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -524,9 +562,9 @@ export default function UserProfile() {
                     <div className="tab-pane" id="followers" role="tabpanel">
                         {params.single_user.followers.map(follower => {
                             return (
-                                <div key={follower.id} className="mt-2">
+                                <div className="mt-2" key={follower.id}>
                                     {follower.follower_user_fullname ?
-                                        <div className="card text-left">
+                                        <div className="card text-left" >
                                             <img className="card-img-top" src="holder.js/100px180/" alt="" />
                                             <div className="card-body">
                                                 <h6 className="card-title pollhover"

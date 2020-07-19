@@ -88,7 +88,7 @@ const NavbarPage = () => {
 			<div className="container">
 				<MDBNavbarBrand>
 					<Link to="/" className="text-light">
-						VotePoll
+						PollSurvey
 					</Link>
 
 				</MDBNavbarBrand>

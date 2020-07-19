@@ -1,6 +1,6 @@
 import {
 	USER_LOADED, REQUEST_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UNFOLLOW_USER,
-	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN, MESSAGE
+	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN, MESSAGE, UPDATE_FAIL
 
 } from "../actions/actionTypes";
 
@@ -46,7 +46,8 @@ const initialState = {
 	email_exist_error: "",
 	username_exist_error: "",
 	login_email_error: "",
-	login_error: ""
+	login_error: "",
+	error_message: false
 
 };
 
@@ -56,6 +57,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				isLoading: "Loading...",
+				status: true
 			};
 		// This is used to mutate/update the state on successful login/registration
 		case LOGIN_SUCCESS:
@@ -74,6 +76,7 @@ const reducer = (state = initialState, action) => {
 				...state,
 				user: action.payload,
 				isAuthenticated: true,
+				status: false
 				// token: action.payload
 
 			};
@@ -92,11 +95,17 @@ const reducer = (state = initialState, action) => {
 				...state,
 				status: false
 			}
+		case UPDATE_FAIL:
+			return {
+				...state,
+				status: false,
+				error_message: true
+			}
 		case VIEWED_LOGGEDIN_USER:
 			return {
 				...state,
 				view_user: action.payload,
-				status: true,
+				status: false,
 			}
 		case AUTH_ERROR:
 		case REGISTER_FAIL:
