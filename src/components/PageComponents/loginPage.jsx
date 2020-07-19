@@ -20,6 +20,10 @@ const LoginForm = () => {
 		loading: state.userAuth.isLoading,
 		email_error: state.userAuth.login_email_error,
 		login_error: state.userAuth.login_error,
+		// For checking the loading state of the data being sent to the server
+		error: state.userAuth.login_error_message,
+		// For checking the status of a request
+		status: state.userAuth.status
 	}));
 
 	useEffect(() => {
@@ -87,7 +91,15 @@ const LoginForm = () => {
 					ref={register({ required: true })}
 				/>
 				<button className="btn btn-info my-4 btn-block" type="submit">
-					{params.loading}
+					{params.status ?
+						<div>
+							{
+								params.error && !params.status ? "Try again" :
+									<div class="spinner-border" role="status">
+									</div>
+							}
+						</div> :
+						"Login"}
 				</button>
 				<hr />
 				<p className="text-light">

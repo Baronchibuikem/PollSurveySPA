@@ -47,6 +47,7 @@ const initialState = {
 	username_exist_error: "",
 	login_email_error: "",
 	login_error: "",
+	login_error_message: false,
 	error_message: false
 
 };
@@ -69,7 +70,8 @@ const reducer = (state = initialState, action) => {
 				// user: action.payload.user,
 				isAuthenticated: true,
 				isLoading: "Submit",
-				token: action.payload.token
+				token: action.payload.token,
+				status: false
 			};
 		case CURRENT_LOGGEDIN_USER:
 			return {
@@ -126,7 +128,9 @@ const reducer = (state = initialState, action) => {
 				user: null,
 				isLoading: "Try again",
 				login_email_error: action.payload.email,
-				login_error: action.payload
+				login_error: action.payload,
+				status: false,
+				login_error_message: true
 			}
 		case LOGOUT_SUCCESS:
 			localStorage.removeItem("token");
