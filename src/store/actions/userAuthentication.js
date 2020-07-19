@@ -6,7 +6,8 @@ import {
 	CURRENT_LOGGEDIN_USER,
 	VIEWED_LOGGEDIN_USER,
 	SET_USER_TOKEN,
-	MESSAGE
+	MESSAGE,
+	UPDATE_FAIL
 } from "./actionTypes";
 import route from "../../ApiClient";
 
@@ -110,7 +111,6 @@ export const viewClickedUserById = (data) => {
 }
 
 export const post_followUser = (data) => {
-	console.log(data)
 	return async (dispatch, getState) => {
 		const token = getState().userAuth.token
 		let config = {
@@ -256,7 +256,6 @@ export const post_edit_userprofile = (data) => {
 				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
 			}
 		} else if (data.image) {
-			console.log(data, "from image action HEREEEEEEEEEE")
 			dispatch({ type: REQUEST_LOADING })
 			let config = {
 				headers: {
@@ -272,7 +271,7 @@ export const post_edit_userprofile = (data) => {
 				}
 				dispatch({ type: MESSAGE })
 			} catch (error) {
-				// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
+				dispatch({ type: UPDATE_FAIL })
 			}
 		}
 	}
