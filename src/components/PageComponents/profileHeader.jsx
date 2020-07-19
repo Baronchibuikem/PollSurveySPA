@@ -25,7 +25,7 @@ const ProfileHeader = () => {
 						</div>
 						:
 						<img
-							src={params.current_user.user.image}
+							src={params.current_user.user.image_url}
 							alt="profile-img"
 							width="100%"
 						/>
