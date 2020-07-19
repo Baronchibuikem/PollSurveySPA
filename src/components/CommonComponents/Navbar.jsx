@@ -56,7 +56,7 @@ const NavbarPage = () => {
 		<MDBNavItem>
 			<MDBDropdown>
 				<MDBDropdownToggle nav caret className="text-light">
-					<MDBIcon icon="user" className="text-light" />
+					{/* <MDBIcon icon="user" className="text-light" /> */}
 					<div className="d-md-inline mx-2 font-weight-bold">{params.authenticated ? params.current_user.user.username : ""}</div>
 				</MDBDropdownToggle>
 				<MDBDropdownMenu className="dropdown-default text-light">
