@@ -122,12 +122,16 @@ const NavbarPage = () => {
 					key={placement}
 				>
 					<div className="text-white">
-						<p onClick={() => { get_user(params.current_user.user.id) }}>My Profile</p>
-						<Divider style={{ backgroundColor: "white" }}></Divider>
-						<p>My Polls</p>
-						<Divider style={{ backgroundColor: "white" }}></Divider>
-						<p onClick={onSubmit}>Logout</p>
-						<Divider style={{ backgroundColor: "white" }}></Divider>
+						{params.authenticated ?
+							<div>
+								<p onClick={() => { get_user(params.current_user.user.id) }}>My Profile</p>
+								<Divider style={{ backgroundColor: "white" }}></Divider>
+								<p>My Polls</p>
+								<Divider style={{ backgroundColor: "white" }}></Divider>
+								<p onClick={onSubmit}>Logout</p>
+								<Divider style={{ backgroundColor: "white" }}></Divider>
+							</div>
+							: ""}
 					</div>
 				</Drawer>
 			</div >
