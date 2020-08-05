@@ -53,65 +53,71 @@ const LoginForm = () => {
 	}
 
 	return (
-		<div className="my-5 py-5">
-
-			<form
-				className="text-center border border-light p-5  col-md-6 col-sm-12 mx-auto shadow login_background_image"
-				style={{ backgroundColor: "#eee" }}
-
-				onSubmit={handleSubmit(onSubmit)}>
-				<h5 className="text-light">{params.login_error}</h5>
-				<p className="h4 mb-4 text-light font-weight-bold">
-					<span style={{ fontSize: "40px" }}>L</span>ogin
-				</p>
-
-				<div className="mb-4">
-					<span className="text-light font-weight-bold">{params.email_error}</span>
-					<h6 className="text-left font-italic text-light">{errors.email && errors.email.type === "required" && (
-						<p>Email field is required</p>
-					)}</h6>
-					<input
-						type="email"
-						name="email"
-						className="form-control"
-						placeholder="Email"
-						ref={register({ required: true })}
-					/>
+		<div className="login_background_image">
+			<div className="row center-content container mx-auto">
+				<div className="col-md-6 col-sm-12 mt-2">
+					<ul style={{ fontSize: "30px", color: "white" }} className="list-unstyled mt-5">
+						<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
+						<li>  <i class="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
+						<li>  <i class="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
+						<li>  <i class="fa fa-check" aria-hidden="true"></i> Follow your favourite pollers</li>
+						<li>  <i class="fa fa-check" aria-hidden="true"></i> View total votes</li>
+						<li>  <i class="fa fa-check" aria-hidden="true"></i> Like a poll</li>
+					</ul>
 				</div>
+				<div className="col-md-6 col-sm-12">
+					<form
+						className="text-center border border-light px-5 py-3 mx-auto shadow form_background_image"
+						style={{ backgroundColor: "#eee" }}
+						onSubmit={handleSubmit(onSubmit)}>
+						<h5 className="text-light">{params.login_error}</h5>
+						<p className="h4 mb-4 text-light font-weight-bold">	<span style={{ fontSize: "40px" }}>L</span>ogin</p>
 
-				<span className="text-light font-weight-bold">{params.password_error}</span>
-				<h6 className="text-left font-italic text-light">{errors.password && errors.password.type === "required" && (
-					<p>Password field is required</p>
-				)}</h6>
-				<input
-					type="password"
-					name="password"
-					className="form-control"
-					placeholder="Password"
-					ref={register({ required: true })}
-				/>
-				<button className="btn btn-info my-4 btn-block" type="submit">
-					{params.status ?
-						<div>
-							{
-								params.error && !params.status ? "Try again" :
-									<div class="spinner-border" role="status">
-									</div>
-							}
-						</div> :
-						"Login"}
-				</button>
-				<hr />
-				<p className="text-light">
-					Don't have an
-					<em> account </em>
-					<Link to="/register" className="lg mx-1">
-						Register
-					</Link>
-				</p>
+						<div className="mb-4">
+							<span className="text-light font-weight-bold">{params.email_error}</span>
+							<h6 className="text-left font-italic text-light">{errors.email && errors.email.type === "required" && (
+								<p>Email field is required</p>
+							)}</h6>
+							<input
+								type="email"
+								name="email"
+								className="form-control"
+								placeholder="Email"
+								ref={register({ required: true })}
+							/>
+						</div>
 
-			</form>
-			<hr />
+						<span className="text-light font-weight-bold">{params.password_error}</span>
+						<h6 className="text-left font-italic text-light">{errors.password && errors.password.type === "required" && (
+							<p>Password field is required</p>
+						)}</h6>
+						<input
+							type="password"
+							name="password"
+							className="form-control"
+							placeholder="Password"
+							ref={register({ required: true })}
+						/>
+						<button className="btn btn-info my-4 btn-block" type="submit">
+							{params.status ?
+								<div>
+									{
+										params.error && !params.status ? "Try again" :
+											<div class="spinner-border" role="status">
+											</div>
+									}
+								</div> :
+								"Login"}
+						</button>
+						<hr />
+						<p className="text-light">
+							Don't have an <em> account </em>
+							<Link to="/register" className="lg mx-1">Register</Link>
+						</p>
+					</form>
+					<hr />
+				</div>
+			</div>
 		</div>
 	);
 };
