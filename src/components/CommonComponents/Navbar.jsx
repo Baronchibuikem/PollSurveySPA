@@ -1,19 +1,7 @@
 import React, { useState } from "react";
+import { Menu, Dropdown, Button, message, Tooltip, Drawer, Radio, Space, Divider, Layout, Row, Col } from 'antd';
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from "react-redux"
-import {
-	MDBNavbar,
-	MDBNavbarBrand,
-	MDBNavbarNav,
-	MDBNavItem,
-	MDBNavbarToggler,
-	MDBCollapse,
-	MDBDropdown,
-	MDBDropdownToggle,
-	MDBDropdownMenu,
-	MDBDropdownItem,
-	MDBIcon,
-} from "mdbreact";
-import { Divider } from "antd";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { Link } from "react-router-dom";
 import { logout } from "../../store/actions/userAuthentication"
@@ -22,8 +10,14 @@ import { viewClickedUserById } from "../../store/actions/userAuthentication"
 
 const NavbarPage = () => {
 
-	// Internal state
-	const [isOpen, setIsOpen] = useState(false)
+	const [visible, setVisible] = useState(false)
+	const [placement, setPlacement] = useState("left")
+
+	const { Header, Content, Footer } = Layout;
+
+	const showDrawer = () => {
+		setVisible(true)
+	};
 
 	// hooks
 	const history = useHistory()
@@ -36,10 +30,14 @@ const NavbarPage = () => {
 		})
 	}
 
-	// for nav toggler
-	const toggleCollapse = () => {
-		setIsOpen(!isOpen)
+	const onClose = () => {
+		setVisible(false)
 	};
+
+	const onChange = e => {
+		setPlacement(e.target.value)
+	};
+
 
 	// used to fetch the value of state from the reducer
 	const params = useSelector((state) => ({
@@ -52,56 +50,89 @@ const NavbarPage = () => {
 		dispatch(logout());
 	};
 
-	const dropdown = (
-		<MDBNavItem>
-			<MDBDropdown>
-				<MDBDropdownToggle nav caret className="text-light">
-					{/* <MDBIcon icon="user" className="text-light" /> */}
-					<div className="d-md-inline mx-2 font-weight-bold">{params.authenticated ? params.current_user.user.username : ""}</div>
-				</MDBDropdownToggle>
-				<MDBDropdownMenu className="dropdown-default text-light">
-					<MDBDropdownItem onClick={() => { get_user(params.current_user.user.id) }}>View Profile</MDBDropdownItem>
-					{/* <MDBDropdownItem href="#!">My polls</MDBDropdownItem> */}
-					{/* <MDBDropdownItem href="#!">My inbox</MDBDropdownItem> */}
 
-					<MDBDropdownItem onClick={onSubmit}>
-						Logout
-					</MDBDropdownItem>
-				</MDBDropdownMenu>
-			</MDBDropdown>
-		</MDBNavItem>
-	)
-	const not_signed_in = (
-		<MDBNavItem>
-			<Link to="/login" className="text-light font-weight-bold">
-				LOGIN
-			</Link>
-		</MDBNavItem>
+	const menu_authenticated = (
+		<Menu onClick={handleMenuClick}>
+			<Menu.Item key="1" icon={<UserOutlined />} onClick={() => { get_user(params.current_user.user.id) }}>
+				My Profile
+		  </Menu.Item>
+			<Menu.Item key="2" icon={<UserOutlined />}>
+				My Polls
+		  </Menu.Item>
+			<Menu.Item key="3" icon={<UserOutlined />} onClick={onSubmit}>
+				Logout
+		  </Menu.Item>
+		</Menu>
+	);
+
+	const menu_unauthenticated = (
+		<Menu onClick={handleMenuClick}>
+			<Menu.Item key="1" icon={<UserOutlined />}>
+				Login
+		  </Menu.Item>
+			<Menu.Item key="2" icon={<UserOutlined />}>
+				Register
+		  </Menu.Item>
+		</Menu>
 	)
 
+	function handleMenuClick(e) {
+		message.info('Click on menu item.');
+		console.log('click', e);
+	}
 	return (
-		<MDBNavbar
-			style={defaultColor.background_color}
-			dark
-			expand="md"
-			fixed="top">
+		<Layout className="layout" style={defaultColor.background_color}>
+			{/* <Header> */}
 			<div className="container">
-				<MDBNavbarBrand>
-					<Link to="/" className="text-light">
-						PollSurvey
-					</Link>
+				<Menu mode="horizontal" defaultSelectedKeys={['2']} style={defaultColor.background_color}>
+					<Row>
+						<Col span={12}>
+							<Radio.Group defaultValue={placement} onChange={onChange}>
+								{/* <Radio value="top">top</Radio> */}
+								<Radio value="right">right</Radio>
+								{/* <Radio value="bottom">bottom</Radio> */}
+								<Radio value="left">left</Radio>
+							</Radio.Group>
+							<Button type="primary" onClick={showDrawer}>
+								Open
+          					</Button>
+						</Col>
+						<Col span={12} className="text-right d-none d-md-block">
+							{params.authenticated === true ?
+								<Dropdown overlay={menu_authenticated}>
+									<Button>
+										{params.authenticated ? params.current_user.user.username : ""} <DownOutlined />
+									</Button>
+								</Dropdown> :
+								<Dropdown overlay={menu_unauthenticated}>
+									<Button>
+										Click me<DownOutlined />
+									</Button>
+								</Dropdown>}
+						</Col>
+					</Row>
+				</Menu>
 
-				</MDBNavbarBrand>
-				<MDBNavbarToggler onClick={toggleCollapse} />
-				<MDBCollapse id="navbarCollapse3" isOpen={isOpen} navbar>
-
-					<MDBNavbarNav right>
-						{params.authenticated === true ? dropdown : not_signed_in}
-
-					</MDBNavbarNav>
-				</MDBCollapse>
-			</div>
-		</MDBNavbar>
+				<Drawer
+					title="PollSurvey"
+					placement={placement}
+					closable={false}
+					onClose={onClose}
+					visible={visible}
+					key={placement}
+				>
+					<div className="text-white">
+						<p onClick={() => { get_user(params.current_user.user.id) }}>My Profile</p>
+						<Divider style={{ backgroundColor: "white" }}></Divider>
+						<p>My Polls</p>
+						<Divider style={{ backgroundColor: "white" }}></Divider>
+						<p onClick={onSubmit}>Logout</p>
+						<Divider style={{ backgroundColor: "white" }}></Divider>
+					</div>
+				</Drawer>
+			</div >
+			{/* </Header> */}
+		</Layout >
 	);
 }
 

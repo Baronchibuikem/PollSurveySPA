@@ -55,14 +55,14 @@ const LoginForm = () => {
 	return (
 		<div className="login_background_image">
 			<div className="row center-content container mx-auto">
-				<div className="col-md-6 col-sm-12 mt-2">
-					<ul style={{ fontSize: "30px", color: "white" }} className="list-unstyled mt-5">
+				<div className="col-md-6 col-sm-12 mt-5">
+					<ul style={{ fontSize: "30px", color: "white" }} className="list-unstyled">
 						<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
-						<li>  <i class="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
-						<li>  <i class="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
-						<li>  <i class="fa fa-check" aria-hidden="true"></i> Follow your favourite pollers</li>
-						<li>  <i class="fa fa-check" aria-hidden="true"></i> View total votes</li>
-						<li>  <i class="fa fa-check" aria-hidden="true"></i> Like a poll</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Follow your favourite pollers</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> View total votes</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Like a poll</li>
 					</ul>
 				</div>
 				<div className="col-md-6 col-sm-12">
@@ -118,7 +118,7 @@ const LoginForm = () => {
 					<hr />
 				</div>
 			</div>
-		</div>
+		</div >
 	);
 };
 
