@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Menu, Dropdown, Button, message, Tooltip, Drawer, Radio, Space, Divider, Layout, Row, Col } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { Link } from "react-router-dom";
@@ -68,11 +69,11 @@ const NavbarPage = () => {
 	const menu_unauthenticated = (
 		<Menu onClick={handleMenuClick}>
 			<Menu.Item key="1" icon={<UserOutlined />}>
-				Login
-		  </Menu.Item>
+				<Link to="/login" className="lg mx-1">Login</Link>
+			</Menu.Item>
 			<Menu.Item key="2" icon={<UserOutlined />}>
-				Register
-		  </Menu.Item>
+				<Link to="/register" className="lg mx-1">Register</Link>
+			</Menu.Item>
 		</Menu>
 	)
 
@@ -125,13 +126,21 @@ const NavbarPage = () => {
 						{params.authenticated ?
 							<div>
 								<p onClick={() => { get_user(params.current_user.user.id) }}>My Profile</p>
-								<Divider style={{ backgroundColor: "white" }}></Divider>
+								<Divider style={{ color: "white" }}></Divider>
 								<p>My Polls</p>
-								<Divider style={{ backgroundColor: "white" }}></Divider>
+								<Divider style={{ color: "white" }}></Divider>
 								<p onClick={onSubmit}>Logout</p>
-								<Divider style={{ backgroundColor: "white" }}></Divider>
+								<Divider style={{ color: "white" }}></Divider>
 							</div>
-							: ""}
+							:
+							<div>
+								<Link to="/login" className="lg mx-1">Login</Link>
+								<Divider style={{ color: "white" }}></Divider>
+								<Link to="/register" className="lg mx-1">Register</Link>
+								<Divider style={{ color: "white" }}></Divider>
+
+							</div>
+						}
 					</div>
 				</Drawer>
 			</div >
