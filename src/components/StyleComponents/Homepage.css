@@ -5,7 +5,7 @@
 	background-size: cover;
 	background-attachment: fixed;
 	background-position: center center;
-	height:100vh
+	min-height:100vh
 }
 .center-content{
 	display: flex;
@@ -24,4 +24,15 @@
 }
 i{
 	color: #17A2B8
+}
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 0px !important; 
+    margin-left: 0px !important;
+}
+
+/* for navbar component */
+.ant-drawer-body{
+	background-color: rgb(65, 58, 118) !important;
 }

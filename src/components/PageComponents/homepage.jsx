@@ -7,7 +7,7 @@ import GetTrends from "./getTrends"
 export default class Homepage extends Component {
 	render() {
 		return (
-			<div className="row container mx-auto" style={{ marginTop: "70px" }}>
+			<div className="row container mx-auto" style={{ marginTop: "10px" }}>
 				<div className="col-md-3">
 					<ProfileHeader />
 				</div>
