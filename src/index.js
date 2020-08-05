@@ -4,6 +4,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import App from "./components/App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.min";
+import "jquery/dist/jquery"
 import "antd/dist/antd.css";
 import "mdbreact";
 import { Provider } from "react-redux";
