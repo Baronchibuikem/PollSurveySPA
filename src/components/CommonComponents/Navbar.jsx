@@ -135,8 +135,8 @@ const NavbarPage = () => {
 							:
 							<div>
 								<div className="row">
-									<div className="col-md-6"><Link to="/register" className="text-light">Register</Link></div>
-									<div className="col-md-6"><Link to="/login" className="text-light mx-1">Login</Link></div>
+									<div className="col-md-6 col-sm-6"><Link to="/register" className="text-light">Register</Link></div>
+									<div className="col-md-6 col-sm-6"><Link to="/login" className="text-light mx-1">Login</Link></div>
 									<Divider style={{ backgroundColor: "white" }}></Divider>
 								</div>
 								<ul style={{ color: "white" }} className="list-unstyled">
