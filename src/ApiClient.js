@@ -6,7 +6,6 @@ import axios from "axios";
 // 			? "http://127.0.0.1:8000/api/v1/"
 // 			: "http://pollsurvey.herokuapp.com/"
 // });
-
 export default axios.create({
 	baseURL: "https://pollsurvey.herokuapp.com/api/v1/"
 });
