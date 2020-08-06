@@ -4,7 +4,6 @@ import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
-import { Link } from "react-router-dom";
 import { logout } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 import { viewClickedUserById } from "../../store/actions/userAuthentication"
@@ -102,7 +101,8 @@ const NavbarPage = () => {
 							{params.authenticated === true ?
 								<Dropdown overlay={menu_authenticated}>
 									<Button>
-										{params.authenticated ? params.current_user.user.username : ""} <DownOutlined />
+										{params.authenticated ? params.current_user.user.username :
+											""} <DownOutlined />
 									</Button>
 								</Dropdown> :
 								<Dropdown overlay={menu_unauthenticated}>
@@ -134,10 +134,26 @@ const NavbarPage = () => {
 							</div>
 							:
 							<div>
-								<Link to="/login" className="lg mx-1">Login</Link>
-								<Divider style={{ color: "white" }}></Divider>
-								<Link to="/register" className="lg mx-1">Register</Link>
-								<Divider style={{ color: "white" }}></Divider>
+								<div className="row">
+									<div className="col-md-6"><Link to="/register" className="text-light">Register</Link></div>
+									<div className="col-md-6"><Link to="/login" className="text-light mx-1">Login</Link></div>
+									<Divider style={{ backgroundColor: "white" }}></Divider>
+								</div>
+								<ul style={{ color: "white" }} className="list-unstyled">
+									<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
+									<Divider style={{ color: "white" }}></Divider>
+									<li>  <i className="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
+									<Divider style={{ color: "white" }}></Divider>
+									<li>  <i className="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
+									<Divider style={{ color: "white" }}></Divider>
+									<li>  <i className="fa fa-check" aria-hidden="true"></i> Follow your favourite pollers</li>
+									<Divider style={{ color: "white" }}></Divider>
+									<li>  <i className="fa fa-check" aria-hidden="true"></i> View total votes</li>
+									<Divider style={{ color: "white" }}></Divider>
+									<li>  <i className="fa fa-check" aria-hidden="true"></i> Like a poll</li>
+									<Divider style={{ color: "white" }}></Divider>
+
+								</ul>
 
 							</div>
 						}

@@ -103,7 +103,7 @@ const LoginForm = () => {
 								<div>
 									{
 										params.error && !params.status ? "Try again" :
-											<div class="spinner-border" role="status">
+											<div className="spinner-border" role="status">
 											</div>
 									}
 								</div> :

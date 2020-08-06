@@ -34,9 +34,21 @@ const RegistrationForm = () => {
 	}
 
 	return (
-		<div className="my-2">
+		<div className="login_background_image">
+			<div className="row center-content container mx-auto">
+				<div className="col-md-6 col-sm-12 mt-5">
+					<ul style={{ fontSize: "30px", color: "white" }} className="list-unstyled">
+						<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Follow your favourite pollers</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> View total votes</li>
+						<li>  <i className="fa fa-check" aria-hidden="true"></i> Like a poll</li>
+					</ul>
+				</div>
+				<div className="col-md-6 col-sm-12">
 			<form
-				className="text-center border border-light p-4 col-md-6 col-sm-12 mx-auto shadow login_background_image"
+				className="text-center border border-light p-4 mx-auto shadow form_background_image"
 				style={{ backgroundColor: "#eee" }}
 				onSubmit={handleSubmit(regSubmit)}>
 				<p className="h4 mb-4">Sign up</p>
@@ -140,7 +152,9 @@ const RegistrationForm = () => {
 					</Link>
 				</p>
 			</form>
+			</div>
 			<hr />
+		</div>
 		</div>
 	);
 };
