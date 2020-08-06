@@ -55,7 +55,6 @@ export const get_polls = () => {
         try {
             const response = await route.get("polls/all-polls/",
                 config)
-            console.log(response.data)
             if (response) {
                 dispatch({ type: ALLPOLL, payload: response.data });
             }
@@ -78,7 +77,6 @@ export const get_single_poll = (data) => {
         try {
             const response = await route.get(`polls/all-polls/${data}/`,
                 config)
-            console.log(response.data)
             if (response) {
                 dispatch({ type: SINGLEPOLL, payload: response.data });
             }
@@ -109,7 +107,6 @@ export const post_currentuser_vote = (data) => {
                 dispatch(get_polls())
             }
         } catch (error) {
-            console.log(error.response.data.non_field_errors)
             dispatch({ type: VOTE_FAIL, payload: error.response.data.non_field_errors })
         }
 
@@ -132,7 +129,6 @@ export const post_delete_poll = (data) => {
                 dispatch(get_polls())
             }
         } catch (error) {
-            console.log(error.response.data.non_field_errors)
             dispatch({ type: VOTE_FAIL, payload: error.response.data.non_field_errors })
         }
 
