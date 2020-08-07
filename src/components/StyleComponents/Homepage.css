@@ -7,6 +7,31 @@
 	background-position: center center;
 	min-height:100vh
 }
+
+@media (max-width: 600px) {
+	.login_background_image {
+		background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+			url(../../assets/images/second-background.png);
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-attachment: fixed;
+		background-position: center center;
+		min-height:120vh
+	}
+	.content-size{
+		font-size: 20px !important;
+	}
+	.login_background_image2 {
+		background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+			url(../../assets/images/second-background.png);
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-attachment: fixed;
+		background-position: center center;
+		min-height:150vh
+	}
+  }
+
 .center-content{
 	display: flex;
 	height: 100vh;

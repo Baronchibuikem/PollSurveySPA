@@ -34,10 +34,10 @@ const RegistrationForm = () => {
 	}
 
 	return (
-		<div className="login_background_image">
+		<div className="login_background_image2">
 			<div className="row center-content container mx-auto">
-				<div className="col-md-6 col-sm-12 mt-5">
-					<ul style={{ fontSize: "30px", color: "white" }} className="list-unstyled">
+				<div className="col-md-6 col-sm-12">
+					<ul style={{ fontSize: "30px", color: "white" }} className="list-unstyled content-size">
 						<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
 						<li>  <i className="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
 						<li>  <i className="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
