@@ -140,7 +140,7 @@ export default function UserProfile() {
     };
 
     return (
-        <div className="row">
+        <div className="row container mx-auto" style={{ marginTop: "20px" }}>
             <div className="col-md-3">
                 <ProfileHeader />
             </div>

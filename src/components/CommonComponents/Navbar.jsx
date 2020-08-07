@@ -7,6 +7,7 @@ import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { logout } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 import { viewClickedUserById } from "../../store/actions/userAuthentication"
+import "../StyleComponents/AllPolls.css"
 
 const NavbarPage = () => {
 
@@ -54,6 +55,7 @@ const NavbarPage = () => {
 	const menu_authenticated = (
 		<Menu onClick={handleMenuClick}>
 			<Menu.Item key="1" icon={<UserOutlined />} onClick={() => { get_user(params.current_user.user.id) }}>
+				{/* <Menu.Item key="1" icon={<UserOutlined />}> */}
 				My Profile
 		  </Menu.Item>
 			<Menu.Item key="2" icon={<UserOutlined />}>
@@ -68,17 +70,16 @@ const NavbarPage = () => {
 	const menu_unauthenticated = (
 		<Menu onClick={handleMenuClick}>
 			<Menu.Item key="1" icon={<UserOutlined />}>
-				<Link to="/login" className="lg mx-1">Login</Link>
+				<Link to="/login" className="lg mx-1 pollhover">Login</Link>
 			</Menu.Item>
 			<Menu.Item key="2" icon={<UserOutlined />}>
-				<Link to="/register" className="lg mx-1">Register</Link>
+				<Link to="/register" className="lg mx-1 pollhover">Register</Link>
 			</Menu.Item>
 		</Menu>
 	)
 
 	function handleMenuClick(e) {
-		message.info('Click on menu item.');
-		console.log('click', e);
+		message.info('Click on dropdown item.');
 	}
 	return (
 		<Layout className="layout" style={defaultColor.background_color}>
@@ -87,12 +88,14 @@ const NavbarPage = () => {
 				<Menu mode="horizontal" defaultSelectedKeys={['2']} style={defaultColor.background_color}>
 					<Row>
 						<Col span={12}>
-							<Radio.Group defaultValue={placement} onChange={onChange}>
-								{/* <Radio value="top">top</Radio> */}
-								<Radio value="right">right</Radio>
-								{/* <Radio value="bottom">bottom</Radio> */}
-								<Radio value="left">left</Radio>
-							</Radio.Group>
+							{/* <div className="d-none d-md-block"> */}
+							{/* <Radio.Group defaultValue={placement} onChange={onChange}> */}
+							{/* <Radio value="top">top</Radio> */}
+							{/* <Radio value="right">right</Radio> */}
+							{/* <Radio value="bottom">bottom</Radio> */}
+							{/* <Radio value="left">left</Radio> */}
+							{/* </Radio.Group> */}
+							{/* </div> */}
 							<Button type="primary" onClick={showDrawer}>
 								Open
           					</Button>
@@ -125,20 +128,20 @@ const NavbarPage = () => {
 					<div className="text-white">
 						{params.authenticated ?
 							<div>
-								<p onClick={() => { get_user(params.current_user.user.id) }}>My Profile</p>
+								<p onClick={() => { get_user(params.current_user.user.id) }} className="pollhover">My Profile</p>
 								<Divider style={{ color: "white" }}></Divider>
 								<p>My Polls</p>
 								<Divider style={{ color: "white" }}></Divider>
-								<p onClick={onSubmit}>Logout</p>
+								<p onClick={onSubmit} className="pollhover">Logout</p>
 								<Divider style={{ color: "white" }}></Divider>
 							</div>
 							:
 							<div>
-								<div className="row">
-									<div className="col-md-6 col-sm-6"><Link to="/register" className="text-light">Register</Link></div>
-									<div className="col-md-6 col-sm-6"><Link to="/login" className="text-light mx-1">Login</Link></div>
-									<Divider style={{ backgroundColor: "white" }}></Divider>
-								</div>
+								<div className="d-flex">
+									<div className="mr-4"><Link to="/register" className="text-light pollhover">Register</Link></div>
+									<div className="mx-auto"><Link to="/login" className="text-light mx-1 pollhover">Login</Link></div>
+
+								</div><Divider style={{ backgroundColor: "white" }}></Divider>
 								<ul style={{ color: "white" }} className="list-unstyled">
 									<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
 									<Divider style={{ color: "white" }}></Divider>
