@@ -8,7 +8,7 @@ import ErrorBoundary from "antd/lib/alert/ErrorBoundary";
 export default class Homepage extends Component {
 	render() {
 		return (
-			<div className="row container mx-auto" style={{ marginTop: "20px" }}>
+			<div className="row container mx-auto">
 				<div className="col-md-3">
 					<ErrorBoundary>
 						<ProfileHeader />
