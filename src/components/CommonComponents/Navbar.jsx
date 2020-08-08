@@ -1,24 +1,94 @@
-import React, { useState } from "react";
-import { Menu, Dropdown, Button, message, Tooltip, Drawer, Radio, Space, Divider, Layout, Row, Col } from 'antd';
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux"
-import { defaultColor } from "../UtilityComponents/HelperFunctions";
+import React, { useState } from 'react';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Drawer from '@material-ui/core/Drawer';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import List from '@material-ui/core/List';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import InboxIcon from '@material-ui/icons/MoveToInbox';
+import MailIcon from '@material-ui/icons/Mail';
 import { logout } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 import { viewClickedUserById } from "../../store/actions/userAuthentication"
-import "../StyleComponents/AllPolls.css"
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux"
+import { Grid } from '@material-ui/core';
 
-const NavbarPage = () => {
+const drawerWidth = 240;
 
-	const [visible, setVisible] = useState(false)
-	const [placement, setPlacement] = useState("left")
+const useStyles = makeStyles((theme) => ({
+	root: {
+		display: 'flex',
+	},
+	appBar: {
+		transition: theme.transitions.create(['margin', 'width'], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen,
+		}),
+	},
+	appBarShift: {
+		width: `calc(100% - ${drawerWidth}px)`,
+		marginLeft: drawerWidth,
+		transition: theme.transitions.create(['margin', 'width'], {
+			easing: theme.transitions.easing.easeOut,
+			duration: theme.transitions.duration.enteringScreen,
+		}),
+	},
+	menuButton: {
+		marginRight: theme.spacing(2),
+	},
+	hide: {
+		display: 'none',
+	},
+	drawer: {
+		width: drawerWidth,
+		flexShrink: 0,
+	},
+	drawerPaper: {
+		width: drawerWidth,
+	},
+	drawerHeader: {
+		display: 'flex',
+		alignItems: 'center',
+		padding: theme.spacing(0, 1),
+		// necessary for content to be below app bar
+		...theme.mixins.toolbar,
+		justifyContent: 'flex-end',
+	},
+	content: {
+		flexGrow: 1,
+		padding: theme.spacing(3),
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.leavingScreen,
+		}),
+		marginLeft: -drawerWidth,
+	},
+	contentShift: {
+		transition: theme.transitions.create('margin', {
+			easing: theme.transitions.easing.easeOut,
+			duration: theme.transitions.duration.enteringScreen,
+		}),
+		marginLeft: 0,
+	},
+}));
 
-	const { Header, Content, Footer } = Layout;
 
-	const showDrawer = () => {
-		setVisible(true)
-	};
+
+export default function PersistentDrawerLeft() {
+	const classes = useStyles();
+	const theme = useTheme();
+	const [open, setOpen] = React.useState(false);
 
 	// hooks
 	const history = useHistory()
@@ -31,141 +101,115 @@ const NavbarPage = () => {
 		})
 	}
 
-	const onClose = () => {
-		setVisible(false)
-	};
-
-	const onChange = e => {
-		setPlacement(e.target.value)
-	};
-
-
 	// used to fetch the value of state from the reducer
 	const params = useSelector((state) => ({
 		authenticated: state.userAuth.isAuthenticated,
 		current_user: state.userAuth.user
 	}));
 
-	const onSubmit = (e) => {
+	const clickLogout = (e) => {
 		// used to dispatch an action that logs a user out
 		dispatch(logout());
 	};
 
+	const handleDrawerOpen = () => {
+		setOpen(true);
+	};
 
-	const menu_authenticated = (
-		<Menu onClick={handleMenuClick}>
-			<Menu.Item key="1" icon={<UserOutlined />} onClick={() => { get_user(params.current_user.user.id) }}>
-				{/* <Menu.Item key="1" icon={<UserOutlined />}> */}
-				My Profile
-		  </Menu.Item>
-			<Menu.Item key="2" icon={<UserOutlined />}>
-				My Polls
-		  </Menu.Item>
-			<Menu.Item key="3" icon={<UserOutlined />} onClick={onSubmit}>
-				Logout
-		  </Menu.Item>
-		</Menu>
-	);
+	const handleDrawerClose = () => {
+		setOpen(false);
+	};
 
-	const menu_unauthenticated = (
-		<Menu onClick={handleMenuClick}>
-			<Menu.Item key="1" icon={<UserOutlined />}>
-				<Link to="/login" className="lg mx-1 pollhover">Login</Link>
-			</Menu.Item>
-			<Menu.Item key="2" icon={<UserOutlined />}>
-				<Link to="/register" className="lg mx-1 pollhover">Register</Link>
-			</Menu.Item>
-		</Menu>
-	)
 
-	function handleMenuClick(e) {
-		message.info('Click on dropdown item.');
-	}
 	return (
-		<Layout className="layout" style={defaultColor.background_color}>
-			{/* <Header> */}
-			<div className="container">
-				<Menu mode="horizontal" defaultSelectedKeys={['2']} style={defaultColor.background_color}>
-					<Row>
-						<Col span={12}>
-							{/* <div className="d-none d-md-block"> */}
-							{/* <Radio.Group defaultValue={placement} onChange={onChange}> */}
-							{/* <Radio value="top">top</Radio> */}
-							{/* <Radio value="right">right</Radio> */}
-							{/* <Radio value="bottom">bottom</Radio> */}
-							{/* <Radio value="left">left</Radio> */}
-							{/* </Radio.Group> */}
-							{/* </div> */}
-							<Button type="primary" onClick={showDrawer}>
-								Open
-          					</Button>
-						</Col>
-						<Col span={12} className="text-right d-none d-md-block">
-							{params.authenticated === true ?
-								<Dropdown overlay={menu_authenticated}>
-									<Button>
-										{params.authenticated ? params.current_user.user.username :
-											""} <DownOutlined />
-									</Button>
-								</Dropdown> :
-								<Dropdown overlay={menu_unauthenticated}>
-									<Button>
-										Click me<DownOutlined />
-									</Button>
-								</Dropdown>}
-						</Col>
-					</Row>
-				</Menu>
+		<div className={classes.root}>
+			<CssBaseline />
+			<AppBar
+				position="fixed"
+				className={clsx(classes.appBar, {
+					[classes.appBarShift]: open,
+				})}
+			>
+				<Toolbar>
+					<IconButton
+						color="inherit"
+						aria-label="open drawer"
+						onClick={handleDrawerOpen}
+						edge="start"
+						className={clsx(classes.menuButton, open && classes.hide)}
+					>
+						<MenuIcon style={{ color: "white" }} />
+					</IconButton>
+					<Typography variant="h6" noWrap className="text-white">
+						PollSurvey
+          			</Typography>
+					{/* <Typography variant="h6" noWrap className="text-right text-white">
+						{params.authenticated ? params.current_user.user.username :
+							""}
+					</Typography> */}
+				</Toolbar>
+			</AppBar>
+			<Drawer
+				className={classes.drawer}
+				variant="persistent"
+				anchor="left"
+				open={open}
+				classes={{
+					paper: classes.drawerPaper,
+				}}
+			>
+				<div className={classes.drawerHeader}>
+					<IconButton onClick={handleDrawerClose}>
+						{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+					</IconButton>
+				</div>
+				<Divider />
+				<List>
+					{params.authenticated ?
+						<div>
+							<ListItem button>
+								<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText onClick={() => { get_user(params.current_user.user.id) }}>Profile</ListItemText>
+							</ListItem>
+							<ListItem button>
+								<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText>My poll</ListItemText>
+							</ListItem>
+							<ListItem button>
+								<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText onClick={clickLogout}>Logout</ListItemText>
+							</ListItem>
+						</div> :
+						<div>
+							<Link to="/register" className="text-light pollhover">
+								<ListItem button>
+									<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText>Register</ListItemText>
+								</ListItem>
+							</Link>
+							<Link to="/login" className="text-light pollhover">
+								<ListItem button>
+									<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText>Login</ListItemText> :
+								</ListItem>
+							</Link>
+						</div>
+					}
+				</List>
 
-				<Drawer
-					title="PollSurvey"
-					placement={placement}
-					closable={false}
-					onClose={onClose}
-					visible={visible}
-					key={placement}
-				>
-					<div className="text-white">
-						{params.authenticated ?
-							<div>
-								<p onClick={() => { get_user(params.current_user.user.id) }} className="pollhover">My Profile</p>
-								<Divider style={{ color: "white" }}></Divider>
-								<p>My Polls</p>
-								<Divider style={{ color: "white" }}></Divider>
-								<p onClick={onSubmit} className="pollhover">Logout</p>
-								<Divider style={{ color: "white" }}></Divider>
-							</div>
-							:
-							<div>
-								<div className="d-flex">
-									<div className="mr-4"><Link to="/register" className="text-light pollhover">Register</Link></div>
-									<div className="mx-auto"><Link to="/login" className="text-light mx-1 pollhover">Login</Link></div>
+				<Divider />
+				{/* <List>
+					{['All mail', 'Trash', 'Logout'].map((text, index) => (
+						<ListItem button key={text}>
+							<ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+							<ListItemText primary={text} />
+						</ListItem>
+					))}
+				</List> */}
+			</Drawer>
+			<main
+				className={clsx(classes.content, {
+					[classes.contentShift]: open,
+				})}
+			>
+				<div className={classes.drawerHeader} />
 
-								</div><Divider style={{ backgroundColor: "white" }}></Divider>
-								<ul style={{ color: "white" }} className="list-unstyled">
-									<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
-									<Divider style={{ color: "white" }}></Divider>
-									<li>  <i className="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
-									<Divider style={{ color: "white" }}></Divider>
-									<li>  <i className="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
-									<Divider style={{ color: "white" }}></Divider>
-									<li>  <i className="fa fa-check" aria-hidden="true"></i> Follow your favourite pollers</li>
-									<Divider style={{ color: "white" }}></Divider>
-									<li>  <i className="fa fa-check" aria-hidden="true"></i> View total votes</li>
-									<Divider style={{ color: "white" }}></Divider>
-									<li>  <i className="fa fa-check" aria-hidden="true"></i> Like a poll</li>
-									<Divider style={{ color: "white" }}></Divider>
-
-								</ul>
-
-							</div>
-						}
-					</div>
-				</Drawer>
-			</div >
-			{/* </Header> */}
-		</Layout >
+			</main>
+		</div>
 	);
 }
-
-export default NavbarPage;
