@@ -104,8 +104,11 @@ const LoginForm = () => {
 									{
 										params.error && !params.status ? "Try again" :
 											// <div className="spinner-border" role="status">
-											"Send"
-										// </div>
+											// "Send"
+											// </div>
+											<button className="btn btn-info my-4 btn-block" type="submit">
+												{params.loading}
+											</button>
 									}
 								</div> :
 								"Login"}
