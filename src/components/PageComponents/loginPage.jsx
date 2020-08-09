@@ -57,7 +57,7 @@ const LoginForm = () => {
 			<div className="row center-content container mx-auto">
 				<div className="col-md-6 col-sm-12">
 					<ul style={{ fontSize: "35px", color: "white" }} className="list-unstyled content-size">
-						<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
+						<li> <i className="fa fa-check" aria-hidden="true"></i> Create poll</li>
 						<li>  <i className="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
 						<li>  <i className="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
 						<li>  <i className="fa fa-check" aria-hidden="true"></i> Follow your favourite pollers</li>
