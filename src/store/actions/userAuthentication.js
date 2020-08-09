@@ -17,7 +17,7 @@ let config = { headers: { "Content-Type": "application/json" } };
 
 // LOGIN USER
 export const login = ({ email, password }) => async (dispatch) => {
-	dispatch({ type: REQUEST_LOADING })
+	// dispatch({ type: REQUEST_LOADING })
 	try {
 		const response = await route.post("/account/login/", { email, password }, config)
 		if (response) {
@@ -25,11 +25,7 @@ export const login = ({ email, password }) => async (dispatch) => {
 			dispatch(getUserById(response.data.user))
 		}
 	} catch (error) {
-		if (error) {
-			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
-		} else {
-			console.log(error)
-		}
+		dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
 	}
 };
 
