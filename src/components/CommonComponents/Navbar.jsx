@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -16,13 +16,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+// import MailIcon from '@material-ui/icons/Mail';
 import { logout } from "../../store/actions/userAuthentication"
 import { useHistory } from "react-router";
 import { viewClickedUserById } from "../../store/actions/userAuthentication"
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"
-import { Grid } from '@material-ui/core';
 
 const drawerWidth = 240;
 

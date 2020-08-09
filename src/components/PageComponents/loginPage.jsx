@@ -56,7 +56,7 @@ const LoginForm = () => {
 		<div className="login_background_image">
 			<div className="row center-content container mx-auto">
 				<div className="col-md-6 col-sm-12">
-					<ul style={{ fontSize: "30px", color: "white" }} className="list-unstyled content-size">
+					<ul style={{ fontSize: "35px", color: "white" }} className="list-unstyled content-size">
 						<li> <i class="fa fa-check" aria-hidden="true"></i> Create poll</li>
 						<li>  <i className="fa fa-check" aria-hidden="true"></i> Vote on a poll choice</li>
 						<li>  <i className="fa fa-check" aria-hidden="true"></i> Bookmark a poll</li>
@@ -70,7 +70,7 @@ const LoginForm = () => {
 						className="text-center border border-light px-5 py-3 mx-auto shadow form_background_image"
 						style={{ backgroundColor: "#eee" }}
 						onSubmit={handleSubmit(onSubmit)}>
-						<h5 className="text-light">{params.login_error}</h5>
+						<h5 className="text-danger bold">{params.login_error}</h5>
 						<p className="h4 mb-4 text-light font-weight-bold">	<span style={{ fontSize: "40px" }}>L</span>ogin</p>
 
 						<div className="mb-4">
@@ -106,9 +106,7 @@ const LoginForm = () => {
 											// <div className="spinner-border" role="status">
 											// "Send"
 											// </div>
-											<button className="btn btn-info my-4 btn-block" type="submit">
-												{params.loading}
-											</button>
+											params.loading
 									}
 								</div> :
 								"Login"}

@@ -16,20 +16,21 @@ import route from "../../ApiClient";
 let config = { headers: { "Content-Type": "application/json" } };
 
 // LOGIN USER
-export const login = ({ email, password }) => (dispatch) => {
+export const login = ({ email, password }) => async (dispatch) => {
 	dispatch({ type: REQUEST_LOADING })
-	route
-		.post("/account/login/", { email, password }, config)
-		.then((response) => {
+	try {
+		const response = await route.post("/account/login/", { email, password }, config)
+		if (response) {
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
-			// dispatch({ type: USER_LOADED, payload: response.data });
-
-		})
-		.catch((error) => {
-			// console.log(error.response.data.data, "ERROR MESSAGE")
-			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data });
-		});
+		}
+	} catch (error) {
+		if (error) {
+			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
+		} else {
+			console.log(error)
+		}
+	}
 };
 
 // Register user
