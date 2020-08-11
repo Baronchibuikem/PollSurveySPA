@@ -32,12 +32,11 @@ let config = { headers: { "Content-Type": "application/json" } };
 export const login = ({ email, password }) => {
 	return async (dispatch) => {
 		try {
-			const response = await route.delete(`/account/login/`, { email, password })
+			const response = await route.post(`account/login/`, { email, password }, config)
 			if (response) {
 				dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 				dispatch(getUserById(response.data.user))
 			}
-
 		} catch (error) {
 			// dispatch({ type: CURRENT_LOGGEDIN_USER_FAIL, payload: error.response.data })
 			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
