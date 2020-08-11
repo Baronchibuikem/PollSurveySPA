@@ -39,7 +39,7 @@ export const login = ({ email, password }) => dispatch => {
 	// const body = JSON.stringify({ email, password });
 	route
 		.post("account/login", { email, password }, config)
-		.then(res => {
+		.then(response => {
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 		})
