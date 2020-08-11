@@ -19,13 +19,13 @@ let config = { headers: { "Content-Type": "application/json" } };
 export const login = ({ email, password }) => async (dispatch) => {
 	// dispatch({ type: REQUEST_LOADING })
 	try {
-		const response = await route.post("/account/login/", { email, password }, config)
+		const response = await route.post("account/login/", { email, password }, config)
 		if (response) {
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 		}
 	} catch (error) {
-		// dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
+		dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
 	}
 };
 
