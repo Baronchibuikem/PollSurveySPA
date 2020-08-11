@@ -7,7 +7,6 @@ import axios from "axios";
 // 			: "http://pollsurvey.herokuapp.com/"
 // });
 
-
 export default axios.create({
 	baseURL: "https://pollsurvey.herokuapp.com/api/v1/"
 });
