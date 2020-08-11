@@ -16,17 +16,37 @@ import route from "../../ApiClient";
 let config = { headers: { "Content-Type": "application/json" } };
 
 // LOGIN USER
-export const login = ({ email, password }) => async (dispatch) => {
-	// dispatch({ type: REQUEST_LOADING })
-	try {
-		const response = await route.post("account/login/", { email, password }, config)
-		if (response) {
+// export const login = ({ email, password }) => async (dispatch) => {
+// 	// dispatch({ type: REQUEST_LOADING })
+// 	try {
+// 		const response = await route.post("account/login/", { email, password }, config)
+// 		if (response) {
+// 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
+// 			dispatch(getUserById(response.data.user))
+// 		}
+// 	} catch (error) {
+// 		dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
+// 	}
+// };
+
+
+export const login = ({ email, password }) => dispatch => {
+	// const config = {
+	// 	headers: {
+	// 		"Content-Type": "application/json"
+	// 	}
+	// };
+	// const body = JSON.stringify({ email, password });
+	route
+		.post("account/login", { email, password }, config)
+		.then(res => {
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
-		}
-	} catch (error) {
-		dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
-	}
+		})
+		.catch(err => {
+			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
+			console.log(error.response.data.data);
+		});
 };
 
 // Register user
