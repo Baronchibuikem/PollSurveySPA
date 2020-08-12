@@ -127,7 +127,7 @@ const reducer = (state = initialState, action) => {
 				token: null,
 				user: null,
 				isLoading: "Try again",
-				login_email_error: action.payload.email,
+				// login_email_error: action.payload.email,
 				login_error: action.payload,
 				status: false,
 				login_error_message: true

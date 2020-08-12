@@ -10,8 +10,6 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -84,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function PersistentDrawerLeft() {
+export default function Navbar() {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(false);
@@ -140,8 +138,8 @@ export default function PersistentDrawerLeft() {
 						<MenuIcon style={{ color: "white" }} />
 					</IconButton>
 					<Typography variant="h6" noWrap className="text-white">
-						PollSurvey
-          			</Typography>
+						<Link exact to="/">PollSurvey</Link>
+					</Typography>
 					{/* <Typography variant="h6" noWrap className="text-right text-white">
 						{params.authenticated ? params.current_user.user.username :
 							""}
@@ -158,14 +156,32 @@ export default function PersistentDrawerLeft() {
 				}}
 			>
 				<div className={classes.drawerHeader}>
-					<IconButton onClick={handleDrawerClose}>
-						{theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+					<IconButton
+						color="inherit"
+						aria-label="close drawer"
+						onClick={handleDrawerClose}
+						edge="start"
+					// className={clsx(classes.menuButton, open && classes.hide)}
+					>
+
+						<MenuIcon style={{ color: "white" }} />
 					</IconButton>
+					{/* <IconButton onClick={handleDrawerClose}>
+						{theme.direction === 'ltr' ? <div>
+							<ChevronLeftIcon />
+
+							
+						</div> : <ChevronRightIcon />}
+					</IconButton> */}
 				</div>
 				<Divider />
 				<List>
 					{params.authenticated ?
 						<div>
+							<ListItem button>
+								<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText><Link exactto="/">Home</Link></ListItemText>
+							</ListItem>
+
 							<ListItem button>
 								<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText onClick={() => { get_user(params.current_user.user.id) }}>Profile</ListItemText>
 							</ListItem>
