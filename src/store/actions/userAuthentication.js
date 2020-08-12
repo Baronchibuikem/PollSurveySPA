@@ -25,10 +25,11 @@ export const login = ({ email, password }) => {
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 		} catch (error) {
-			console.log(error)
-			console.log("--------------------")
-			console.log(error.response.data)
-			dispatch({ type: LOGIN_FAIL, payload: error.response.data.data })
+			dispatch({
+				type: LOGIN_FAIL, payload: error
+					&& error.response && error.response.data && error.response.data.data ? error.response.data.data
+					: ""
+			})
 		}
 
 	}
