@@ -42,21 +42,6 @@ export const login = ({ email, password }) => {
 	}
 };
 
-// export const asyncApiCall = (values) => {
-// 	return async dispatch => {
-// 	  try {
-// 		const response = await axios.get(url);
-// 		dispatch(successHandle(response));
-// 	  }
-// 	  catch(error) {
-// 		dispatch(errorHandle(error));
-// 	  }
-
-// 	  return 'done';
-// 	}
-//   }
-
-
 // Register user
 export const register_action = ({ data }) => (dispatch) => {
 	dispatch({ type: REQUEST_LOADING })
@@ -72,8 +57,19 @@ export const register_action = ({ data }) => (dispatch) => {
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 		})
-		.catch((err) => {
-			dispatch({ type: REGISTER_FAIL, payload: err.response });
+		.catch((error) => {
+
+			console.log("error 2", error.response.data)
+			dispatch({
+				type: REGISTER_FAIL,
+				payload: error &&
+					error.response &&
+					error.response.data
+					?
+					error.response.data
+					:
+					"Error registering you in. Please try again"
+			});
 
 		});
 };

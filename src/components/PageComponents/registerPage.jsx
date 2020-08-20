@@ -53,8 +53,6 @@ const RegistrationForm = () => {
 				onSubmit={handleSubmit(regSubmit)}>
 				<p className="h4 mb-4">Sign up</p>
 
-				<h6 className="text-left font-italic text-light">{params.email_exist_error ? params.email_exist_error : ""}</h6>
-				<h6 className="text-left font-italic text-light">{params.username_exist_error ? params.username_exist_error : ""}</h6>
 				<div className="mb-4">
 					<h6 className="text-left font-italic text-light">{errors.firstname && errors.firstname.type === "required" && (
 						<p>Firstname field is required</p>
@@ -81,7 +79,8 @@ const RegistrationForm = () => {
 					/>
 				</div>
 
-				<div className="mb-4">
+				<div className="mb-4">					
+				<h6 className="text-left font-italic text-light">{params.username_exist_error ? params.username_exist_error : ""}</h6>
 					<h6 className="text-left font-italic text-light">{errors.username && errors.username.type === "required" && (
 						<p>Username field is required</p>
 					)}</h6>
@@ -93,7 +92,8 @@ const RegistrationForm = () => {
 						ref={register({ required: true })}
 					/>
 				</div>
-				<div className="mb-4">
+				<div className="mb-4">					
+				<h6 className="text-left font-italic text-light">{params.email_exist_error ? params.email_exist_error : ""}</h6>
 					<h6 className="text-left font-italic text-light">{errors.email && errors.email.type === "required" && (
 						<p>Email field is required</p>
 					)}</h6>
@@ -133,7 +133,7 @@ const RegistrationForm = () => {
 					} })}
 				/>
 				<button className="btn btn-info my-4 btn-block" type="submit">
-					{params.loading}
+					Register
 				</button>
 				<p className="text-light">
 					<Link to="login" className="lg mx-1 font-weight-bold">

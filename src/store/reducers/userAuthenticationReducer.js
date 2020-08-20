@@ -59,13 +59,6 @@ const reducer = (state = initialState, action) => {
 				isLoading: "Loading...",
 				status: true
 			};
-
-		// if authentication of a user fails upon registration or login
-		case AUTH_ERROR:
-			return {
-				...errorReducer(state, action.payload),
-				isLoading: false
-			}
 		// This is used to mutate/update the state on successful login/registration
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
@@ -85,14 +78,12 @@ const reducer = (state = initialState, action) => {
 				user: action.payload,
 				isAuthenticated: true,
 				status: false
-				// token: action.payload
 
 			};
 		case SET_USER_TOKEN:
 			return {
 				...state,
 				token: action.payload,
-				// isAuthenticated: true
 			}
 		case UNFOLLOW_USER:
 			return {
@@ -123,7 +114,6 @@ const reducer = (state = initialState, action) => {
 				token: null,
 				user: null,
 				isAuthenticated: false,
-				isLoading: "Try Again",
 				email_exist_error: action.payload.email.error,
 				username_exist_error: action.payload.username.error
 			};
