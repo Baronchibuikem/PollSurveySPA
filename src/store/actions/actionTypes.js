@@ -27,3 +27,4 @@ export const VOTE_FAIL = "VOTE_FAIL"
 export const LIKE_POLL = "LIKE_POLL"
 
 export const MESSAGE = "MESSAGE"
+export const DEFAULT_ERROR_MESSAGE = "DEFAULT_ERROR_MESSAGE"

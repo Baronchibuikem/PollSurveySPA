@@ -15,20 +15,27 @@ import route from "../../ApiClient";
 
 let config = { headers: { "Content-Type": "application/json" } };
 
+
 // // LOGIN USER
 export const login = ({ email, password }) => {
 	return async dispatch => {
 		// dispatch({ type: REQUEST_LOADING })
 		try {
 			const response = await route.post("/account/login/", { email, password }, config)
-			console.log(response.data)
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 		} catch (error) {
+			console.log("error", error.response.data.data[0])
 			dispatch({
-				type: LOGIN_FAIL, payload: error
-					&& error.response && error.response.data && error.response.data.data ? error.response.data.data
-					: ""
+				type: LOGIN_FAIL,
+				payload: error &&
+					error.response &&
+					error.response.data &&
+					error.response.data.data[0]
+					?
+					error.response.data.data[0]
+					:
+					"Error login you in. Please try again"
 			})
 		}
 

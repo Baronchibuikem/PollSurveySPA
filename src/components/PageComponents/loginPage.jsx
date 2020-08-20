@@ -17,13 +17,7 @@ const LoginForm = () => {
 	// Here we fetching data from our global state store in redux
 	const params = useSelector((state) => ({
 		authenticated: state.userAuth.isAuthenticated,
-		loading: state.userAuth.isLoading,
-		email_error: state.userAuth.login_email_error,
-		login_error: state.userAuth.login_error,
-		// For checking the loading state of the data being sent to the server
-		error: state.userAuth.login_error_message,
-		// For checking the status of a request
-		status: state.userAuth.status
+		error: state.userAuth.error,
 	}));
 
 	useEffect(() => {
@@ -70,7 +64,7 @@ const LoginForm = () => {
 						className="text-center border border-light px-5 py-3 mx-auto shadow form_background_image"
 						style={{ backgroundColor: "#eee" }}
 						onSubmit={handleSubmit(onSubmit)}>
-						<h5 className="text-danger bold">{params.login_error}</h5>
+						<h5 className="text-danger bold">{params.error !== null ? params.error : ""}</h5>
 						<p className="h4 mb-4 text-light font-weight-bold">	<span style={{ fontSize: "40px" }}>L</span>ogin</p>
 
 						<div className="mb-4">
@@ -86,8 +80,6 @@ const LoginForm = () => {
 								ref={register({ required: true })}
 							/>
 						</div>
-
-						<span className="text-light font-weight-bold">{params.password_error}</span>
 						<h6 className="text-left font-italic text-light">{errors.password && errors.password.type === "required" && (
 							<p>Password field is required</p>
 						)}</h6>

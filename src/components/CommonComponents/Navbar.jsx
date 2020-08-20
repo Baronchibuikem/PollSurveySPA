@@ -138,7 +138,7 @@ export default function Navbar() {
 						<MenuIcon style={{ color: "white" }} />
 					</IconButton>
 					<Typography variant="h6" noWrap className="text-white">
-						<Link exact to="/">PollSurvey</Link>
+						<Link to="/">PollSurvey</Link>
 					</Typography>
 					{/* <Typography variant="h6" noWrap className="text-right text-white">
 						{params.authenticated ? params.current_user.user.username :
@@ -178,10 +178,11 @@ export default function Navbar() {
 				<List>
 					{params.authenticated ?
 						<div>
-							<ListItem button>
-								<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText><Link exactto="/">Home</Link></ListItemText>
-							</ListItem>
-
+							<Link to="/" className="text-light pollhover">
+								<ListItem button>
+									<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText>Home</ListItemText>
+								</ListItem>
+							</Link>
 							<ListItem button>
 								<ListItemIcon><InboxIcon style={{ color: "white" }} /></ListItemIcon><ListItemText onClick={() => { get_user(params.current_user.user.id) }}>Profile</ListItemText>
 							</ListItem>

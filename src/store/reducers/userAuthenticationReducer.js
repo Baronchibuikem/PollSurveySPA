@@ -1,8 +1,9 @@
 import {
 	USER_LOADED, REQUEST_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UNFOLLOW_USER,
-	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN, MESSAGE, UPDATE_FAIL
+	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN, MESSAGE, UPDATE_FAIL, DEFAULT_ERROR_MESSAGE
 
 } from "../actions/actionTypes";
+import errorReducer from "./ErrorReducer"
 
 const initialState = {
 	token: localStorage.getItem("token"),
@@ -45,10 +46,8 @@ const initialState = {
 	},
 	email_exist_error: "",
 	username_exist_error: "",
-	login_email_error: "",
-	login_error: "",
-	login_error_message: false,
-	error_message: false
+	error: null
+
 
 };
 
@@ -60,6 +59,13 @@ const reducer = (state = initialState, action) => {
 				isLoading: "Loading...",
 				status: true
 			};
+
+		// if authentication of a user fails upon registration or login
+		case AUTH_ERROR:
+			return {
+				...errorReducer(state, action.payload),
+				isLoading: false
+			}
 		// This is used to mutate/update the state on successful login/registration
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
@@ -109,7 +115,7 @@ const reducer = (state = initialState, action) => {
 				view_user: action.payload,
 				status: false,
 			}
-		case AUTH_ERROR:
+
 		case REGISTER_FAIL:
 			localStorage.removeItem("token");
 			return {
@@ -124,13 +130,7 @@ const reducer = (state = initialState, action) => {
 		case LOGIN_FAIL:
 			return {
 				...state,
-				token: null,
-				user: null,
-				isLoading: "Try again",
-				// login_email_error: action.payload.email,
-				login_error: action.payload,
-				status: false,
-				login_error_message: true
+				error: action.payload
 			}
 		case LOGOUT_SUCCESS:
 			localStorage.removeItem("token");
