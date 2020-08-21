@@ -25,7 +25,6 @@ export const login = ({ email, password }) => {
 			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
 			dispatch(getUserById(response.data.user))
 		} catch (error) {
-			console.log("error", error.response.data.data[0])
 			dispatch({
 				type: LOGIN_FAIL,
 				payload: error &&
@@ -58,8 +57,6 @@ export const register_action = ({ data }) => (dispatch) => {
 			dispatch(getUserById(response.data.user))
 		})
 		.catch((error) => {
-
-			console.log("error 2", error.response.data)
 			dispatch({
 				type: REGISTER_FAIL,
 				payload: error &&
