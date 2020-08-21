@@ -1,5 +1,5 @@
 import { ALLPOLL, ALLPOLL_FAIL, VOTE_FAIL, SINGLEPOLL, CREATEPOLL_FAIL, SINGLEPOLL_FAIL } from "../actions/actionTypes"
-import route from "../../ApiClient";
+import { route } from "../../ApiClient";
 import { callApi } from "../index";
 
 

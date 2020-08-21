@@ -9,7 +9,7 @@ import {
 	MESSAGE,
 	UPDATE_FAIL
 } from "./actionTypes";
-import route from "../../ApiClient";
+import { route } from "../../ApiClient";
 
 
 
