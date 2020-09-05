@@ -28,3 +28,6 @@ export const LIKE_POLL = "LIKE_POLL"
 
 export const MESSAGE = "MESSAGE"
 export const DEFAULT_ERROR_MESSAGE = "DEFAULT_ERROR_MESSAGE"
+export const CLEAR_MESSAGE = "CLEAR_MESSAGE"
+export const REQUEST_ERROR = "REQUEST_ERROR"
+

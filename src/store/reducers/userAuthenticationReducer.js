@@ -1,6 +1,7 @@
 import {
 	USER_LOADED, REQUEST_LOADING, AUTH_ERROR, LOGIN_FAIL, LOGIN_SUCCESS, LOGOUT_SUCCESS, REGISTER_SUCCESS, UNFOLLOW_USER,
-	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN, MESSAGE, UPDATE_FAIL, DEFAULT_ERROR_MESSAGE
+	REGISTER_FAIL, CURRENT_LOGGEDIN_USER, VIEWED_LOGGEDIN_USER, LIKE_POLL, SET_USER_TOKEN, MESSAGE, UPDATE_FAIL,
+	DEFAULT_ERROR_MESSAGE, CLEAR_MESSAGE, REQUEST_ERROR
 
 } from "../actions/actionTypes";
 import errorReducer from "./ErrorReducer"
@@ -53,12 +54,18 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
+		// for updating status to true
 		case REQUEST_LOADING:
 			return {
 				...state,
-				isLoading: "Loading...",
 				status: true
 			};
+		// for updating status state to false
+		case REQUEST_ERROR:
+			return {
+				...state,
+				status: false
+			}
 		// This is used to mutate/update the state on successful login/registration
 		case LOGIN_SUCCESS:
 		case REGISTER_SUCCESS:
@@ -72,6 +79,10 @@ const reducer = (state = initialState, action) => {
 				token: action.payload.token,
 				status: false
 			};
+		/* 
+		used to updated the profile of the current logged in user;
+		dispatched action: getUserByID
+		*/
 		case CURRENT_LOGGEDIN_USER:
 			return {
 				...state,
@@ -80,6 +91,10 @@ const reducer = (state = initialState, action) => {
 				status: false
 
 			};
+		/*
+		 This will update the user token from the login action dispatched;
+		 dispatched action: login
+		*/
 		case SET_USER_TOKEN:
 			return {
 				...state,
@@ -117,10 +132,18 @@ const reducer = (state = initialState, action) => {
 				email_exist_error: action.payload.email.error,
 				username_exist_error: action.payload.username.error
 			};
+		// for updating login error when an error occurs
 		case LOGIN_FAIL:
 			return {
 				...state,
-				error: action.payload
+				error: action.payload,
+				status: false
+			}
+		// For clear error messages on login when the user refreshes the page
+		case CLEAR_MESSAGE:
+			return {
+				...state,
+				error: null
 			}
 		case LOGOUT_SUCCESS:
 			localStorage.removeItem("token");

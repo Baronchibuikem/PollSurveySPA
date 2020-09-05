@@ -7,7 +7,9 @@ import {
 	VIEWED_LOGGEDIN_USER,
 	SET_USER_TOKEN,
 	MESSAGE,
-	UPDATE_FAIL
+	UPDATE_FAIL,
+	CLEAR_MESSAGE,
+	REQUEST_ERROR
 } from "./actionTypes";
 import { route } from "../../ApiClient";
 
@@ -15,16 +17,30 @@ import { route } from "../../ApiClient";
 
 let config = { headers: { "Content-Type": "application/json" } };
 
+// for clearing error messages
+export const clear_error = () => {
+	return dispatch => {
+		dispatch({
+			type: CLEAR_MESSAGE
+		})
+	}
+}
 
 // // LOGIN USER
 export const login = ({ email, password }) => {
 	return async dispatch => {
-		// dispatch({ type: REQUEST_LOADING })
 		try {
+			dispatch({ type: REQUEST_LOADING })
 			const response = await route.post("/account/login/", { email, password }, config)
-			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
-			dispatch(getUserById(response.data.user))
+			if (response.status === 200) {
+				dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
+				dispatch(getUserById(response.data.user))
+				dispatch({ type: REQUEST_ERROR })
+			} else (
+				dispatch({ type: REQUEST_ERROR })
+			)
 		} catch (error) {
+			dispatch({ type: REQUEST_ERROR })
 			dispatch({
 				type: LOGIN_FAIL,
 				payload: error &&
@@ -36,27 +52,35 @@ export const login = ({ email, password }) => {
 					:
 					"Error login you in. Please try again"
 			})
+			// dispatch({ type: CLEAR_MESSAGE })
 		}
 
 	}
 };
 
 // Register user
-export const register_action = ({ data }) => (dispatch) => {
-	dispatch({ type: REQUEST_LOADING })
-	route
-		.post("/account/register/", {
-			first_name: data.firstname,
-			last_name: data.lastname,
-			email: data.email,
-			username: data.username,
-			password: data.password
-		}, config)
-		.then((response) => {
-			dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
-			dispatch(getUserById(response.data.user))
-		})
-		.catch((error) => {
+export const register_action = ({ data }) => {
+	return async dispatch => {
+		try {
+			dispatch({ type: REQUEST_LOADING })
+			const response = await route.post("/account/register/", {
+				first_name: data.firstname,
+				last_name: data.lastname,
+				email: data.email,
+				username: data.username,
+				password: data.password
+			}, config)
+			if (response.status === 200) {
+				dispatch({ type: SET_USER_TOKEN, payload: response.data.token });
+				dispatch(getUserById(response.data.user))
+				dispatch({ type: REQUEST_ERROR })
+			}
+			else {
+				dispatch({ type: REQUEST_ERROR })
+			}
+
+		} catch (error) {
+			dispatch({ type: REQUEST_ERROR })
 			dispatch({
 				type: REGISTER_FAIL,
 				payload: error &&
@@ -67,9 +91,9 @@ export const register_action = ({ data }) => (dispatch) => {
 					:
 					"Error registering you in. Please try again"
 			});
-
-		});
-};
+		}
+	}
+}
 
 
 export const logout = () => (dispatch, getState) => {

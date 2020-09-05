@@ -15,10 +15,11 @@ const RegistrationForm = () => {
 	// Here we fetching data from our global state store in redux
 	// email_exist_error and username_exist_error are errors coming from the server side if the email and username entered already exist
 	const params = useSelector((state) => ({
-		loading: state.userAuth.isLoading,
 		email_exist_error : state.userAuth.email_exist_error,
 		username_exist_error: state.userAuth.username_exist_error,
 		authenticated: state.userAuth.isAuthenticated,
+		status: state.userAuth.status,
+		error: state.userAuth.error
 	}));
 
 	// This is used to dispatch a redux action with the needed registration data
@@ -51,7 +52,7 @@ const RegistrationForm = () => {
 				className="text-center border border-light p-4 mx-auto shadow form_background_image"
 				style={{ backgroundColor: "#eee" }}
 				onSubmit={handleSubmit(regSubmit)}>
-				<p className="h4 mb-4">Sign up</p>
+				<p className="h4 mb-4 text-light font-weight-bold">	<span style={{ fontSize: "40px" }}>R</span>egister</p>
 
 				<div className="mb-4">
 					<h6 className="text-left font-italic text-light">{errors.firstname && errors.firstname.type === "required" && (
@@ -133,7 +134,13 @@ const RegistrationForm = () => {
 					} })}
 				/>
 				<button className="btn btn-info my-4 btn-block" type="submit">
-					Register
+				{
+					params.status ?
+						<div>
+							<span>Loading</span>
+						</div>
+						: "Register"
+				}
 				</button>
 				<p className="text-light">
 					<Link to="login" className="lg mx-1 font-weight-bold">

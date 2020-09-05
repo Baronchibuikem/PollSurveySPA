@@ -3,7 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form"
 // import PropTypes from "prop-types";
-import { login } from "../../store/actions/userAuthentication";
+import { login, clear_error } from "../../store/actions/userAuthentication";
 import "../StyleComponents/Homepage.css";
 
 const LoginForm = () => {
@@ -12,33 +12,27 @@ const LoginForm = () => {
 	const [password, setPassword] = useState("");
 
 	// Here we are instantiating our dispatch action
-	const dispatch_login = useDispatch();
+	const dispatch = useDispatch();
 
 	// Here we fetching data from our global state store in redux
 	const params = useSelector((state) => ({
 		authenticated: state.userAuth.isAuthenticated,
 		error: state.userAuth.error,
+		status: state.userAuth.status
 	}));
 
 	useEffect(() => {
 	}, [params.login_error])
+
+	// useEffect(() => {
+	// }, [dispatch(clear_error())])
 
 	// hooks form 
 	const { register, handleSubmit, errors } = useForm();
 
 	// this is used to dispatch a redux action with the neeeded login data
 	const onSubmit = (data) => {
-		dispatch_login(login({ email: data.email, password: data.password }));
-	};
-
-	// Here we use this function to update our email value when it changes
-	const onChangeEmail = (e) => {
-		setEmail(e.target.value);
-	};
-
-	// Here we use this function to update our password value when ut changes
-	const onChangePassword = (e) => {
-		setPassword(e.target.value);
+		dispatch(login({ email: data.email, password: data.password }));
 	};
 
 	// Here we are checking if our authenticated value from the state is true, it yes we redirect to the homepage
@@ -64,7 +58,7 @@ const LoginForm = () => {
 						className="text-center border border-light px-5 py-3 mx-auto shadow form_background_image"
 						style={{ backgroundColor: "#eee" }}
 						onSubmit={handleSubmit(onSubmit)}>
-						<h5 className="text-danger bold">{params.error !== null ? params.error : ""}</h5>
+						<h5 className="text-light bold">{!params.status && params.error ? params.error : ""}</h5>
 						<p className="h4 mb-4 text-light font-weight-bold">	<span style={{ fontSize: "40px" }}>L</span>ogin</p>
 
 						<div className="mb-4">
@@ -91,17 +85,14 @@ const LoginForm = () => {
 							ref={register({ required: true })}
 						/>
 						<button className="btn btn-info my-4 btn-block" type="submit">
-							{params.status ?
-								<div>
-									{
-										params.error && !params.status ? "Try again" :
-											// <div className="spinner-border" role="status">
-											// "Send"
-											// </div>
-											params.loading
-									}
-								</div> :
-								"Login"}
+							{
+								params.status ?
+									<div>
+										<span>Loading</span>
+									</div>
+									: "Login"
+							}
+
 						</button>
 						<hr />
 						<p className="text-light">
