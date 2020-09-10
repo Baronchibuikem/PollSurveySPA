@@ -3,6 +3,7 @@ import { func, object } from "prop-types";
 import { useDispatch, useSelector } from "react-redux"
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { create_poll } from "../../store/actions/poll_action";
+import LoadSpinner from "../CommonComponents/Loadspinner"
 
 
 const CreatePoll = () => {
@@ -16,7 +17,9 @@ const CreatePoll = () => {
 	const dispatch_createpoll = useDispatch()
 
 	const params = useSelector((state) => ({
-		token: state.userAuth.token
+		token: state.userAuth.token,
+		error: state.userAuth.error,
+		status: state.userAuth.status
 	}));
 
 
@@ -70,7 +73,7 @@ const CreatePoll = () => {
 		setOptions([])
 		setInitialValue([])
 		setDate("")
-		setShowForm(false)
+		// setShowForm(false)
 	}
 
 	const choiceform = (
@@ -113,18 +116,18 @@ const CreatePoll = () => {
 				<div className="options">
 					{options.map((option, index) => {
 						return (
-							<div
-								key={index}
-								style={{ display: "flex", justifyContent: "space-around" }}>
-								<h6 onClick={() => RemoveOption(option)}>
-									<span className="fa fa-check"></span> {option}
-								</h6>
-								<small
-									className="text-danger"
-									onClick={() => RemoveOption(option)}
-									style={{ cursor: "pointer" }}>
-									X
+							<div key={index}>
+								<hr />
+								<h5 onClick={() => RemoveOption(option)} className=" mx-1">
+									{option}
+									<small
+										className="text-danger mx-1"
+										onClick={() => RemoveOption(option)}
+										style={{ cursor: "pointer" }}>
+										<i className="fa fa-trash"></i>
 									</small>
+								</h5><hr />
+
 							</div>
 						);
 					})}
@@ -163,7 +166,13 @@ const CreatePoll = () => {
 										? defaultColor.background_color
 										: { backgroundColor: "grey" }
 								}>
-								Submit
+								{
+									params.status ?
+										<div>
+											<span>Loading...</span>
+										</div>
+										: "Submit"
+								}
 							</button>
 							<button
 								className="form-control mt-3"
@@ -177,6 +186,7 @@ const CreatePoll = () => {
 				}
 
 			</form>
+
 		</div>
 	);
 }

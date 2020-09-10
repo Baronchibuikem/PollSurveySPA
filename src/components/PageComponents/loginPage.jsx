@@ -88,7 +88,7 @@ const LoginForm = () => {
 							{
 								params.status ?
 									<div>
-										<span>Loading</span>
+										<span>Loading...</span>
 									</div>
 									: "Login"
 							}

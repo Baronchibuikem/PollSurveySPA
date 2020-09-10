@@ -1,4 +1,7 @@
-import { ALLPOLL, ALLPOLL_FAIL, VOTE_FAIL, SINGLEPOLL, CREATEPOLL_FAIL, SINGLEPOLL_FAIL } from "../actions/actionTypes"
+import {
+    ALLPOLL, ALLPOLL_FAIL, VOTE_FAIL, SINGLEPOLL, CREATEPOLL_FAIL,
+    REQUEST_ERROR, REQUEST_LOADING, SINGLEPOLL_FAIL
+} from "../actions/actionTypes"
 import { route } from "../../ApiClient";
 import { callApi } from "../index";
 
@@ -28,16 +31,22 @@ export const create_poll = (data) => {
 export const create_poll = (data) => {
     return async dispatch => {
         try {
+            dispatch({ type: REQUEST_LOADING })
             const response = await callApi("polls/create-polls/", {
                 poll_question: data.question,
                 choices: data.choices,
                 poll_expiration_date: data.date
             }, "POST", data.token)
-            if (response) {
+            if (response.status === 200) {
                 dispatch(get_polls())
+                dispatch({ type: REQUEST_ERROR })
             }
         } catch (error) {
-            dispatch({ type: CREATEPOLL_FAIL, payload: error.response })
+            dispatch({ type: REQUEST_ERROR })
+            dispatch({
+                type: REQUEST_ERROR, payload: error && error.response ? error.response :
+                    "Couldn't create the poll"
+            })
         }
 
     };
