@@ -8,6 +8,7 @@ import { viewClickedUserById, post_likepost, post_bookmarkpoll } from "../../sto
 import { useHistory } from "react-router";
 import profileImage from "../../assets/images/no-profile-image.jpg";
 
+
 const AllPolls = () => {
 
 	// const { likes, setLikes } = useState([])
@@ -94,7 +95,7 @@ const AllPolls = () => {
 			{
 				params.all.map(poll => (
 					<div key={poll.id} >
-						<div className="mb-3 card" style={{ borderColor: "lightblue" }} >
+						<div className="mb-3 card" style={{ borderColor: "lightblue" }}>
 							<div className="card-body poll" style={{ borderLeft: "1px solid #F0F0F0", position: "relative" }}>
 								<div className="d-flex">
 									{
