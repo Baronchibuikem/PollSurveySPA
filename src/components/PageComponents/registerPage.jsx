@@ -36,11 +36,11 @@ const RegistrationForm = () => {
   }
 
   return (
-    <div className="login_background_image mb-view">
-      <div className="row center-content container mx-auto">
+    <div className=" mb-view">
+      <div className="row center-content container mx-auto mt-5">
         <div className="col-md-6 col-sm-12">
           <ul
-            style={{ fontSize: "35px", color: "white" }}
+            style={{ fontSize: "35px", color: "black" }}
             className="list-unstyled content-size"
           >
             <li>
@@ -74,8 +74,8 @@ const RegistrationForm = () => {
         </div>
         <div className="col-md-6 col-sm-12">
           <form
-            className="text-center border border-light px-3 mx-auto shadow form_background_image"
-            style={{ backgroundColor: "#eee" }}
+            className="text-center border border-light px-1 mx-auto shadow"
+            style={{ backgroundColor: "#413A76" }}
             onSubmit={handleSubmit(regSubmit)}
           >
             <p className="h4 mb-4 text-light font-weight-bold">
@@ -191,7 +191,10 @@ const RegistrationForm = () => {
                   })}
                 />
               </div>
-              <button className="btn-info mb-3 form-control" type="submit">
+              <button
+                className="btn-info my-3 form-control w-75 mx-auto"
+                type="submit"
+              >
                 {params.status ? (
                   <div>
                     <span>Loading</span>

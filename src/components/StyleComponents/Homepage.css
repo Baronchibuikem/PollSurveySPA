@@ -1,15 +1,15 @@
 .login_background_image {
-	background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-		url(../../assets/images/second-background.png);
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-attachment: fixed;
-	background-position: center center;
-	min-height:100vh
+  background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../assets/images/second-background.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
+  min-height: 100vh;
 }
 
 @media (max-width: 600px) {
-	.login_background_image {
+  /* .login_background_image {
 		background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
 			url(../../assets/images/second-background.png);
 		background-repeat: no-repeat;
@@ -17,11 +17,11 @@
 		background-attachment: fixed;
 		background-position: center center;
 		min-height:120vh
-	}
-	.content-size{
-		font-size: 20px !important;
-	}
-	.mb-view {
+	} */
+  .content-size {
+    font-size: 20px !important;
+  }
+  /* .mb-view {
 		background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
 			url(../../assets/images/second-background.png);
 		background-repeat: no-repeat;
@@ -29,45 +29,45 @@
 		background-attachment: fixed;
 		background-position: center center;
 		min-height:150vh
-	}
-  }
-
-.center-content{
-	display: flex;
-	height: 100vh;
-	align-items: center;
-	justify-content: center;
-  }
-  .form_background_image {
-	background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-		url(../../assets/images/login-bg.svg);
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-attachment: fixed;
-	background-position: center center;
-	/* height:100vh */
+	} */
 }
-i{
-	color: #17A2B8
+
+.center-content {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
+.form_background_image {
+  background: linear-gradient(rgba(1, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url(../../assets/images/login-bg.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center center;
+  /* height:100vh */
+}
+i {
+  color: #17a2b8;
 }
 .row {
-    display: flex;
-    flex-wrap: wrap;
-    margin-right: 0px !important; 
-    margin-left: 0px !important;
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 0px !important;
+  margin-left: 0px !important;
 }
 
 /* Navbar */
 .MuiAppBar-colorPrimary {
-    color: #fff;
-    background-color: #413A76 !important;
+  color: #fff;
+  background-color: #413a76 !important;
 }
 .MuiPaper-root {
-    color: white !important;
-    transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    background-color: #413A76 !important;
+  color: white !important;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  background-color: #413a76 !important;
 }
 
 .makeStyles-content-9 {
-    padding: 0px !important;
+  padding: 0px !important;
 }

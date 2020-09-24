@@ -150,7 +150,7 @@ export default function Navbar() {
               aria-label="open drawer"
               onClick={toggleDrawer(anchor, true)}
               edge="start"
-              className="ml-5"
+              className="ml-1"
             >
               <MenuIcon />
             </IconButton>
