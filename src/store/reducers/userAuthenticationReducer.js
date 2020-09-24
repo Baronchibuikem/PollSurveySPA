@@ -4,7 +4,6 @@ import {
 	DEFAULT_ERROR_MESSAGE, CLEAR_MESSAGE, REQUEST_ERROR
 
 } from "../actions/actionTypes";
-import errorReducer from "./ErrorReducer"
 
 const initialState = {
 	token: localStorage.getItem("token"),
