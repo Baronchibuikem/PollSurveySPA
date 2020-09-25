@@ -3,7 +3,6 @@ import { func, object } from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { defaultColor } from "../UtilityComponents/HelperFunctions";
 import { create_poll } from "../../store/actions/poll_action";
-import LoadSpinner from "../CommonComponents/Loadspinner";
 
 const CreatePoll = () => {
   const [question, setQuestion] = useState("");
@@ -73,7 +72,7 @@ const CreatePoll = () => {
     setOptions([]);
     setInitialValue([]);
     setDate("");
-    setShowForm(false);
+    setShowForm(true);
   };
 
   const choiceform = (

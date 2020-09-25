@@ -25,6 +25,7 @@ export const create_poll = (data) => {
 
   return async (dispatch) => {
     try {
+      dispatch({ type: REQUEST_LOADING });
       const response = await route.post(
         "polls/create-polls/",
         {

@@ -132,7 +132,7 @@ export default function Navbar() {
               <ListItemIcon>
                 <InboxIcon style={{ color: "white" }} />
               </ListItemIcon>
-              <ListItemText>Login</ListItemText> :
+              <ListItemText>Login</ListItemText>
             </ListItem>
           </Link>
         </div>
